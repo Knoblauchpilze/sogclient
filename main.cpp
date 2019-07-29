@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
 
   try {
     sdl::core::BasicSdlWindowShPtr app = std::make_shared<sdl::core::SdlApplication>(
-      std::string("OGClient - Yeh gonna be addict. Am I repeating myslef ?"),
+      std::string("OGClient - Yeh gonna be addict. Am I repeating myself ?"),
       std::string("data/img/65px-Stop_hand.BMP"),
       640.0f,
       480.0f,
