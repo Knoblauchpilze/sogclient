@@ -7,7 +7,7 @@ set (CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set (CMAKE_VERBOSE_MAKEFILE ON)
+#set (CMAKE_VERBOSE_MAKEFILE ON)
 
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 
@@ -28,9 +28,11 @@ target_include_directories (sogclient PRIVATE
   )
 
 target_link_libraries(sogclient
+  core_utils
+  sdl_engine
   sdl_core
   sdl_graphic
   sdl_app_core
-  ${SDL2_LIBRARY}
+  ${SDL2_LIBRARIES}
   ${SDL2_TTF_LIBRARIES}
   )
