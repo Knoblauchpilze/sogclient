@@ -1,0 +1,10 @@
+body
+{
+  background-image: url("img/background.jpeg");
+  background-size: cover;
+}
+
+#presentation
+{
+  color: #FFFFFF;
+}
