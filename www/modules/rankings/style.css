@@ -64,3 +64,47 @@ body
 {
   text-align: center;
 }
+
+#middle
+{
+  text-align: center;
+}
+#filters_panel
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+#filters_page
+{
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: space-around;
+}
+.rank_header
+{
+  white-space: nowrap;
+}
+.rank_position
+{
+  text-align: left;
+}
+.rank_progression
+{
+  text-align: center;
+}
+.rank_nickname
+{
+  display: flex;
+  text-align: left;
+}
+.rank_action
+{
+  text-align: center;
+}
+.rank_points
+{
+  display: flex;
+  text-align: right;
+}
