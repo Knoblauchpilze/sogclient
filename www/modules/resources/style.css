@@ -58,6 +58,7 @@ body
 .menu_item
 {
   text-align: center;
+  flex-shrink: 0;
 }
 .menu_icon
 {
@@ -69,4 +70,16 @@ body
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.production_value
+{
+  text-align: right;
+}
+.adjustable_production_value
+{
+  text-align: right;
+}
+.storage_value
+{
+  text-align: right;
 }

@@ -58,6 +58,7 @@ body
 .menu_item
 {
   text-align: center;
+  flex-shrink: 0;
 }
 .menu_icon
 {
