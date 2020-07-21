@@ -64,23 +64,9 @@ body
   text-align: center;
 }
 
-#overview_planet_info
+#middle
 {
-  margin-right: 0px;
-  margin-left: auto;
-}
-
-#overview_planet_desc_key
-{
-  text-align: left;
-}
-
-#overview_planet_desc_value
-{
-  text-align: right;
-}
-
-#overview_planet_construction_list
-{
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
