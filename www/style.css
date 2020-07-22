@@ -8,3 +8,9 @@ body
 {
   color: #FFFFFF;
 }
+
+h2, h3
+{
+  color: blueviolet;
+  opacity: 0.25;
+}
