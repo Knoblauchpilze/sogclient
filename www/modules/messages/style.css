@@ -64,3 +64,60 @@ body
 {
   text-align: center;
 }
+
+#filters_panel
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+#category_fleets
+{
+  display: flex;
+  flex-direction: row;
+  word-wrap: nowrap;
+  justify-content: space-around;
+  flex-shrink: 0;
+}
+#category_communication
+{
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+}
+
+.mail_header, .mail_footer
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.mail_first
+{
+  margin-left: 5px;
+}
+.mail_previous, .mail_page, .mail_next
+{
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.mail_last
+{
+  margin-right: 5px;
+}
+.mail_container
+{
+  display: flex;
+  flex-direction: column;
+}
+.mail_subject
+{
+  color: #46466D;
+}
+.mail_sender, .mail_content
+{
+  color: #999999;
+}
+.mail_delete{
+  color: #FF2222
+}
