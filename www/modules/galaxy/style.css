@@ -64,3 +64,50 @@ body
 {
   text-align: center;
 }
+
+#galaxy_available_ships
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.galaxy_item_header
+{
+  text-align: center;
+}
+.galaxy_item_container
+{
+  color: #FFFFFF;
+}
+.galaxy_item_position
+{
+  text-align: right;
+}
+.galaxy_item_hidden
+{
+  visibility: hidden;
+}
+.galaxy_item_text
+{
+  background-color: #111111;
+}
+.galaxy_normal_player
+{
+  color: #FFFFFF;
+}
+.galaxy_inactive_player
+{
+  color: #555555;
+}
+.galaxy_vacation_player
+{
+  color: #55FFFF;
+}
+.galaxy_noob_player
+{
+  color: #33FF33;
+}
+.galaxy_strong_player
+{
+  color: #FF3333;
+}
