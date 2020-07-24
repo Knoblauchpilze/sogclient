@@ -64,3 +64,59 @@ body
 {
   text-align: center;
 }
+
+#fleets_available_container
+{
+  display: flex;
+  flex-direction: row;
+  color: #FFFFFF;
+  align-items: stretch;
+}
+#fleets_available_container_content
+{
+  flex-shrink: 1;
+}
+#fleets_available_container_spacer
+{
+  flex-grow: 1;
+}
+
+#fleets_available_ships
+{
+  display: flex;
+  flex-direction: row;
+}
+#fleets_combat_ships
+{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+#fleets_civil_ships
+{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.fleet_ships_header
+{
+  color: #113377;
+  text-align: center;
+}
+.fleet_ship_container
+{
+  margin: 2px;
+}
+.fleet_ship_name
+{
+  color: #224488;
+}
+.fleet_ship_available_count
+{
+  text-align: right;
+  color: #FF8800;
+}
+.fleet_ship_selected_count
+{
+  text-align: right;
+}
