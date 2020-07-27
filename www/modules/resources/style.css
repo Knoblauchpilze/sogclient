@@ -55,6 +55,13 @@ body
   flex-direction: row;
 }
 
+#middle
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .menu_item
 {
   text-align: center;
