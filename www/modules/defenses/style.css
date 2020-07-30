@@ -66,8 +66,20 @@ body
 .menu_item a {
   text-decoration: none;
 }
+.menu_item:hover {
+  background-color: #666666;
+}
+.menu_item:hover {
+  background-color: #666666;
+}
 .menu_item a:visited {
   color: #888888;
+}
+.menu_item a:hover {
+  color: #BBBBBB;
+}
+.menu_item a:hover {
+  color: #BBBBBB;
 }
 #menu_item_selected
 {
