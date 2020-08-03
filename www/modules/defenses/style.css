@@ -2,13 +2,16 @@ body
 {
   background-image: url("../img/background.jpeg");
   background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #vertical_container
 {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  min-width: 80%;
+  max-width: 80%;
 }
 
 #horizontal_container
@@ -21,7 +24,6 @@ body
 {
   display: flex;
   flex-direction: column;
-  max-width: 80%;
 }
 
 #headerbar

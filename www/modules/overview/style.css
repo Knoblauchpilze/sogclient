@@ -2,13 +2,16 @@ body
 {
   background-image: url("../img/background.jpeg");
   background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #vertical_container
 {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  min-width: 80%;
+  max-width: 80%;
 }
 
 #horizontal_container
@@ -21,7 +24,6 @@ body
 {
   display: flex;
   flex-direction: column;
-  max-width: 80%;
 }
 
 #headerbar
@@ -30,7 +32,8 @@ body
   flex-direction: row;
   justify-content: space-between;
   background-color: #111111;
-  padding: 10px 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 #headerbar a {
   text-decoration: none;
@@ -51,7 +54,8 @@ body
 }
 .spaced_column
 {
-  padding: 10px 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 #top_internal_container
@@ -66,7 +70,6 @@ body
   display: flex;
   flex-direction: column;
 }
-
 
 #resources
 {
