@@ -14,12 +14,6 @@ body
   max-width: 80%;
 }
 
-#horizontal_container
-{
-  display: flex;
-  flex-direction: row;
-}
-
 #top
 {
   display: flex;
@@ -85,6 +79,13 @@ body
 {
   display: flex;
   flex-direction: row;
+}
+
+#horizontal_container
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .menu_item
