@@ -152,26 +152,145 @@
 
           <section id="middle">
             <img src="../img/planet_ships.jpeg" alt="Planet ships visual" title="Vision of a planet under attack"/>
-            <table>
-              <tbody>
-                <tr class="element_container">
-                  <td class="element_name">Light fighter</td>
-                  <td class="element_count">0</td>
-                </tr>
-                <tr class="element_container">
-                  <td class="element_name">Heavy fighter</td>
-                  <td class="element_count">0</td>
-                </tr>
-                <tr class="element_container">
-                  <td class="element_name">Cruiser</td>
-                  <td class="element_count">400</td>
-                </tr>
-                <tr class="element_container">
-                  <td class="element_name">Battleship</td>
-                  <td class="element_count">15</td>
-                </tr>
-              </tbody>
-            </table>
+            <div id="planet_available_ships">
+              <div class="planet_ships_section">
+                <p class="planet_ships_header">Combat ships</p>
+                <div id="planet_combat_ships">
+                  <div class="planet_ship_container">
+                    <p class="planet_ship_name">Light fighter</p>
+                    <p class="planet_ship_available_count">1</p>
+                    <form class="planet_ship_selected_count">
+                      <p>
+                        <input class="planet_ship_selector" method="post" type="number" name="light_fighter_ship_count" id="light_fighter_ship_count" value="0" min="0" max="1"/>
+                      </p>
+                    </form>
+                  </div>
+                  <div class="planet_ship_container">
+                    <p class="planet_ship_name">Heavy fighter</p>
+                    <p class="planet_ship_available_count">1</p>
+                    <form class="planet_ship_selected_count">
+                      <p>
+                        <input class="planet_ship_selector" method="post" type="number" name="heavy_fighter_ship_count" id="heavy_fighter_ship_count" value="0" min="0" max="1"/>
+                      </p>
+                    </form>
+                  </div>
+                  <div class="planet_ship_container">
+                    <p class="planet_ship_name">Cruiser</p>
+                    <p class="planet_ship_available_count">10</p>
+                    <form class="planet_ship_selected_count">
+                      <p>
+                        <input class="planet_ship_selector" method="post" type="number" name="cruiser_ship_count" id="cruiser_ship_count" value="8" min="0" max="10"/>
+                      </p>
+                    </form>
+                  </div>
+                  <div class="planet_ship_container">
+                    <p class="planet_ship_name">Battleship</p>
+                    <p class="planet_ship_available_count">2</p>
+                    <form class="planet_ship_selected_count">
+                      <p>
+                        <input class="planet_ship_selector" method="post" type="number" name="battleship_ship_count" id="battleship_ship_count" value="0" min="0" max="2"/>
+                      </p>
+                    </form>
+                  </div>
+                  <div class="planet_ship_container">
+                    <p class="planet_ship_name">Battlecruiser</p>
+                    <p class="planet_ship_available_count">3</p>
+                    <form class="planet_ship_selected_count">
+                      <p>
+                        <input class="planet_ship_selector" method="post" type="number" name="battlecruiser_ship_count" id="battlecruiser_ship_count" value="2" min="0" max="3"/>
+                      </p>
+                    </form>
+                  </div>
+                  <div class="planet_ship_container">
+                    <p class="planet_ship_name">Bomber</p>
+                    <p class="planet_ship_available_count">4</p>
+                    <form class="planet_ship_selected_count">
+                      <p>
+                        <input class="planet_ship_selector" method="post" type="number" name="bomber_ship_count" id="bomber_ship_count" value="0" min="0" max="4"/>
+                      </p>
+                    </form>
+                  </div>
+                  <div class="planet_ship_container">
+                    <p class="planet_ship_name">Destroyer</p>
+                    <p class="planet_ship_available_count">5</p>
+                    <form class="planet_ship_selected_count">
+                      <p>
+                        <input class="planet_ship_selector" method="post" type="number" name="destroyer_ship_count" id="destroyer_ship_count" value="0" min="0" max="5"/>
+                      </p>
+                    </form>
+                  </div>
+                  <div class="planet_ship_container">
+                    <p class="planet_ship_name">Deathstar</p>
+                    <p class="planet_ship_available_count">0</p>
+                    <form class="planet_ship_selected_count">
+                      <p>
+                        <input class="planet_ship_selector" method="post" type="number" name="deathstar_ship_count" id="deathstar_ship_count" value="0" min="0" max="0"/>
+                      </p>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="planet_ships_section">
+                <p class="planet_ships_header">Civil ships</p>
+                <div id="planet_civil_ships">
+                  <div class="planet_ship_container">
+                    <p class="planet_ship_name">Small cargo ship</p>
+                    <p class="planet_ship_available_count">0</p>
+                    <form class="planet_ship_selected_count">
+                      <p>
+                        <input class="planet_ship_selector" method="post" type="number" name="small_cargo_ship_count" id="small_cargo_ship_count" value="0" min="0" max="0"/>
+                      </p>
+                    </form>
+                  </div>
+                  <div class="planet_ship_container">
+                    <p class="planet_ship_name">Large cargo ship</p>
+                    <p class="planet_ship_available_count">250</p>
+                    <form class="planet_ship_selected_count">
+                      <p>
+                        <input class="planet_ship_selector" method="post" type="number" name="large_cargo_ship_count" id="large_cargo_ship_count" value="0" min="0" max="250"/>
+                      </p>
+                    </form>
+                  </div>
+                  <div class="planet_ship_container">
+                    <p class="planet_ship_name">Colony ship</p>
+                    <p class="planet_ship_available_count">0</p>
+                    <form class="planet_ship_selected_count">
+                      <p>
+                        <input class="planet_ship_selector" method="post" type="number" name="colony_ship_count" id="colony_ship_count" value="0" min="0" max="0"/>
+                      </p>
+                    </form>
+                  </div>
+                  <div class="planet_ship_container">
+                    <p class="planet_ship_name">Recycler</p>
+                    <p class="planet_ship_available_count">0</p>
+                    <form class="planet_ship_selected_count">
+                      <p>
+                        <input class="planet_ship_selector" method="post" type="number" name="recycler_ship_count" id="recycler_ship_count" value="0" min="0" max="0"/>
+                      </p>
+                    </form>
+                  </div>
+                  <div class="planet_ship_container">
+                    <p class="planet_ship_name">Espionage probe</p>
+                    <p class="planet_ship_available_count">0</p>
+                    <form class="planet_ship_selected_count">
+                      <p>
+                        <input class="planet_ship_selector" method="post" type="number" name="espionage_probe_count" id="espionage_probe_count" value="0" min="0" max="0"/>
+                      </p>
+                    </form>
+                  </div>
+                  <div class="planet_ship_container">
+                    <p class="planet_ship_name">Solar satellite</p>
+                    <p class="planet_ship_available_count">0</p>
+                    <form class="planet_ship_selected_count">
+                      <p>
+                        <input class="planet_ship_selector" method="post" type="number" name="solar_satellite_probe_count" id="espionage_probe_count" value="0" min="0" max="0"/>
+                      </p>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
           </section>
 
           <section id="right">

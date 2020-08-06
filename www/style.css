@@ -14,3 +14,22 @@ h2, h3
   color: blueviolet;
   opacity: 0.25;
 }
+
+.form_wrapper
+{
+  background-color: #FF0000;
+  width: 150px;
+  height: 150px;
+}
+.form_elem
+{
+  background-color: #00FF00;
+  width: 150px;
+  height: 150px;
+}
+.form_input
+{
+  background-color: #0000FF;
+  width: inherit;
+  height: 100%;
+}

@@ -141,14 +141,6 @@ body
   color: #FFFFFF;
   align-items: stretch;
 }
-#fleets_available_container_content
-{
-  flex-shrink: 1;
-}
-#fleets_available_container_spacer
-{
-  flex-grow: 1;
-}
 
 #fleets_available_ships
 {
@@ -187,6 +179,7 @@ body
 {
   /* TODO: Add max width/height */
   margin: 2px;
+  background-color: #141E26;
 }
 .fleet_ship_name
 {
