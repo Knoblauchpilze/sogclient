@@ -51,6 +51,10 @@ body
   padding-left: 10px;
   padding-right: 10px;
 }
+#player_time
+{
+  color: #888888;
+}
 
 #top_internal_container
 {
@@ -181,8 +185,7 @@ body
   text-align: right;
 }
 .selector_container{
-  width: 150px;
-  height: 150px;
+  
 }
 .defense_to_build_count
 {
