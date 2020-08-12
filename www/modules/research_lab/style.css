@@ -85,7 +85,8 @@ body
   display: flex;
   flex-direction: row;
 }
-.resource_info{
+.resource_info
+{
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -97,6 +98,22 @@ body
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: stretch;
+}
+.event_element
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  padding: 5px;
+  color: #5B9FC1;
+  background-color: #252F3B;
+  border: 3px #121815 groove;
+}
+#eventsbar h2
+{
+  flex-grow: 1;
 }
 
 #horizontal_container_wrapper
