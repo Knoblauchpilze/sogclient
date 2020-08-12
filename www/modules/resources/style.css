@@ -1,6 +1,6 @@
 body
 {
-  background-image: url("../img/background.jpeg");
+  background: url("../img/background.jpeg") no-repeat center center fixed;
   background-size: cover;
   display: flex;
   flex-direction: column;
@@ -97,7 +97,7 @@ body
 {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: stretch;
   justify-content: stretch;
 }
 .event_element
