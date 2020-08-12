@@ -83,6 +83,7 @@ body
 {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 #horizontal_container_wrapper
