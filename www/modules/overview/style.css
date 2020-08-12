@@ -1,6 +1,6 @@
 body
 {
-  background-image: url("../img/background.jpeg");
+  background: url("../img/background.jpeg") no-repeat center center fixed;
   background-size: cover;
   display: flex;
   flex-direction: column;
@@ -98,7 +98,23 @@ body
 {
   display: flex;
   flex-direction: row;
+  align-items: stretch;
+  justify-content: stretch;
+}
+.event_element
+{
+  display: flex;
+  justify-content: center;
   align-items: center;
+  margin: 5px;
+  padding: 5px;
+  color: #5B9FC1;
+  background-color: #252F3B;
+  border: 3px #121815 groove;
+}
+#eventsbar h2
+{
+  flex-grow: 1;
 }
 
 #horizontal_container_wrapper
