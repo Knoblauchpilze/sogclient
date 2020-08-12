@@ -110,394 +110,398 @@
 
         </header>
 
-        <div id="horizontal_container">
-          <nav id="left">
-            <table>
-              <tbody>
-                <tr>
-                  <td class="menu_item"><a href="../overview/overview.html">General view</a></td>
-                  <td class="menu_icon"></td>
-                </tr>
-                <tr>
-                  <td class="menu_item"><a href="../resources/resources.html">Resources</a></td>
-                  <td class="menu_icon"><a href="../resources/production_settings.html">Production control</a></td>
-                </tr>
-                <tr>
-                  <td class="menu_item"><a href="../facilities/facilities.html">Facilities</a></td>
-                  <td class="menu_icon"></td>
-                </tr>
-                <tr>
-                  <td class="menu_item"><a href="../research_lab/research_lab.html">Research lab</a></td>
-                  <td class="menu_icon"><a href="../research_lab/technologies_list.html">Technologies</a></td>
-                </tr>
-                <tr>
-                  <td class="menu_item"><a href="../shipyard/shipyard.html">Shipyard</a></td>
-                  <td class="menu_icon"></td>
-                </tr>
-                <tr>
-                  <td class="menu_item"><a href="../defenses/defenses.html">Defenses</a></td>
-                  <td class="menu_icon"></td>
-                </tr>
-                <tr>
-                  <td class="menu_item"><a href="../fleets/fleets.html">Fleets</a></td>
-                  <td class="menu_icon"><a href="../fleets/fleets_movements.html">Fleet movements</a></td>
-                </tr>
-                <tr>
-                  <td id="menu_item_selected"><a href="../galaxy/galaxy.html">Galaxy</a></td>
-                  <td class="menu_icon"></td>
-                </tr>
-              </tbody>
-            </table>
-          </nav>
+        <div id="horizontal_container_wrapper">
+          <div id="horizontal_internal_container">
+            <div id="horizontal_container">
+              <nav id="left">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td class="menu_item"><a href="../overview/overview.html">General view</a></td>
+                      <td class="menu_icon"></td>
+                    </tr>
+                    <tr>
+                      <td class="menu_item"><a href="../resources/resources.html">Resources</a></td>
+                      <td class="menu_icon"><a href="../resources/production_settings.html">Production control</a></td>
+                    </tr>
+                    <tr>
+                      <td class="menu_item"><a href="../facilities/facilities.html">Facilities</a></td>
+                      <td class="menu_icon"></td>
+                    </tr>
+                    <tr>
+                      <td class="menu_item"><a href="../research_lab/research_lab.html">Research lab</a></td>
+                      <td class="menu_icon"><a href="../research_lab/technologies_list.html">Technologies</a></td>
+                    </tr>
+                    <tr>
+                      <td class="menu_item"><a href="../shipyard/shipyard.html">Shipyard</a></td>
+                      <td class="menu_icon"></td>
+                    </tr>
+                    <tr>
+                      <td class="menu_item"><a href="../defenses/defenses.html">Defenses</a></td>
+                      <td class="menu_icon"></td>
+                    </tr>
+                    <tr>
+                      <td class="menu_item"><a href="../fleets/fleets.html">Fleets</a></td>
+                      <td class="menu_icon"><a href="../fleets/fleets_movements.html">Fleet movements</a></td>
+                    </tr>
+                    <tr>
+                      <td id="menu_item_selected"><a href="../galaxy/galaxy.html">Galaxy</a></td>
+                      <td class="menu_icon"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </nav>
 
-          <section id="middle">
-            <table>
-              <tr>
-                <td colspan="3">Galaxy</td>
-                <td colspan="3">Solar system</td>
-              </tr>
-              <tr>
-                <td>
-                  <button class="galaxy_view_navigator" type="button">&lt;</button>
-                </td>
-                <td>
-                  <form class="galaxy_index_selector">
-                    <p>
-                      <label for="galaxy_view_galaxy_index"></label>
-                      <input class="galaxy_view_index_elem" method="post" type="number" name="galaxy_view_galaxy_index" id="galaxy_view_galaxy_index" value="1" min="1" max="9"/>
-                    </p>
-                  </form>
-                </td>
-                <td>
-                  <button class="galaxy_view_navigator" type="button">&gt;</button>
-                </td>
-                <td>
-                  <button class="galaxy_view_navigator" type="button">&lt;</button>
-                </td>
-                <td>
-                  <form class="system_index_selector">
-                    <p>
-                      <label for="galaxy_view_system_index"></label>
-                      <input class="galaxy_view_index_elem" method="post" type="number" name="galaxy_view_system_index" id="galaxy_view_system_index" value="1" min="1" max="499"/>
-                    </p>
-                  </form>
-                </td>
-                <td>
-                  <button class="galaxy_view_navigator" type="button">&gt;</button>
-                </td>
-                <td>
-                  <button class="galaxy_view_navigator" type="button">Refresh</button>
-                </td>
-                <td>
-                  <button class="galaxy_view_navigator" type="button">Expedition</button>
-                </td>
-              </tr>
-            </table>
+              <section id="middle">
+                <table>
+                  <tr>
+                    <td colspan="3">Galaxy</td>
+                    <td colspan="3">Solar system</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <button class="galaxy_view_navigator" type="button">&lt;</button>
+                    </td>
+                    <td>
+                      <form class="galaxy_index_selector">
+                        <p>
+                          <label for="galaxy_view_galaxy_index"></label>
+                          <input class="galaxy_view_index_elem" method="post" type="number" name="galaxy_view_galaxy_index" id="galaxy_view_galaxy_index" value="1" min="1" max="9"/>
+                        </p>
+                      </form>
+                    </td>
+                    <td>
+                      <button class="galaxy_view_navigator" type="button">&gt;</button>
+                    </td>
+                    <td>
+                      <button class="galaxy_view_navigator" type="button">&lt;</button>
+                    </td>
+                    <td>
+                      <form class="system_index_selector">
+                        <p>
+                          <label for="galaxy_view_system_index"></label>
+                          <input class="galaxy_view_index_elem" method="post" type="number" name="galaxy_view_system_index" id="galaxy_view_system_index" value="1" min="1" max="499"/>
+                        </p>
+                      </form>
+                    </td>
+                    <td>
+                      <button class="galaxy_view_navigator" type="button">&gt;</button>
+                    </td>
+                    <td>
+                      <button class="galaxy_view_navigator" type="button">Refresh</button>
+                    </td>
+                    <td>
+                      <button class="galaxy_view_navigator" type="button">Expedition</button>
+                    </td>
+                  </tr>
+                </table>
 
-            <div id="galaxy_available_ships">
-              <p class="galaxy_available_ship">73 espionage probe(s)</p>
-              <p class="galaxy_available_ship">144 recycler(s)</p>
-              <p class="galaxy_available_ship">0 interplanetary missile(s)</p>
-              <p class="galaxy_available_ship">2/13 slot(s)</p>
+                <div id="galaxy_available_ships">
+                  <p class="galaxy_available_ship">73 espionage probe(s)</p>
+                  <p class="galaxy_available_ship">144 recycler(s)</p>
+                  <p class="galaxy_available_ship">0 interplanetary missile(s)</p>
+                  <p class="galaxy_available_ship">2/13 slot(s)</p>
+                </div>
+
+                <table id="galaxy_current_system">
+                  <thead>
+                    <tr>
+                      <td colspan="2" class="galaxy_item_header">Planet</td>
+                      <td class="galaxy_item_header">Name</td>
+                      <td class="galaxy_item_header">Moon</td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_header">Debris</td>
+                      <td class="galaxy_item_header">Player (status)</td>
+                      <td class="galaxy_item_header">Guild</td>
+                      <td colspan="4" class="galaxy_item_header">Actions</td>
+                    </tr>
+                  </thead>
+                  <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">1</td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet1.png" alt="planet_1"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                    <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">2</td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet2.png" alt="planet_2"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                    <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">3</td>
+                      <td class="galaxy_item_icon"><img src="img/planet3.png" alt="planet_3"/></td>
+                      <td class="galaxy_item_text">Base camp</td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_text galaxy_noob_player">xXx_TrueMarksman_xXx</td>
+                      <td class="galaxy_item_text">FlotteDeAmi</td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                    <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">4</td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet4.png" alt="planet_4"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                    <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">5</td>
+                      <td class="galaxy_item_icon"><img src="img/planet5.png" alt="planet_5"/></td>
+                      <td class="galaxy_item_text">Ultimate</td>
+                      <td class="galaxy_item_icon"><img src="img/moon.png" alt="moon"/></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
+                      <td class="galaxy_item_text galaxy_strong_player">Sukebt</td>
+                      <td class="galaxy_item_text">UE 30</td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                    <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">6</td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet6.png" alt="planet_6"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_icon"><img src="img/wreckfield.png" alt="debris"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                    <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">7</td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet7.png" alt="planet_7"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_icon"><img src="img/wreckfield.png" alt="debris"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                    <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">8</td>
+                      <td class="galaxy_item_icon"><img src="img/planet8.png" alt="planet_8"/></td>
+                      <td class="galaxy_item_text">Casselfornia</td>
+                      <td class="galaxy_item_icon"><img src="img/moon.png" alt="moon"/></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
+                      <td class="galaxy_item_text galaxy_inactive_player">G-ViRuS (i)</td>
+                      <td class="galaxy_item_text">T_G</td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                    <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">9</td>
+                      <td class="galaxy_item_icon"><img src="img/planet9.png" alt="planet_9"/></td>
+                      <td class="galaxy_item_text">Kolonie</td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
+                      <td class="galaxy_item_text galaxy_vacation_player">sChLaFmUeTzE (v I)</td>
+                      <td class="galaxy_item_text">.out.</td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                    <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">10</td>
+                      <td class="galaxy_item_icon"><img src="img/planet10.png" alt="planet_10"/></td>
+                      <td class="galaxy_item_text">Vis Urban (24)</td>
+                      <td class="galaxy_item_icon"><img src="img/moon.png" alt="moon"/></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_icon"><img src="img/wreckfield.png" alt="debris"/></td>
+                      <td class="galaxy_item_text">Francolino</td>
+                      <td class="galaxy_item_text">.F.test.</td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                    <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">11</td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet11.png" alt="planet_11"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                    <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">12</td>
+                      <td class="galaxy_item_icon"><img src="img/planet12.png" alt="planet_12"/></td>
+                      <td class="galaxy_item_text">SoniX</td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
+                      <td class="galaxy_item_text galaxy_normal_player">Francolino</td>
+                      <td class="galaxy_item_text">.F.test.</td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                    <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">13</td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet13.png" alt="planet_13"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                    <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">14</td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet14.png" alt="planet_14"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                    <tr class="galaxy_item_container">
+                      <td class="galaxy_item_position">15</td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet15.png" alt="planet_15"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
+                      <td><!-- Blank --></td>
+                      <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td class="galaxy_item_text"><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                      <td><!-- Blank --></td>
+                    </tr>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </section>
+
+              <section id="right">
+                <h2>9/9 planet(s)</h2>
+                <ol>
+                  <li>
+                    <div>
+                      <h3><a href="../overview/overview.html">Planet 1</a></h3>
+                      <h4>[2:222:9]</h4>
+                      <h4><a href="../overview/overview.html">Moon 1</a></h4>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3><a href="../overview/overview.html">Planet 2</a></h3>
+                      <h4>[3:135:9]</h4>
+                      <h4><a href="../overview/overview.html">Moon 2</a></h4>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3><a href="../overview/overview.html">Planet 3</a></h3>
+                      <h4>[3:138:9]</h4>
+                      <h4><a href="../overview/overview.html">Moon 3</a></h4>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3><a href="../overview/overview.html">Planet 4</a></h3>
+                      <h4>[4:129:8]</h4>
+                      <h4><a href="../overview/overview.html">Moon 4</a></h4>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3><a href="../overview/overview.html">Planet 5</a></h3>
+                      <h4>[4:130:8]</h4>
+                      <h4><a href="../overview/overview.html">Moon 5</a></h4>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3><a href="../overview/overview.html">Planet 6</a></h3>
+                      <h4>[5:53:1]</h4>
+                      <h4><a href="../overview/overview.html">Moon 6</a></h4>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3><a href="../overview/overview.html">Planet 7</a></h3>
+                      <h4>[5:53:7]</h4>
+                      <h4><a href="../overview/overview.html">Moon 7</a></h4>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3><a href="../overview/overview.html">Planet 8</a></h3>
+                      <h4>[5:53:8]</h4>
+                      <h4><a href="../overview/overview.html">Moon 8</a></h4>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3><a href="../overview/overview.html">Planet 9</a></h3>
+                      <h4>[5:53:9]</h4>
+                      <h4><a href="../overview/overview.html">Moon 9</a></h4>
+                    </div>
+                  </li>
+                </ol>
+              </section>
             </div>
-
-            <table id="galaxy_current_system">
-              <thead>
-                <tr>
-                  <td colspan="2" class="galaxy_item_header">Planet</td>
-                  <td class="galaxy_item_header">Name</td>
-                  <td class="galaxy_item_header">Moon</td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_header">Debris</td>
-                  <td class="galaxy_item_header">Player (status)</td>
-                  <td class="galaxy_item_header">Guild</td>
-                  <td colspan="4" class="galaxy_item_header">Actions</td>
-                </tr>
-              </thead>
-              <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">1</td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet1.png" alt="planet_1"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-                <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">2</td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet2.png" alt="planet_2"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-                <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">3</td>
-                  <td class="galaxy_item_icon"><img src="img/planet3.png" alt="planet_3"/></td>
-                  <td class="galaxy_item_text">Base camp</td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_text galaxy_noob_player">xXx_TrueMarksman_xXx</td>
-                  <td class="galaxy_item_text">FlotteDeAmi</td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-                <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">4</td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet4.png" alt="planet_4"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-                <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">5</td>
-                  <td class="galaxy_item_icon"><img src="img/planet5.png" alt="planet_5"/></td>
-                  <td class="galaxy_item_text">Ultimate</td>
-                  <td class="galaxy_item_icon"><img src="img/moon.png" alt="moon"/></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
-                  <td class="galaxy_item_text galaxy_strong_player">Sukebt</td>
-                  <td class="galaxy_item_text">UE 30</td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-                <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">6</td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet6.png" alt="planet_6"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_icon"><img src="img/wreckfield.png" alt="debris"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-                <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">7</td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet7.png" alt="planet_7"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_icon"><img src="img/wreckfield.png" alt="debris"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-                <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">8</td>
-                  <td class="galaxy_item_icon"><img src="img/planet8.png" alt="planet_8"/></td>
-                  <td class="galaxy_item_text">Casselfornia</td>
-                  <td class="galaxy_item_icon"><img src="img/moon.png" alt="moon"/></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
-                  <td class="galaxy_item_text galaxy_inactive_player">G-ViRuS (i)</td>
-                  <td class="galaxy_item_text">T_G</td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-                <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">9</td>
-                  <td class="galaxy_item_icon"><img src="img/planet9.png" alt="planet_9"/></td>
-                  <td class="galaxy_item_text">Kolonie</td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
-                  <td class="galaxy_item_text galaxy_vacation_player">sChLaFmUeTzE (v I)</td>
-                  <td class="galaxy_item_text">.out.</td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-                <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">10</td>
-                  <td class="galaxy_item_icon"><img src="img/planet10.png" alt="planet_10"/></td>
-                  <td class="galaxy_item_text">Vis Urban (24)</td>
-                  <td class="galaxy_item_icon"><img src="img/moon.png" alt="moon"/></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_icon"><img src="img/wreckfield.png" alt="debris"/></td>
-                  <td class="galaxy_item_text">Francolino</td>
-                  <td class="galaxy_item_text">.F.test.</td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-                <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">11</td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet11.png" alt="planet_11"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-                <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">12</td>
-                  <td class="galaxy_item_icon"><img src="img/planet12.png" alt="planet_12"/></td>
-                  <td class="galaxy_item_text">SoniX</td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
-                  <td class="galaxy_item_text galaxy_normal_player">Francolino</td>
-                  <td class="galaxy_item_text">.F.test.</td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-                <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">13</td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet13.png" alt="planet_13"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-                <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">14</td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet14.png" alt="planet_14"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-                <tr class="galaxy_item_container">
-                  <td class="galaxy_item_position">15</td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/planet15.png" alt="planet_15"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/moon.png" alt="moon_gone"/></td>
-                  <td><!-- Blank --></td>
-                  <td class="galaxy_item_icon galaxy_item_hidden"><img src="img/wreckfield.png" alt="debris_gone"/></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td class="galaxy_item_text"><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                  <td><!-- Blank --></td>
-                </tr>
-              <tbody>
-
-              </tbody>
-            </table>
-          </section>
-
-          <section id="right">
-            <h2>9/9 planet(s)</h2>
-            <ol>
-              <li>
-                <div>
-                  <h3><a href="../overview/overview.html">Planet 1</a></h3>
-                  <h4>[2:222:9]</h4>
-                  <h4><a href="../overview/overview.html">Moon 1</a></h4>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <h3><a href="../overview/overview.html">Planet 2</a></h3>
-                  <h4>[3:135:9]</h4>
-                  <h4><a href="../overview/overview.html">Moon 2</a></h4>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <h3><a href="../overview/overview.html">Planet 3</a></h3>
-                  <h4>[3:138:9]</h4>
-                  <h4><a href="../overview/overview.html">Moon 3</a></h4>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <h3><a href="../overview/overview.html">Planet 4</a></h3>
-                  <h4>[4:129:8]</h4>
-                  <h4><a href="../overview/overview.html">Moon 4</a></h4>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <h3><a href="../overview/overview.html">Planet 5</a></h3>
-                  <h4>[4:130:8]</h4>
-                  <h4><a href="../overview/overview.html">Moon 5</a></h4>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <h3><a href="../overview/overview.html">Planet 6</a></h3>
-                  <h4>[5:53:1]</h4>
-                  <h4><a href="../overview/overview.html">Moon 6</a></h4>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <h3><a href="../overview/overview.html">Planet 7</a></h3>
-                  <h4>[5:53:7]</h4>
-                  <h4><a href="../overview/overview.html">Moon 7</a></h4>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <h3><a href="../overview/overview.html">Planet 8</a></h3>
-                  <h4>[5:53:8]</h4>
-                  <h4><a href="../overview/overview.html">Moon 8</a></h4>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <h3><a href="../overview/overview.html">Planet 9</a></h3>
-                  <h4>[5:53:9]</h4>
-                  <h4><a href="../overview/overview.html">Moon 9</a></h4>
-                </div>
-              </li>
-            </ol>
-          </section>
+          </div>
         </div>
 
         <footer>
