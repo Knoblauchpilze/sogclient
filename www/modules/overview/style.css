@@ -146,16 +146,20 @@ body
   color: #888888;
   text-decoration: none;
 }
-.menu_item a {
+.menu_item a
+{
   text-decoration: none;
 }
-.menu_item:hover {
+.menu_item:hover
+{
   background-color: #666666;
 }
-.menu_item a:visited {
+.menu_item a:visited
+{
   color: #888888;
 }
-.menu_item a:hover {
+.menu_item a:hover
+{
   color: #BBBBBB;
 }
 #menu_item_selected
@@ -166,10 +170,12 @@ body
   color: #BBBBBB;
   text-decoration: none;
 }
-#menu_item_selected a {
+#menu_item_selected a
+{
   text-decoration: none;
 }
-#menu_item_selected a:visited {
+#menu_item_selected a:visited
+{
   color: #BBBBBB;
 }
 .menu_icon
@@ -221,4 +227,55 @@ body
   background-color: #12161C;
   border: 1px #171D23 solid;
   margin: 2px;
+}
+
+#right
+{
+  display: flex;
+  flex-direction: column;
+  background-color: #FF0000;
+}
+#planets_count_info
+{
+  color: #5B9FC1;
+  background-color: #10181F;
+  border: 2px #141F27 solid;
+  font-size: medium;
+  white-space: nowrap;
+  padding: 1px 10px;
+}
+.planet_link_container
+{
+  color: #5B9FC1;
+  background-color: #141F27;
+  font-size: medium;
+  margin: 2px;
+}
+.planet_link_container:hover
+{
+  color: #94BF01;
+}
+.selected_planet_link_container
+{
+  color: #94BF01;
+  background-color: #141F27;
+  font-size: medium;
+  margin: 2px;
+}
+.planet_link
+{
+  text-decoration: none;
+  white-space: nowrap;
+}
+.planet_link:hover
+{
+  color: inherit;
+}
+.planet_link:visited
+{
+  color: inherit;
+}
+.planet_coordinates
+{
+  font-size: small;
 }
