@@ -204,3 +204,21 @@ body
 {
   text-align: center;
 }
+.construction_action_container
+{
+  background-color: #0D1014;
+  padding: 5px 2px;
+}
+.construction_action_title
+{
+  color: #5B9FC1;
+  background-color: #12161C;
+  margin: 2px;
+}
+.construction_action_value
+{
+  color: #FFFFFF;
+  background-color: #12161C;
+  border: 1px #171D23 solid;
+  margin: 2px;
+}
