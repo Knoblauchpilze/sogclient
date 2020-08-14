@@ -148,13 +148,16 @@ body
 .menu_item a {
   text-decoration: none;
 }
-.menu_item:hover {
+.menu_item:hover
+{
   background-color: #666666;
 }
-.menu_item a:visited {
+.menu_item a:visited
+{
   color: #888888;
 }
-.menu_item a:hover {
+.menu_item a:hover
+{
   color: #BBBBBB;
 }
 #menu_item_selected
@@ -165,10 +168,12 @@ body
   color: #BBBBBB;
   text-decoration: none;
 }
-#menu_item_selected a {
+#menu_item_selected a
+{
   text-decoration: none;
 }
-#menu_item_selected a:visited {
+#menu_item_selected a:visited
+{
   color: #BBBBBB;
 }
 .menu_icon
