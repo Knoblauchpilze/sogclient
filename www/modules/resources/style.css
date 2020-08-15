@@ -137,13 +137,6 @@ body
   margin: auto;
 }
 
-#middle
-{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .menu_item
 {
   text-align: center;
@@ -205,4 +198,82 @@ body
 .storage_value
 {
   text-align: right;
+}
+
+#right
+{
+  display: flex;
+  flex-direction: column;
+}
+#planets_count_info
+{
+  color: #5B9FC1;
+  background-color: #10181F;
+  border: 4px #030303 solid;
+  font-size: medium;
+  white-space: nowrap;
+  padding: 1px 10px;
+}
+.planet_link_container
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #5B9FC1;
+  font-size: medium;
+  margin: 2px;
+}
+.planet_link_container:hover
+{
+  color: #94BF01;
+}
+.selected_planet_link_container
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #94BF01;
+  font-size: medium;
+  margin: 2px;
+}
+
+.planet_and_moon
+{
+  margin: 4px;
+  width: 50px;
+  height: 35px;
+}
+.planet
+{
+  width: 35px;
+  height: 35px;
+  position: relative;
+  top: -8px;
+  left: 11px;
+}
+.moon
+{
+  width: 25px;
+  height: 25px;
+  position: relative;
+  top: -18px;
+  left: -4px;
+}
+
+.planet_link
+{
+  text-decoration: none;
+  white-space: nowrap;
+}
+.planet_link:hover
+{
+  color: inherit;
+}
+.planet_link:visited
+{
+  color: inherit;
+}
+.planet_coordinates
+{
+  font-size: small;
 }
