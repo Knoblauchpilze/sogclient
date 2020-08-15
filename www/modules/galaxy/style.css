@@ -92,6 +92,7 @@ body
   flex-grow: 1;
   margin: 5px;
   align-items: center;
+  color: #91A3B5;
 }
 #eventsbar
 {
@@ -135,6 +136,11 @@ body
   display: flex;
   flex-direction: row;
   margin: auto;
+}
+
+#left
+{
+  background-color: #03030388;
 }
 
 .menu_item
@@ -240,6 +246,7 @@ body
 {
   display: flex;
   flex-direction: column;
+  background-color: #03030388;
 }
 #planets_count_info
 {
