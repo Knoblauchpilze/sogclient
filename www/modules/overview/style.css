@@ -145,6 +145,7 @@ body
 #left
 {
   background-color: #03030388;
+  height: 400px;
 }
 
 #left table
@@ -209,34 +210,92 @@ body
 {
   display: flex;
   flex-direction: column;
-  align-items: center;
   flex-grow: 1;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#overview
+{
+  background: url("../img/planet_view.jpeg");
+  background-size: 100% 100%;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#view_title
+{
+  margin-left: 5px;
+  padding-left: 10px;
+  color: #FFFFFF;
+  background-color: #06060644;
 }
 
 #overview_planet_info
 {
   margin-right: 0px;
-  margin-left: auto;
+  margin: 0px 10px 10px auto;
+  background-color: #06060644;
 }
 
 #overview_planet_desc_key
 {
   text-align: left;
+  color: #529BC8;
 }
 
-#overview_planet_desc_value
+#overview_planet_desc_value, #overview_planet_options
 {
   text-align: right;
+  color: #FFFFFF;
+}
+#overview_planet_desc_value a
+{
+  text-decoration: none;
+  white-space: nowrap;
+}
+#overview_planet_desc_value a:hover
+{
+  color: inherit;
+  text-decoration: underline;
+}
+#overview_planet_desc_value a:visited
+{
+  color: inherit;
+}
+
+#overview_planet_bonus
+{
+  color: #FFFFFF;
+}
+#overview_planet_bonus a
+{
+  text-decoration: none;
+  white-space: nowrap;
+}
+#overview_planet_bonus a:hover
+{
+  color: inherit;
+  text-decoration: underline;
+}
+#overview_planet_bonus a:visited
+{
+  color: inherit;
 }
 
 #overview_planet_construction_list
 {
   text-align: center;
+  margin-top: 5px;
+  padding: 0px;
 }
 .construction_action_container
 {
   background-color: #0D1014;
   padding: 5px 2px;
+  vertical-align: bottom;
 }
 .construction_action_title
 {
@@ -256,6 +315,7 @@ body
 {
   display: flex;
   flex-direction: column;
+  min-height: 400px;
   background-color: #03030388;
 }
 #planets_count_info
