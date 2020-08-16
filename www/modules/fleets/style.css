@@ -29,13 +29,16 @@ body
   padding-left: 10px;
   padding-right: 10px;
 }
-#headerbar a {
+#headerbar a
+{
   text-decoration: none;
 }
-#headerbar a:visited {
+#headerbar a:visited
+{
   color: #5B9FC1;
 }
-#headerbar a:hover {
+#headerbar a:hover
+{
   color: #5B9FC1;
 }
 .text_legend
@@ -60,8 +63,8 @@ body
 {
   display: flex;
   flex-direction: row;
-  min-width: 60%;
-  max-width: 60%;
+  min-width: 70%;
+  max-width: 70%;
   margin: auto;
   align-items: center;
   justify-content: stretch;
@@ -128,8 +131,8 @@ body
   flex-direction: row;
   align-items: center;
   align-self: center;
-  min-width: 60%;
-  max-width: 60%;
+  min-width: 70%;
+  max-width: 70%;
 }
 #horizontal_container
 {
@@ -143,6 +146,11 @@ body
   background-color: #03030388;
 }
 
+#left table
+{
+  border-spacing: 5px 2px;
+}
+
 .menu_item
 {
   text-align: center;
@@ -150,6 +158,8 @@ body
   background-color: #222222;
   color: #888888;
   text-decoration: none;
+  border: 6px #121815 groove;
+  white-space: nowrap;
 }
 .menu_item a
 {
@@ -174,6 +184,8 @@ body
   background-color: #666666;
   color: #BBBBBB;
   text-decoration: none;
+  border: 6px #222222 groove;
+  white-space: nowrap;
 }
 #menu_item_selected a
 {
@@ -186,6 +198,10 @@ body
 .menu_icon
 {
   text-align: center;
+  height: 30px;
+  width: 30px;
+  background-color: #222222;
+  padding: 2px;
 }
 
 #middle
@@ -193,6 +209,7 @@ body
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex-grow: 1;
 }
 
 #fleets_available_container
