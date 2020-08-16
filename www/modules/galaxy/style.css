@@ -320,3 +320,31 @@ body
 {
   font-size: small;
 }
+
+#contact
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #111111;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: absolute;
+  justify-content: right;
+  width: 80%;
+  bottom: 0px;
+  color: #91A3B5;
+}
+#contact a
+{
+  text-decoration: none;
+  white-space: nowrap;
+}
+#contact a:hover
+{
+  color: inherit;
+}
+#contact a:visited
+{
+  color: inherit;
+}
