@@ -2,34 +2,43 @@ body
 {
   background: url("img/background.jpeg") no-repeat center center fixed;
   background-size: cover;
-}
-
-#presentation
-{
-  color: #FFFFFF;
-}
-
-h2, h3
-{
-  color: blueviolet;
-  opacity: 0.25;
-}
-
-.form_wrapper
-{
-  background-color: #FF0000;
-  width: 150px;
-  height: 150px;
-}
-.form_elem
-{
-  background-color: #00FF00;
-  width: 150px;
-  height: 150px;
-}
-.form_input
-{
-  background-color: #0000FF;
-  width: inherit;
   height: 100%;
+}
+
+#presentation {
+  color: #FFFFFF;
+  padding: 10px;
+}
+#content {
+  padding-bottom: 25px;
+}
+
+#contact
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #111111;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: fixed;
+  justify-content: right;
+  align-items: center;
+  width: 80%;
+  height: 25px;
+  bottom: 0px;
+  color: #91A3B5;
+}
+#contact a
+{
+  text-decoration: none;
+  white-space: nowrap;
+}
+#contact a:hover
+{
+  color: inherit;
+}
+#contact a:visited
+{
+  color: inherit;
 }
