@@ -124,6 +124,7 @@ body
 {
   display: flex;
   flex-direction: column;
+  padding-bottom: 25px;
 }
 #horizontal_internal_container
 {
@@ -349,9 +350,11 @@ body
   background-color: #111111;
   padding-left: 10px;
   padding-right: 10px;
-  position: absolute;
+  position: fixed;
   justify-content: right;
+  align-items: center;
   width: 80%;
+  height: 25px;
   bottom: 0px;
   color: #91A3B5;
 }
