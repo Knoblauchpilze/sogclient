@@ -89,7 +89,6 @@
           </div>
         </header>
 
-        
         <div id="horizontal_container_wrapper">
           <div id="horizontal_internal_container">
             <div id="horizontal_container">
@@ -146,7 +145,7 @@
 
               <section id="middle">
                 <div id ="overview">
-                  <h3>General view - New London</h3>
+                  <h3 id="view_title">General view - New London</h3>
                   <table id="overview_planet_info">
                     <tbody>
                       <tr>
@@ -169,49 +168,42 @@
                         <td id="overview_planet_desc_key">Honorific points:</td>
                         <td id="overview_planet_desc_value">48837</td>
                       </tr>
-                      <tr>
-                        <!-- Blank row-->
-                      </tr>
-                      <tr>
-                        <td id="overview_planet_desc_key">Move (2)</td>
-                        <td id="overview_planet_desc_value">Abandon/Rename</td>
-                      </tr>
                     </tbody>
+                    <tfoot>
+                      <tr>
+                        <td id="overview_planet_bonus">
+                          <a href="../galaxy/galaxy.html">Move (2)</a>
+                        </td>
+                        <td id="overview_planet_options">Abandon/Rename</td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
 
-                <div id="overview_planet_construction_list">
-                  <table>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <div class="construction_action_container">
-                            <h3 class="construction_action_title">Building</h3>
-                            <div class="construction_action_value">
-                              <p>No construction at the moment</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="construction_action_container">
-                            <h3 class="construction_action_title">Research lab</h3>
-                            <div class="construction_action_value">
-                              <p>No research at the moment</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="construction_action_container">
-                            <h3 class="construction_action_title">Shipyard</h3>
-                            <div class="construction_action_value">
-                              <p>No construction at the moment</p>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                <table id="overview_planet_construction_list">
+                  <tbody>
+                    <tr>
+                      <td class="construction_action_container">
+                        <h3 class="construction_action_title">Building</h3>
+                        <div class="construction_action_value">
+                          <p>No construction at the moment</p>
+                        </div>
+                      </td>
+                      <td class="construction_action_container">
+                        <h3 class="construction_action_title">Research lab</h3>
+                        <div class="construction_action_value">
+                          <p>No research at the moment</p>
+                        </div>
+                      </td>
+                      <td class="construction_action_container">
+                        <h3 class="construction_action_title">Shipyard</h3>
+                        <div class="construction_action_value">
+                          <p>No construction at the moment</p>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </section>
 
               <section id="right">
