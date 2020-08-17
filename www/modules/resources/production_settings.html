@@ -9,7 +9,6 @@
 
     <body>
       <div id="vertical_container">
-
         <header id="top">
           <div id="headerbar">
             <div id="player_info">
@@ -146,7 +145,7 @@
               </nav>
 
               <section id="middle">
-                <table>
+                <table id="production_settings">
                   <thead>
                     <tr>
                       <td><!-- Blank --></td>
@@ -159,18 +158,18 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Base production</td>
-                      <td class="production_value">30</td>
-                      <td class="production_value">15</td>
+                      <td class="row_header">Base production</td>
+                      <td class="production_value positive_value">30</td>
+                      <td class="production_value positive_value">15</td>
                       <td class="production_value">0</td>
                       <td class="production_value">0</td>
                     </tr>
                     <tr>
-                      <td>Metal mine (level 35)</td>
-                      <td class="production_value">78175</td>
+                      <td class="row_header">Metal mine (level 35)</td>
+                      <td class="production_value positive_value">78175</td>
                       <td class="production_value">0</td>
                       <td class="production_value">0</td>
-                      <td class="adjustable_production_value">8686/8686</td>
+                      <td class="adjustable_production_value negative_value">8686/8686</td>
                       <td class="adjustable_production_selector">
                         <form method="post">
                           <select name="production_selector_for_metal_mine" id="production_selector_for_metal_mine">
@@ -190,11 +189,11 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>Crystal mine (level 30)</td>
+                      <td class="row_header">Crystal mine (level 30)</td>
                       <td class="production_value">0</td>
-                      <td class="production_value">31408</td>
+                      <td class="production_value positive_value">31408</td>
                       <td class="production_value">0</td>
-                      <td class="adjustable_production_value">5234/5234</td>
+                      <td class="adjustable_production_value negative_value">5234/5234</td>
                       <td class="adjustable_production_selector">
                         <form method="post">
                           <select name="production_selector_for_crystal_mine" id="production_selector_for_crystal_mine">
@@ -214,11 +213,11 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>Deuterium synthetizer (level 30)</td>
+                      <td class="row_header">Deuterium synthetizer (level 30)</td>
                       <td class="production_value">0</td>
                       <td class="production_value">0</td>
-                      <td class="production_value">19410</td>
-                      <td class="adjustable_production_value">10469/10469</td>
+                      <td class="production_value positive_value">19410</td>
+                      <td class="adjustable_production_value negative_value">10469/10469</td>
                       <td class="adjustable_production_selector">
                         <form method="post">
                           <select name="production_selector_for_deuterium_synthetizer" id="production_selector_for_deuterium_synthetizer">
@@ -238,11 +237,11 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>Solar plant (level 32)</td>
+                      <td class="row_header">Solar plant (level 32)</td>
                       <td class="production_value">0</td>
                       <td class="production_value">0</td>
                       <td class="production_value">0</td>
-                      <td class="adjustable_production_value">13512</td>
+                      <td class="adjustable_production_value positive_value">13512</td>
                       <td class="adjustable_production_selector">
                         <form method="post">
                           <select name="production_selector_for_solar_plant" id="production_selector_for_solar_plant">
@@ -262,7 +261,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>Fusion reactor (level 0)</td>
+                      <td class="row_header">Fusion reactor (level 0)</td>
                       <td class="production_value">0</td>
                       <td class="production_value">0</td>
                       <td class="production_value">0</td>
@@ -286,11 +285,11 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>Solar satellite (Count: 351)</td>
+                      <td class="row_header">Solar satellite (Count: 351)</td>
                       <td class="production_value">0</td>
                       <td class="production_value">0</td>
                       <td class="production_value">0</td>
-                      <td class="adjustable_production_value">10881</td>
+                      <td class="adjustable_production_value positive_value">10881</td>
                       <td class="adjustable_production_selector">
                         <form method="post">
                           <select name="production_selector_for_solar_satellite" id="production_selector_for_solar_satellite">
@@ -310,21 +309,34 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>Storage capacity</td>
+                      <td class="row_header">Storage capacity</td>
                       <td class="storage_value">9820000</td>
                       <td class="storage_value">2920000</td>
                       <td class="storage_value">865000</td>
+                      <td class="storage_value">-</td>
                     </tr>
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td>Total per hour</td>
+                      <td class="row_header production_total">Total per hour:</td>
+                      <td class="production_value positive_value">78205</td>
+                      <td class="production_value positive_value">31423</td>
+                      <td class="production_value positive_value">19410</td>
+                      <td class="production_value positive_value">2443</td>
                     </tr>
                     <tr>
-                      <td>Total per day</td>
+                      <td class="row_header production_total">Total per day:</td>
+                      <td class="production_value positive_value">1876920</td>
+                      <td class="production_value positive_value">754152</td>
+                      <td class="production_value positive_value">465840</td>
+                      <td class="production_value positive_value">2443</td>
                     </tr>
                     <tr>
-                      <td>Total per week</td>
+                      <td class="row_header production_total">Total per week:</td>
+                      <td class="production_value positive_value">13138440</td>
+                      <td class="production_value positive_value">5279064</td>
+                      <td class="production_value positive_value">3260880</td>
+                      <td class="production_value positive_value">2443</td>
                     </tr>
                   </tfoot>
                 </table>
