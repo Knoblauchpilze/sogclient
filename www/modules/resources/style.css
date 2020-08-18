@@ -239,6 +239,7 @@ body
   margin-right: 0px;
   margin: 0px 10px 10px auto;
   background-color: #06060644;
+  visibility: hidden;
 }
 
 #overview_planet_desc_key
@@ -365,7 +366,6 @@ body
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  background-color: #880000;
 }
 .planet_building_container
 {
@@ -374,27 +374,47 @@ body
   background-color: #141E26;
   margin: 2px;
   padding: 5px;
-  width: 150px;
-  height: 150px;
+  min-width: 20px;
+  min-height: 20px;
 }
 .planet_building_name
 {
-  color: #224488;
+  color: #5B9FC1;
+  background-color: #1E2D39;
+  white-space: nowrap;
 }
 .planet_building_icon
 {
-  padding: 3px;
   background-color: #888800;
-  flex: 1;
+  flex-grow: 1;
 }
 .planet_building_level
 {
   text-align: right;
   color: #FF8800;
+  background-color: #283C52;
 }
-.planet_ship_selector
+.planet_building_action
 {
-  text-align: right;
+  display: flex;
+  flex-direction: row;
+}
+.planet_upgrade_action
+{
+  width: 66%;
+  background-image: url("../img/building_upgrade.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.planet_demolish_action
+{
+  width: 34%;
+  height: 20px;
+  background-image: url("../img/building_demolish.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 #right
