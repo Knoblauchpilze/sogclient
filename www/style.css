@@ -5,11 +5,13 @@ body
   height: 100%;
 }
 
-#presentation {
+#presentation
+{
   color: #FFFFFF;
   padding: 10px;
 }
-#content {
+#content
+{
   padding-bottom: 25px;
 }
 
