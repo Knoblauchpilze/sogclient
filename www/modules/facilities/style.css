@@ -239,6 +239,7 @@ body
   margin-right: 0px;
   margin: 0px 10px 10px auto;
   background-color: #06060644;
+  visibility: hidden;
 }
 
 #overview_planet_desc_key
@@ -315,12 +316,6 @@ body
   padding: 5px;
   min-width: 20px;
   min-height: 20px;
-}
-.planet_building_name
-{
-  color: #5B9FC1;
-  background-color: #1E2D39;
-  white-space: nowrap;
 }
 .planet_building_icon
 {

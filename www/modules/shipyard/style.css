@@ -239,6 +239,7 @@ body
   margin-right: 0px;
   margin: 0px 10px 10px auto;
   background-color: #06060644;
+  visibility: hidden;
 }
 
 #overview_planet_desc_key
@@ -296,6 +297,7 @@ body
 {
   margin-left: 5px;
   margin-right: 5px;
+  background-color: #0D1014;
 }
 .planet_ships_header
 {
@@ -310,37 +312,56 @@ body
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  background-color: #0000FF;
 }
 #planet_civil_ships
 {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  background-color: #FF00FF;
 }
 .planet_ship_container
 {
-  /* TODO: Add max width/height */
-  margin: 2px;
+  display: flex;
+  flex-direction: column;
   background-color: #141E26;
-  width: 100%;
-  height: 100%;
-  max-width: 150px;
-  max-height: 150px;
+  margin: 2px;
+  padding: 5px;
+  min-width: 20px;
+  min-height: 20px;
 }
-.planet_ship_name
+.planet_ship_icon
 {
-  color: #224488;
+  background-color: #888800;
+  flex-grow: 1;
+  max-width: 96px;
+  max-height: 96px;
 }
 .planet_ship_available_count
 {
   text-align: right;
   color: #FF8800;
+  background-color: #283C52;
 }
-.planet_ship_selector
+.planet_ship_action
 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.planet_ship_selector .planet_ship_selected_count
+{
+  width: 34%;
+  height: 20px;
   text-align: right;
+}
+.planet_ship_build
+{
+  width: 66%;
+  height: 20px;
+  background-image: url("../img/building_upgrade.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 #right

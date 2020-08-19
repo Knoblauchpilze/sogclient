@@ -240,6 +240,7 @@ body
   margin-right: 0px;
   margin: 0px 10px 10px auto;
   background-color: #06060644;
+  visibility: hidden;
 }
 
 #overview_planet_desc_key
