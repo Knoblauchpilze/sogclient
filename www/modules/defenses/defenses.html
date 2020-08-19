@@ -182,103 +182,108 @@
                   </table>
                 </div>
 
-                <div id="planet_defenses_section">
-                  <p id="planet_defenses_section_header">Defense systems</p>
-                  <div id="planet_defenses_container">
-                    <div class="defense_container">
-                      <p class="defense_name">Rocket launcher</p>
-                      <p class="defense_built_count">1500</p>
-                      <div class="selector_container">
-                        <form class="defense_to_build_count">
-                          <p>
-                            <input class="defense_build_selector" method="post" type="number" name="rocket_launcher_count" id="rocket_launcher_count" value="0" min="0" max="0"/>
-                          </p>
+                <div class="planet_defenses_section">
+                  <p class="planet_defenses_header">Defense systems</p>
+                  <div id="planet_defenses">
+                    <div class="planet_defense_container">
+                      <img class="planet_defense_icon" src="../img/rocket_launcher.jpeg" alt="Rocket launcher" title="Rocket launcher"/>
+                      <span class="planet_defense_available_count">1500</span>
+                      <div class="planet_defense_action">
+                        <form class="planet_defense_selected_count">
+                          <input class="planet_defense_selector" method="post" type="number" name="rocket_launcher_defense_count" id="rocket_launcher_defense_count" value="0" min="0" max="33035"/>
                         </form>
+                        <button class="planet_defense_build" type="button"></button>
                       </div>
                     </div>
-                    <div class="defense_container">
-                      <p class="defense_name">Light laser</p>
-                      <p class="defense_built_count">0</p>
-                      <div class="selector_container">
-                        <form class="defense_to_build_count">
-                          <p>
-                            <input class="defense_build_selector" method="post" type="number" name="rocket_launcher_count" id="rocket_launcher_count" value="0" min="0" max="0"/>
-                          </p>
+                    <div class="planet_defense_container">
+                      <img class="planet_defense_icon" src="../img/light_laser.jpeg" alt="Light laser" title="Light laser"/>
+                      <span class="planet_defense_available_count">0</span>
+                      <div class="planet_defense_action">
+                        <form class="planet_defense_selected_count">
+                          <input class="planet_defense_selector" method="post" type="number" name="light_laser_defense_count" id="light_laser_defense_count" value="0" min="0" max="45"/>
                         </form>
+                        <button class="planet_defense_build" type="button"></button>
                       </div>
                     </div>
-
-                    <div class="defense_container">
-                      <p class="defense_name">Heavy laser</p>
-                      <p class="defense_built_count">400</p>
-                      <form class="defense_to_build_count">
-                        <p>
-                          <input class="defense_build_selector" method="post" type="number" name="rocket_launcher_count" id="rocket_launcher_count" value="0" min="0" max="0"/>
-                        </p>
-                      </form>
+                    <div class="planet_defense_container">
+                      <img class="planet_defense_icon" src="../img/heavy_laser.jpeg" alt="Heavy laser" title="Heavy laser"/>
+                      <span class="planet_defense_available_count">400</span>
+                      <div class="planet_defense_action">
+                        <form class="planet_defense_selected_count">
+                          <input class="planet_defense_selector" method="post" type="number" name="heavy_laser_defense_count" id="heavy_laser_defense_count" value="0" min="0" max="3663"/>
+                        </form>
+                        <button class="planet_defense_build" type="button"></button>
+                      </div>
                     </div>
-                    <div class="defense_container">
-                      <p class="defense_name">Gauss cannon</p>
-                      <p class="defense_built_count">15</p>
-                      <form class="defense_to_build_count">
-                        <p>
-                          <input class="defense_build_selector" method="post" type="number" name="rocket_launcher_count" id="rocket_launcher_count" value="0" min="0" max="0"/>
-                        </p>
-                      </form>
+                    <div class="planet_defense_container">
+                      <img class="planet_defense_icon" src="../img/gauss_cannon.jpeg" alt="Gauss cannon" title="Gauss cannon"/>
+                      <span class="planet_defense_available_count">15</span>
+                      <div class="planet_defense_action">
+                        <form class="planet_defense_selected_count">
+                          <input class="planet_defense_selector" method="post" type="number" name="gauss_cannon_defense_count" id="gauss_cannon_defense_count" value="0" min="0" max="1500"/>
+                        </form>
+                        <button class="planet_defense_build" type="button"></button>
+                      </div>
                     </div>
-                    <div class="defense_container">
-                      <p class="defense_name">Ion artillery</p>
-                      <p class="defense_built_count">0</p>
-                      <form class="defense_to_build_count">
-                        <p>
-                          <input class="defense_build_selector" method="post" type="number" name="rocket_launcher_count" id="rocket_launcher_count" value="0" min="0" max="0"/>
-                        </p>
-                      </form>
+                    <div class="planet_defense_container">
+                      <img class="planet_defense_icon" src="../img/ion_cannon.jpeg" alt="Ion cannon" title="Ion cannon"/>
+                      <span class="planet_defense_available_count">0</span>
+                      <div class="planet_defense_action">
+                        <form class="planet_defense_selected_count">
+                          <input class="planet_defense_selector" method="post" type="number" name="ion_cannon_defense_count" id="ion_cannon_defense_count" value="0" min="0" max="650"/>
+                        </form>
+                        <button class="planet_defense_build" type="button"></button>
+                      </div>
                     </div>
-                    <div class="defense_container">
-                      <p class="defense_name">Plasma turret</p>
-                      <p class="defense_built_count">0</p>
-                      <form class="defense_to_build_count">
-                        <p>
-                          <input class="defense_build_selector" method="post" type="number" name="rocket_launcher_count" id="rocket_launcher_count" value="0" min="0" max="0"/>
-                        </p>
-                      </form>
+                    <div class="planet_defense_container">
+                      <img class="planet_defense_icon" src="../img/plasma_turret.jpeg" alt="Plasma turret" title="Plasma turret"/>
+                      <span class="planet_defense_available_count">0</span>
+                      <div class="planet_defense_action">
+                        <form class="planet_defense_selected_count">
+                          <input class="planet_defense_selector" method="post" type="number" name="plasma_turret_defense_count" id="plasma_turret_defense_count" value="0" min="0" max="100"/>
+                        </form>
+                        <button class="planet_defense_build" type="button"></button>
+                      </div>
                     </div>
-                    <div class="defense_container">
-                      <p class="defense_name">Small shield dome</p>
-                      <p class="defense_built_count">1</p>
-                      <form class="defense_to_build_count">
-                        <p>
-                          <input class="defense_build_selector" method="post" type="number" name="rocket_launcher_count" id="rocket_launcher_count" value="0" min="0" max="0"/>
-                        </p>
-                      </form>
+                    <div class="planet_defense_container">
+                      <img class="planet_defense_icon" src="../img/small_shield_dome.jpeg" alt="Small shield dome" title="Small shield dome"/>
+                      <span class="planet_defense_available_count">1</span>
+                      <div class="planet_defense_action">
+                        <form class="planet_defense_selected_count">
+                          <input class="planet_defense_selector" method="post" type="number" name="small_shield_dome_defense_count" id="small_shield_dome_defense_count" value="0" min="0" max="450"/>
+                        </form>
+                        <button class="planet_defense_build" type="button"></button>
+                      </div>
                     </div>
-                    <div class="defense_container">
-                      <p class="defense_name">Large shield dome</p>
-                      <p class="defense_built_count">1</p>
-                      <form class="defense_to_build_count">
-                        <p>
-                          <input class="defense_build_selector" method="post" type="number" name="rocket_launcher_count" id="rocket_launcher_count" value="0" min="0" max="0"/>
-                        </p>
-                      </form>
+                    <div class="planet_defense_container">
+                      <img class="planet_defense_icon" src="../img/large_shield_dome.jpeg" alt="Large shield dome" title="Large shield dome"/>
+                      <span class="planet_defense_available_count">1</span>
+                      <div class="planet_defense_action">
+                        <form class="planet_defense_selected_count">
+                          <input class="planet_defense_selector" method="post" type="number" name="large_shield_dome_defense_count" id="large_shield_dome_defense_count" value="0" min="0" max="0"/>
+                        </form>
+                        <button class="planet_defense_build" type="button"></button>
+                      </div>
                     </div>
-                    <div class="defense_container">
-                      <p class="defense_name">Anti-ballistic missile</p>
-                      <p class="defense_built_count">20</p>
-                      <form class="defense_to_build_count">
-                        <p>
-                          <input class="defense_build_selector" method="post" type="number" name="rocket_launcher_count" id="rocket_launcher_count" value="0" min="0" max="0"/>
-                        </p>
-                      </form>
+                    <div class="planet_defense_container">
+                      <img class="planet_defense_icon" src="../img/antiballistic_missile.jpeg" alt="Anti-ballistic missile" title="Anti-ballistic missile"/>
+                      <span class="planet_defense_available_count">20</span>
+                      <div class="planet_defense_action">
+                        <form class="planet_defense_selected_count">
+                          <input class="planet_defense_selector" method="post" type="number" name="antiballistic_missile_defense_count" id="antiballistic_missile_defense_count" value="0" min="0" max="0"/>
+                        </form>
+                        <button class="planet_defense_build" type="button"></button>
+                      </div>
                     </div>
-                    <div class="defense_container">
-                      <p class="defense_name">Interplanetary missile</p>
-                      <p class="defense_built_count">0</p>
-                      <form class="defense_to_build_count">
-                        <p>
-                          <input class="defense_build_selector" method="post" type="number" name="rocket_launcher_count" id="rocket_launcher_count" value="0" min="0" max="0"/>
-                        </p>
-                      </form>
+                    <div class="planet_defense_container">
+                      <img class="planet_defense_icon" src="../img/interplanetary_missile.jpeg" alt="Interplanetary missile" title="Interplanetary missile"/>
+                      <span class="planet_defense_available_count">0</span>
+                      <div class="planet_defense_action">
+                        <form class="planet_defense_selected_count">
+                          <input class="planet_defense_selector" method="post" type="number" name="interplanetaty_missile_defense_count" id="interplanetaty_missile_defense_count" value="0" min="0" max="0"/>
+                        </form>
+                        <button class="planet_defense_build" type="button"></button>
+                      </div>
                     </div>
                   </div>
                 </div>
