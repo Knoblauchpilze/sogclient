@@ -286,6 +286,79 @@ body
   color: inherit;
 }
 
+.planet_buildings_section
+{
+  margin-left: 5px;
+  margin-right: 5px;
+  background-color: #0D1014;
+}
+.planet_buildings_header
+{
+  color: #5B9FC1;
+  text-align: center;
+  background-color: #141E26;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+#planet_buildings
+{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.planet_building_container
+{
+  display: flex;
+  flex-direction: column;
+  background-color: #141E26;
+  margin: 2px;
+  padding: 5px;
+  min-width: 20px;
+  min-height: 20px;
+}
+.planet_building_name
+{
+  color: #5B9FC1;
+  background-color: #1E2D39;
+  white-space: nowrap;
+}
+.planet_building_icon
+{
+  background-color: #888800;
+  flex-grow: 1;
+  max-width: 96px;
+  max-height: 96px;
+}
+.planet_building_level
+{
+  text-align: right;
+  color: #FF8800;
+  background-color: #283C52;
+}
+.planet_building_action
+{
+  display: flex;
+  flex-direction: row;
+}
+.planet_upgrade_action
+{
+  width: 66%;
+  height: 20px;
+  background-image: url("../img/building_upgrade.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.planet_demolish_action
+{
+  width: 34%;
+  height: 20px;
+  background-image: url("../img/building_demolish.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 #right
 {
   display: flex;

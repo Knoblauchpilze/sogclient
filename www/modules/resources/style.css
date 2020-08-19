@@ -387,6 +387,8 @@ body
 {
   background-color: #888800;
   flex-grow: 1;
+  max-width: 96px;
+  max-height: 96px;
 }
 .planet_building_level
 {
@@ -402,6 +404,7 @@ body
 .planet_upgrade_action
 {
   width: 66%;
+  height: 20px;
   background-image: url("../img/building_upgrade.png");
   background-size: contain;
   background-repeat: no-repeat;
