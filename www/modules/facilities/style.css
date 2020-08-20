@@ -145,7 +145,7 @@ body
 #left
 {
   background-color: #03030388;
-  height: 400px;
+  height: 320px;
 }
 
 #left table
@@ -219,7 +219,7 @@ body
 {
   background: url("../img/planet_view.jpeg");
   background-size: 100% 100%;
-  height: 400px;
+  height: 320px;
   min-width: 650px;
   display: flex;
   flex-direction: column;
@@ -289,6 +289,7 @@ body
 
 .planet_buildings_section
 {
+  margin-top: 5px;
   background-color: #0D1014;
 }
 .planet_buildings_header
@@ -355,7 +356,7 @@ body
 {
   display: flex;
   flex-direction: column;
-  min-height: 400px;
+  min-height: 320px;
   background-color: #03030388;
 }
 #planets_count_info
