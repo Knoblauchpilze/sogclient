@@ -287,7 +287,7 @@ body
   color: inherit;
 }
 
-#planet_available_ships
+#all_ships_section
 {
   display: flex;
   flex-direction: row;
@@ -295,8 +295,6 @@ body
 }
 .planet_ships_section
 {
-  margin-left: 5px;
-  margin-right: 5px;
   background-color: #0D1014;
 }
 .planet_ships_header
@@ -325,7 +323,6 @@ body
   flex-direction: column;
   background-color: #141E26;
   margin: 2px;
-  padding: 5px;
   min-width: 20px;
   min-height: 20px;
 }
