@@ -16,36 +16,6 @@ body
 }
 
 /* Beginning of test */
-#test
-{
-  background-color: #888800;
-}
-
-#before_form
-{
-  background-color: #880000;
-}
-
-#thisistheform
-{
-  background-color: #008800;
-}
-
-#login
-{
-  width: 30px;
-  -moz-appearance:textfield
-}
-
-#in_form
-{
-  background-color: #880088;
-}
-
-#after_form
-{
-  background-color: #000088;
-}
 /* End of test */
 
 #contact
