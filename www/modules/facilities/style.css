@@ -341,6 +341,16 @@ body
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  background-color: #141E26;
+  border: none;
+}
+.planet_upgrade_action:hover
+{
+  background-color: #283C5288;
+}
+.planet_upgrade_action:active
+{
+  background-color: #283C52FF;
 }
 .planet_demolish_action
 {
@@ -350,6 +360,16 @@ body
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  background-color: #141E26;
+  border: none;
+}
+.planet_demolish_action:hover
+{
+  background-color: #283C5288;
+}
+.planet_demolish_action:active
+{
+  background-color: #283C52FF;
 }
 
 #right
