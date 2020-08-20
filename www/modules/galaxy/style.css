@@ -145,7 +145,7 @@ body
 #left
 {
   background-color: #03030388;
-  height: 400px;
+  height: 320px;
 }
 
 #left table
@@ -266,7 +266,7 @@ body
 {
   display: flex;
   flex-direction: column;
-  min-height: 400px;
+  min-height: 320px;
   background-color: #03030388;
 }
 #planets_count_info
