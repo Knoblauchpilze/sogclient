@@ -255,8 +255,7 @@ body
 }
 .filter_icon
 {
-  max-width: 60px;
-  max-height: 60px;
+  width: 60px;
   margin: auto;
 }
 .filter_name
