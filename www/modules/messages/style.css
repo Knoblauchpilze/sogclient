@@ -212,14 +212,59 @@ body
   flex-grow: 1;
   margin-left: 5px;
   margin-right: 5px;
+  background-color: #03030388;
+}
+
+#middle h3
+{
+  min-width: 650px;
+  color: #5B9FC1;
+  text-align: center;
+  background-color: #141E26;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 #filters_panel
 {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: start;
+  background-color: #10181F;
 }
+.filter_container
+{
+  display: flex;
+  flex-direction: column;
+  margin: 5px 5px 0px 5px;
+  padding: 5px;
+  border: 2px #030303 solid;
+  color: #414D4F;
+}
+.selected_filter_container
+{
+  display: flex;
+  flex-direction: column;
+  margin: 5px 5px 0px 5px;
+  padding: 5px;
+  border-top: 2px #030303 solid;
+  border-left: 2px #030303 solid;
+  border-right: 2px #030303 solid;
+  background-color: #1F2C35;
+  color: #FFFFFF;
+}
+.filter_icon
+{
+  max-width: 60px;
+  max-height: 60px;
+  margin: auto;
+}
+.filter_name
+{
+  white-space: nowrap;
+  font-size: smaller;
+}
+
 #category_fleets
 {
   display: flex;
