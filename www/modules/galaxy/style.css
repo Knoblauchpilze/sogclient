@@ -215,7 +215,6 @@ body
   flex-grow: 1;
   margin-left: 5px;
   margin-right: 5px;
-  max-width: 650px;
 }
 
 #galaxy_view_navigator
@@ -328,7 +327,6 @@ body
   text-align: center;
 }
 
-
 .galaxy_item_container
 {
   color: #FFFFFF;
@@ -350,6 +348,39 @@ body
   padding: 3px;
   background-color: #111111AA;
 }
+.galaxy_item_status
+{
+  color: #AA0000;
+  font-weight: bold;
+}
+
+.galaxy_action_spy, .galaxy_action_friend, .galaxy_action_message, .galaxy_action_mip
+{
+  min-width: 20px;
+  min-height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #6D8297;
+  border: none;
+}
+.galaxy_action_spy
+{
+  background-image: url("img/spy.png");
+}
+.galaxy_action_friend
+{
+  background-image: url("img/friend.png");
+}
+.galaxy_action_message
+{
+  background-image: url("img/message.png");
+}
+.galaxy_action_mip
+{
+  background-image: url("img/mip.png");
+}
+
 .galaxy_normal_player
 {
   color: #FFFFFF;
@@ -369,6 +400,44 @@ body
 .galaxy_strong_player
 {
   color: #FF3333;
+}
+
+#galaxy_fleet_messages
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 5px;
+  background-color: #121815;
+  font-size: smaller;
+}
+#galaxy_system_info
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px;
+  margin-top: 2px;
+  color: #5B9FC1;
+  background-color: #121815;
+}
+#galaxy_system_info_action
+{
+  min-width: 20px;
+  min-height: 20px;
+  color: #FFFFFF;
+  background-color: #5B9FC1;
+  font-weight: bold;
+  border-radius: 50%;
+  border: none;
+}
+#galaxy_system_info_action:hover
+{
+  background-color: #ADCFE0;
+}
+#galaxy_system_info_action:active
+{
+  background-color: #D5E7EF;
 }
 
 #right
