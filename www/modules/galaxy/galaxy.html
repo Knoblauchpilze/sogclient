@@ -144,59 +144,41 @@
               </nav>
 
               <section id="middle">
-                <table>
-                  <tr>
-                    <td colspan="3">Galaxy</td>
-                    <td colspan="3">Solar system</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <button class="galaxy_view_navigator" type="button">&lt;</button>
-                    </td>
-                    <td>
-                      <form class="galaxy_index_selector">
-                        <p>
-                          <label for="galaxy_view_galaxy_index"></label>
-                          <input class="galaxy_view_index_elem" method="post" type="number" name="galaxy_view_galaxy_index" id="galaxy_view_galaxy_index" value="1" min="1" max="9"/>
-                        </p>
+                <div id="galaxy_view_navigator">
+                  <div id="galaxy_navigation">
+                    <div class="galaxy_element_selector">
+                      <span class="galaxy_view_label">Galaxy:</span>
+                      <button class="galaxy_selector_previous" type="button"></button>
+                      <form class="galaxy_index_selected">
+                        <input class="galaxy_index_selector" method="post" type="number" name="galaxy_index" id="galaxy_index" value="0" min="0" max="9"/>
                       </form>
-                    </td>
-                    <td>
-                      <button class="galaxy_view_navigator" type="button">&gt;</button>
-                    </td>
-                    <td>
-                      <button class="galaxy_view_navigator" type="button">&lt;</button>
-                    </td>
-                    <td>
-                      <form class="system_index_selector">
-                        <p>
-                          <label for="galaxy_view_system_index"></label>
-                          <input class="galaxy_view_index_elem" method="post" type="number" name="galaxy_view_system_index" id="galaxy_view_system_index" value="1" min="1" max="499"/>
-                        </p>
+                      <button class="galaxy_selector_next" type="button"></button>
+                    </div>
+                    <div class="galaxy_element_selector">
+                      <span class="galaxy_view_label">System:</span>
+                      <button class="galaxy_selector_previous" type="button"></button>
+                      <form class="galaxy_index_selected">
+                        <input class="galaxy_index_selector" method="post" type="number" name="system_index" id="system_index" value="0" min="0" max="499"/>
                       </form>
-                    </td>
-                    <td>
-                      <button class="galaxy_view_navigator" type="button">&gt;</button>
-                    </td>
-                    <td>
-                      <button class="galaxy_view_navigator" type="button">Refresh</button>
-                    </td>
-                    <td>
-                      <button class="galaxy_view_navigator" type="button">Expedition</button>
-                    </td>
-                  </tr>
-                </table>
+                      <button class="galaxy_selector_next" type="button"></button>
+                    </div>
+                    <button class="galaxy_view_action" type="button">Refresh</button>
+                  </div>
+                  <button class="galaxy_view_action" type="button">
+                    <a href="../fleets/fleets.html">Expedition</a>
+                  </button>
+                </div>
 
                 <div id="galaxy_available_ships">
-                  <p class="galaxy_available_ship">73 espionage probe(s)</p>
-                  <p class="galaxy_available_ship">144 recycler(s)</p>
-                  <p class="galaxy_available_ship">0 interplanetary missile(s)</p>
-                  <p class="galaxy_available_ship">2/13 slot(s)</p>
+                  <span class="galaxy_view_label">73 espionage probe(s)</span>
+                  <span class="galaxy_view_label">144 recycler(s)</span>
+                  <span class="galaxy_view_label">0 interplanetary missile(s)</span>
+                  <span class="galaxy_view_label">2/13 slot(s)</span>
                 </div>
 
                 <table id="galaxy_current_system">
                   <thead>
-                    <tr>
+                    <tr id="system_data_header">
                       <td colspan="2" class="galaxy_item_header">Planet</td>
                       <td class="galaxy_item_header">Name</td>
                       <td class="galaxy_item_header">Moon</td>
