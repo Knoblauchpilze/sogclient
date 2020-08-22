@@ -147,97 +147,83 @@
                 <h3>Newsfeed</h3>
 
                 <div id="filters_panel">
-                  <div class="selected_filter_container">
+                  <a class="selected_filter_container" href="mailbox.html">
                     <img class="filter_icon" src="img/fleets.png" alt="Fleets" />
                     <span class="filter_name">Fleets</span>
-                  </div>
-                  <div class="filter_container">
+                  </a>
+                  <a class="filter_container" href="mailbox.html">
                     <img class="filter_icon" src="img/communication.png" alt="Communication" />
                     <span class="filter_name">Communication</span>
-                  </div>
-                  <div class="filter_container">
+                  </a>
+                  <a class="filter_container" href="mailbox.html">
                     <img class="filter_icon" src="img/economy.png" alt="Economy" />
                     <span class="filter_name">Economy</span>
-                  </div>
-                  <div class="filter_container">
+                  </a>
+                  <a class="filter_container" href="mailbox.html">
                     <img class="filter_icon" src="img/system_messages.png" alt="System" />
                     <span class="filter_name">System messages</span>
-                  </div>
-                  <div class="filter_container">
+                  </a>
+                  <a class="filter_container" href="mailbox.html">
                     <img class="filter_icon" src="img/oglike.png" alt="OGlike" />
                     <span class="filter_name">OGlike</span>
+                  </a>
+                </div>
+
+                <div id="category_actions">
+                  <button id="delete_all_mails" type="button">Trash</button>
+                </div>
+
+                <div id="mails_data">
+                  <div class="mail_navigation">
+                    <button class="mail_navigation_button" type="button">|&lt;&lt;</button>
+                    <button class="mail_navigation_button" type="button">&lt;</button>
+                    <span class="mail_page">1/1</span>
+                    <button class="mail_navigation_button" type="button">&gt;</button>
+                    <button class="mail_navigation_button" type="button">&gt;&gt;|</button>
+                  </div>
+
+                  <div class="mail_container">
+                    <div class="mail_header">
+                      <span class="mail_subject">Refund event</span>
+                      <span class="mail_timestamp">21.08.2020 00:02:07</span>
+                    </div>
+                    <span class="mail_sender">From: OGlike</span>
+                    <p class="mail_content">Hello tttttttttttttttttttt,<br><br>Do you want some money ?<br>Send 5000$ to Wells Fargo please.<br><br>Have a good day Sir.</p>
+                    <div class="mail_footer">
+                      <button class="mail_delete" type="button"></button>
+                    </div>
+                  </div>
+                  <div class="mail_container">
+                    <div class="mail_header">
+                      <span class="mail_subject">Refund event</span>
+                      <span class="mail_timestamp">21.08.2020 00:22:14</span>
+                    </div>
+                    <span class="mail_sender">From: OGlike</span>
+                    <p class="mail_content">Hello tttttttttttttttttttt,<br><br>This was an error, we actually need 50000$.<br>Thanks.<br><br>Have a good day Sir.</p>
+                    <div class="mail_footer">
+                      <button class="mail_delete" type="button"></button>
+                    </div>
+                  </div>
+                  <div class="mail_container">
+                    <div class="mail_header">
+                      <span class="mail_subject">Refund event</span>
+                      <span class="mail_timestamp">21.08.2020 00:44:37</span>
+                    </div>
+                    <span class="mail_sender">From: OGlike</span>
+                    <p class="mail_content">Hello tttttttttttttttttttt,<br><br>Yo where's da money punk ?<br><br>Have a good day Sir.</p>
+                    <div class="mail_footer">
+                      <button class="mail_delete" type="button"></button>
+                    </div>
+                  </div>
+
+                  <div class="mail_navigation">
+                    <button class="mail_navigation_button" type="button">|&lt;&lt;</button>
+                    <button class="mail_navigation_button" type="button">&lt;</button>
+                    <span class="mail_page">1/1</span>
+                    <button class="mail_navigation_button" type="button">&gt;</button>
+                    <button class="mail_navigation_button" type="button">&gt;&gt;|</button>
                   </div>
                 </div>
-
-                <div id="category_fleets">
-                  <p>Espionage</p>
-                  <p>Fight reports</p>
-                  <p>Expeditions</p>
-                  <p>Group/transport</p>
-                  <p>Various</p>
-                </div>
-                <div id="category_communication">
-                  <p>Messages</p>
-                  <p>Notifications</p>
-                  <p>Shared fight reports</p>
-                  <p>Shared spying reports</p>
-                  <p>Expeditions</p>
-                </div>
-
-                <table>
-                  <thead>
-                    <tr class="mail_header">
-                      <td class="mail_first">
-                        <button class="mail_navigation_button" type="button">|&lt;&lt;</button>
-                      </td>
-                      <td class="mail_previous">
-                        <button class="mail_navigation_button" type="button">&lt;</button>
-                      </td>
-                      <td class="mail_page">1/1</td>
-                      <td class="mail_next">
-                        <button class="mail_navigation_button" type="button">&gt;</button>
-                      </td>
-                      <td class="mail_last">
-                        <button class="mail_navigation_button" type="button">|&gt;&gt;</button>
-                      </td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr class="mail_container">
-                      <td class="mail_subject">Refund event</td>
-                      <td class="mail_sender">From: OGlike</td>
-                      <td class="mail_content">Hello, do you want some money ? Send 5000$ to Wells Fargo please.</td>
-                      <td class="mail_delete">
-                        <button class="mail_action_button" type="button">Delete</button>
-                      </td>
-                    </tr>
-                    <tr class="mail_container">
-                      <td class="mail_subject">Refund event</td>
-                      <td class="mail_sender">From: OGlike</td>
-                      <td class="mail_content">Hello. This was an error, we actually need 50000$. Thanks.</td>
-                      <td class="mail_delete">
-                        <button class="mail_action_button" type="button">Delete</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                  <tfoot>
-                    <tr class="mail_footer">
-                      <td class="mail_first">
-                        <button class="mail_navigation_button" type="button">|&lt;&lt;</button>
-                      </td>
-                      <td class="mail_previous">
-                        <button class="mail_navigation_button" type="button">&lt;</button>
-                      </td>
-                      <td class="mail_page">1/1</td>
-                      <td class="mail_next">
-                        <button class="mail_navigation_button" type="button">&gt;</button>
-                      </td>
-                      <td class="mail_last">
-                        <button class="mail_navigation_button" type="button">|&gt;&gt;</button>
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
               </section>
 
               <section id="right">
