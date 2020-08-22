@@ -72,6 +72,8 @@ body
 #pagereloader
 {
   margin: 20px;
+  max-width: 100px;
+  max-height: 100px;
 }
 
 #top_events_container
@@ -261,6 +263,7 @@ body
 .filter_name
 {
   white-space: nowrap;
+  text-align: center;
   font-size: smaller;
 }
 
