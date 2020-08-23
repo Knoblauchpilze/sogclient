@@ -215,28 +215,212 @@ body
   flex-grow: 1;
   margin-left: 5px;
   margin-right: 5px;
+  background-color: #03030388;
+}
+
+#middle h3
+{
+  min-width: 650px;
+  color: #5B9FC1;
+  text-align: center;
+  background-color: #141E26;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+#rankings_container
+{
+  background-color: #10181F;
 }
 
 #filters_panel
 {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: start;
 }
-#filters_page
+
+#filter_categories
 {
   display: flex;
   flex-direction: row;
-  text-align: center;
-  justify-content: space-around;
+  margin-right: 20px;
 }
-.rank_header
+#filter_types
+{
+  display: flex;
+  flex-direction: row;
+}
+
+.filter_container
+{
+  display: flex;
+  flex-direction: column;
+  margin: 5px 5px 0px 5px;
+  padding: 5px;
+  border: 2px #030303 solid;
+  color: #414D4F;
+  text-decoration: none;
+}
+.filter_container:hover
+{
+  background-color: #1F2C35;
+}
+.selected_filter_container
+{
+  display: flex;
+  flex-direction: column;
+  margin: 5px 5px 0px 5px;
+  padding: 5px;
+  border-top: 2px #030303 solid;
+  border-left: 2px #030303 solid;
+  border-right: 2px #030303 solid;
+  background-color: #22313B;
+  color: #FFFFFF;
+  text-decoration: none;
+}
+.filter_icon
+{
+  width: 60px;
+  margin: auto;
+  padding: 5px;
+}
+.filter_name
 {
   white-space: nowrap;
+  text-align: center;
+  font-size: smaller;
+}
+
+.players
+{
+  border-radius: 4px;
+  background-color: #327599;
+  box-shadow: inset 0 0 10px #000000;
+}
+.guilds
+{
+  border-radius: 4px;
+  background-color: #339778;
+  box-shadow: inset 0 0 10px #000000;
+}
+.points
+{
+  border-radius: 4px;
+  background-color: #8A862C;
+  box-shadow: inset 0 0 10px #000000;
+}
+.economy
+{
+  border-radius: 4px;
+  background-color: #5D5D5D;
+  box-shadow: inset 0 0 10px #000000;
+}
+.research
+{
+  border-radius: 4px;
+  background-color: #8FC02A;
+  box-shadow: inset 0 0 10px #000000;
+}
+.military
+{
+  border-radius: 4px;
+  background-color: #C52B29;
+  box-shadow: inset 0 0 10px #000000;
+}
+
+#rankings_data
+{
+  margin: 10px;
+  background-color: #0D1014;
+}
+
+#filters_pages
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+.selected_filters_page
+{
+  color: #FFFFFF;
+  margin: 0px 5px 0px 5px;
+  border: 1px #000000 solid;
+  background-color: #22313B;
+  text-decoration: none;
+  text-align: center;
+  font-size: smaller;
+  min-width: 15px;
+  min-height: 15px;
+}
+.filters_page
+{
+  color: #9B9B95;
+  margin: 0px 5px 0px 5px;
+  border: 1px #22313B solid;
+  background-color: #000000;
+  text-decoration: none;
+  text-align: center;
+  font-size: smaller;
+  min-width: 15px;
+  min-height: 15px;
+}
+.filters_page:hover
+{
+  background-color: #22313B;
+  text-decoration: underline;
+}
+
+#quick_filters_pages
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px;
+  color: #9B9B95;
+  font-size: larger;
+  font-weight: bold;
+}
+#rankings_page_selection
+{
+  background-color: #141E26;
+  text-align: left;
+  min-width: 150px;
+  color: #9B9B95;
+  border-radius: 4px;
+  border: 1px #000000 solid;
+}
+
+#rankings_raw_data
+{
+  min-width: 630px;
+  background-color: #000000;
+}
+#rankings_raw_data tr:nth-child(even)
+{
+  background-color: #0D1014;
+}
+#rankings_raw_data tr:nth-child(odd)
+{
+  background-color: #12171C;
+}
+
+.rank_header
+{
+  font-size: smaller;
+}
+.rank_position, .rank_progress, .rank_nickname, .rank_action, .rank_points
+{
+  vertical-align: middle;
+  padding: 3px;
 }
 .rank_position
 {
+  color: #717C76;
   text-align: left;
+  font-size: smaller;
 }
 .rank_progression
 {
@@ -244,17 +428,73 @@ body
 }
 .rank_nickname
 {
-  display: flex;
+  color: #717C76;
   text-align: left;
+  font-size: smaller;
 }
 .rank_action
 {
-  text-align: center;
+  color: #717C76;
+  text-align: left;
 }
 .rank_points
 {
-  display: flex;
+  color: #717C76;
   text-align: right;
+  font-weight: bold;
+}
+
+.no_change, .rank_up, .rank_down
+{
+  max-width: 10px;
+  max-height: 10px;
+}
+.rank_up_text
+{
+  color: #89AB33;
+  font-size: smaller;
+}
+.rank_down_text
+{
+  color: #BC3939;
+  font-size: smaller;
+}
+
+.player_guild
+{
+  color: #5B9FC1;
+}
+.player_honorific_positive
+{
+  color: #89AB33;
+}
+.player_honorific_negative
+{
+  color: #BC3939;
+}
+
+.player_action_friend, .player_action_message
+{
+  min-width: 20px;
+  min-height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #6D8297;
+  border: none;
+  box-shadow: inset 0 0 5px #000000;
+}
+.player_action_friend:hover, .player_action_message:hover
+{
+  background-color: #B6C0CB;
+}
+.player_action_friend
+{
+  background-image: url("img/friend.png");
+}
+.player_action_message
+{
+  background-image: url("img/message.png");
 }
 
 #right

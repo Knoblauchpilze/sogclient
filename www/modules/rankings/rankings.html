@@ -144,111 +144,212 @@
               </nav>
 
               <section id="middle">
-                <div>
-                  <p>Rankings</p>
-                </div>
+                <h3>Rankings</h3>
 
-                <div id="filters_panel">
-                  <td>
-                    <button class="filters_panel_button" type="button">Player</button>
-                  </td>
-                  <td>
-                    <button class="filters_panel_button" type="button">Guild</button>
-                  </td>
-                  <td>
-                    <button class="filters_panel_button" type="button">Points</button>
-                  </td>
-                  <td>
-                    <button class="filters_panel_button" type="button">Economy</button>
-                  </td>
-                  <td>
-                    <button class="filters_panel_button" type="button">Research</button>
-                  </td>
-                  <td>
-                    <button class="filters_panel_button" type="button">Military</button>
-                  </td>
-                </div>
+                <div id="rankings_container">
+                  <div id="filters_panel">
+                    <div id="filter_categories">
+                      <a class="selected_filter_container" href="rankings.html">
+                        <img class="filter_icon players" src="img/player.png" alt="Players" />
+                        <span class="filter_name">Player</span>
+                      </a>
+                      <a class="filter_container" href="rankings.html">
+                        <img class="filter_icon guilds" src="img/guild.png" alt="Guilds" />
+                        <span class="filter_name">Guild</span>
+                      </a>
+                    </div>
 
-                <div id="filters_page">
-                  <td>
-                    <button class="filters_page_button" type="button">1</button>
-                  </td>
-                  <td>
-                    <button class="filters_page_button" type="button">2</button>
-                  </td>
-                  <td>
-                    <button class="filters_page_button" type="button">3</button>
-                  </td>
-                  <td>
-                    <button class="filters_page_button" type="button">4</button>
-                  </td>
-                  <td>
-                    <button class="filters_page_button" type="button">5</button>
-                  </td>
-                </div>
+                    <div id="filter_types">
+                      <a class="selected_filter_container" href="rankings.html">
+                        <img class="filter_icon points" src="img/points.png" alt="Points" />
+                        <span class="filter_name">Points</span>
+                      </a>
+                      <a class="filter_container" href="rankings.html">
+                        <img class="filter_icon economy" src="img/economy.png" alt="Economy" />
+                        <span class="filter_name">Economy</span>
+                      </a>
+                      <a class="filter_container" href="rankings.html">
+                        <img class="filter_icon research" src="img/research.png" alt="Research" />
+                        <span class="filter_name">Research</span>
+                      </a>
+                      <a class="filter_container" href="rankings.html">
+                        <img class="filter_icon military" src="img/military.png" alt="Military" />
+                        <span class="filter_name">Military</span>
+                      </a>
+                    </div>
+                  </div>
 
-                <table>
-                  <thead>
-                    <tr class="rank_header">
-                      <td class="rank_position">Rank</td>
-                      <td><!-- Blank --></td>
-                      <td class="rank_nickname">Nickname (honorific points)</td>
-                      <td class="rank_action">Action</td>
-                      <td class="rank_points">Points</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="rank_position">101</td>
-                      <td class="rank_progression">No change</td>
-                      <td class="rank_nickname">Youss</td>
-                      <td class="rank_action"><!-- Blank --></td>
-                      <td class="rank_points">10644717</td>
-                    </tr>
-                    <tr>
-                      <td class="rank_position">102</td>
-                      <td class="rank_progression">+2</td>
-                      <td class="rank_nickname">pamkiller</td>
-                      <td class="rank_action"><!-- Blank --></td>
-                      <td class="rank_points">10636189</td>
-                    </tr>
-                    <tr>
-                      <td class="rank_position">103</td>
-                      <td class="rank_progression">No change</td>
-                      <td class="rank_nickname">Bandit Canari</td>
-                      <td class="rank_action"><!-- Blank --></td>
-                      <td class="rank_points">10413348</td>
-                    </tr>
-                    <tr>
-                      <td class="rank_position">104</td>
-                      <td class="rank_progression">-2</td>
-                      <td class="rank_nickname">kharzan</td>
-                      <td class="rank_action"><!-- Blank --></td>
-                      <td class="rank_points">10285022</td>
-                    </tr>
-                    <tr>
-                      <td class="rank_position">105</td>
-                      <td class="rank_progression">No change</td>
-                      <td class="rank_nickname">Akitto</td>
-                      <td class="rank_action"><!-- Blank --></td>
-                      <td class="rank_points">10187783</td>
-                    </tr>
-                    <tr>
-                      <td class="rank_position">106</td>
-                      <td class="rank_progression">No change</td>
-                      <td class="rank_nickname">tttttttttttttttttttt</td>
-                      <td class="rank_action"><!-- Blank --></td>
-                      <td class="rank_points">5702399</td>
-                    </tr>
-                    <tr>
-                      <td class="rank_position">107</td>
-                      <td class="rank_progression">No change</td>
-                      <td class="rank_nickname">Gorestone</td>
-                      <td class="rank_action"><!-- Blank --></td>
-                      <td class="rank_points">10141646</td>
-                    </tr>
-                  </tbody>
-                </table>
+                  <div id="rankings_data">
+                    <div id="filters_pages">
+                      <a class="selected_filters_page" href="rankings.html">1</a>
+                      <a class="filters_page" href="rankings.html">2</a>
+                      <a class="filters_page" href="rankings.html">3</a>
+                      <a class="filters_page" href="rankings.html">4</a>
+                      <a class="filters_page" href="rankings.html">5</a>
+                      <a class="filters_page" href="rankings.html">>></a>
+                    </div>
+
+                    <div id="quick_filters_pages">
+                      <span>Rankings</span>
+                      <form id="rankings_page_form" method="post">
+                        <select id="rankings_page_selection" name="rankings_page" id="rankings_page">
+                            <option value="Own rank">Own rank</option>
+                            <option value="1 - 100">1 - 100</option>
+                            <option value="101 - 200">101 - 200</option>
+                            <option value="201 - 300">201 - 300</option>
+                            <option value="301 - 400">301 - 400</option>
+                            <option value="401 - 500">401 - 500</option>
+                            <option value="501 - 600">501 - 600</option>
+                            <option value="601 - 700">601 - 700</option>
+                        </select>
+                     </form>
+                    </div>
+
+                    <table id="rankings_raw_data">
+                      <thead>
+                        <tr>
+                          <td class="rank_header rank_position">Rank</td>
+                          <td class="rank_header rank_progress"></td>
+                          <td class="rank_header rank_nickname">Nickname (honorific points)</td>
+                          <td class="rank_header rank_action">Action</td>
+                          <td class="rank_header rank_points">Points</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="rank_position">101</td>
+                          <td class="rank_progression">
+                            <img class="no_change" src="img/no_change.png" alt="No change">
+                          </td>
+                          <td class="rank_nickname">
+                            <span class="player_guild">[S-H]</span>
+                            <span class="player_name">Youss</span>
+                            <span class="player_honorific_positive">(14542)</span>
+                          </td>
+                          <td class="rank_action">
+                            <button class="player_action_friend"></button>
+                            <button class="player_action_message"></button>
+                          </td>
+                          <td class="rank_points">10644717</td>
+                        </tr>
+                        <tr>
+                          <td class="rank_position">102</td>
+                          <td class="rank_progression">
+                            <img class="no_change" src="img/rank_up.png" alt="Rank up">
+                            <span class="rank_up_text">(2)</span>
+                          </td>
+                          <td class="rank_nickname">
+                            <span class="player_guild">[C-N]</span>
+                            <span class="player_name">pamkiller</span>
+                            <span class="player_honorific_positive">(33290)</span>
+                          </td>
+                          <td class="rank_action">
+                            <button class="player_action_friend"></button>
+                            <button class="player_action_message"></button>
+                          </td>
+                          <td class="rank_points">10636189</td>
+                        </tr>
+                        <tr>
+                          <td class="rank_position">103</td>
+                          <td class="rank_progression">
+                            <img class="no_change" src="img/no_change.png" alt="No change">
+                          </td>
+                          <td class="rank_nickname">
+                            <span class="player_guild">[MINE]</span>
+                            <span class="player_name">Bandit Canari</span>
+                            <span class="player_honorific_positive">(23017)</span>
+                          </td>
+                          <td class="rank_action">
+                            <button class="player_action_friend"></button>
+                            <button class="player_action_message"></button>
+                          </td>
+                          <td class="rank_points">10413348</td>
+                        </tr>
+                        <tr>
+                          <td class="rank_position">104</td>
+                          <td class="rank_progression">
+                            <img class="rank_down" src="img/rank_down.png" alt="Rank down">
+                            <span class="rank_down_text">(2)</span>
+                          </td>
+                          <td class="rank_nickname">
+                            <span class="player_guild"></span>
+                            <span class="player_name">kharzan</span>
+                            <span class="player_honorific_positive">(2020)</span>
+                          </td>
+                          <td class="rank_action">
+                            <button class="player_action_friend"></button>
+                            <button class="player_action_message"></button>
+                          </td>
+                          <td class="rank_points">10285022</td>
+                        </tr>
+                        <tr>
+                          <td class="rank_position">105</td>
+                          <td class="rank_progression">
+                            <img class="no_change" src="img/no_change.png" alt="No change">
+                          </td>
+                          <td class="rank_nickname">
+                            <span class="player_guild"></span>
+                            <span class="player_name">lordseven</span>
+                            <span class="player_honorific_positive">(0)</span>
+                          </td>
+                          <td class="rank_action">
+                            <button class="player_action_friend"></button>
+                            <button class="player_action_message"></button>
+                          </td>
+                          <td class="rank_points">10187783</td>
+                        </tr>
+                        <tr>
+                          <td class="rank_position">106</td>
+                          <td class="rank_progression">
+                            <img class="no_change" src="img/no_change.png" alt="No change">
+                          </td>
+                          <td class="rank_nickname">
+                            <span class="player_guild">[ROO]</span>
+                            <span class="player_name">tttttttttttttttttttt</span>
+                            <span class="player_honorific_positive">(48837)</span>
+                          </td>
+                          <td class="rank_action">
+                            <button class="player_action_friend"></button>
+                            <button class="player_action_message"></button>
+                          </td>
+                          <td class="rank_points">5702399</td>
+                        </tr>
+                        <tr>
+                          <td class="rank_position">107</td>
+                          <td class="rank_progression">
+                            <img class="no_change" src="img/no_change.png" alt="No change">
+                          </td>
+                          <td class="rank_nickname">
+                            <span class="player_guild">[8FFLE]</span>
+                            <span class="player_name">Gorestone</span>
+                            <span class="player_honorific_positive">(1336)</span>
+                          </td>
+                          <td class="rank_action">
+                            <button class="player_action_friend"></button>
+                            <button class="player_action_message"></button>
+                          </td>
+                          <td class="rank_points">10141646</td>
+                        </tr>
+                        <tr>
+                          <td class="rank_position">108</td>
+                          <td class="rank_progression">
+                            <img class="no_change" src="img/no_change.png" alt="No change">
+                          </td>
+                          <td class="rank_nickname">
+                            <span class="player_guild">[ProteoS]</span>
+                            <span class="player_name">Papy</span>
+                            <span class="player_honorific_negative">(-157175)</span>
+                          </td>
+                          <td class="rank_action">
+                            <button class="player_action_friend"></button>
+                            <button class="player_action_message"></button>
+                          </td>
+                          <td class="rank_points">10094009</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </section>
 
               <section id="right">
