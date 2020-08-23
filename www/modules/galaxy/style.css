@@ -264,7 +264,6 @@ body
   width: 100px;
   max-height: 20px;
   text-align: center;
-  /* This helped: https://stackoverflow.com/questions/42421361/input-button-elements-not-shrinking-in-a-flex-container */
   min-width: 0;
   margin: 0px;
   padding: 0px;
