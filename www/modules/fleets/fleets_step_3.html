@@ -183,135 +183,110 @@
                 <div id="fleet_creation_container">
                   <div id="fleets_available_container">
                     <div>
-                      <span class="fleet_slots">Fleets: 0/15</span>
-                      <span class="fleet_slots">Expeditions: 0/4</span>
+                      <span class="fleet_mission_text">Mission:</span>
+                      <span class="fleet_mission_entry">Deployment</span>
+                      <span class="fleet_mission_text">Target:</span>
+                      <!-- TODO: Gets overriden by `fleets_available_container a` -->
+                      <span class="fleet_mission_entry"><a href="../galaxy/galaxy.html">[5:53:7]</a></span>
+                      <span class="fleet_mission_text">Player name:</span>
+                      <span class="fleet_mission_entry">tttttttttttttttttttt</span>
                     </div>
                     <a href="fleets_movements.html">Fleet movements</a>
                   </div>
-
-
-                  <div id="fleet_flight_info">
-                    <div id="fleet_coordinates">
-                      <div id="fleet_take_off">
-                        <p id="fleet_step_title">Take off location:</p>
-                        <div id="fleet_endpoint_data">
-                          <div id="fleet_endpoint_raw">
-                            <p id="fleet_endpoint_name">New horizons</p>
-                            <div id="fleet_endpoint_type">
-                              <img class="fleet_info_picture" src="img/planet.png" alt="Planet" />
-                              <img class="fleet_info_picture" src="img/moon.png" alt="Moon" />
-                            </div>
-                            <p class="fleet_general_text">Coordinates: <a href="../galaxy/galaxy.html">5:53:7</a></p>
-                          </div>
-                          <div id="flight_distance">
-                            <p class="fleet_distance_indicator">&lt;</p>
-                            <div>
-                              <p class="fleet_general_text">Distance:</p>
-                              <p class="fleet_general_text">5</p>
-                            </div>
-                            <p class="fleet_distance_indicator">&gt;</p>
-                          </div>
-                        </div>
+                  
+                  <div id="fleet_mission">
+                    <p id="fleet_step_title">Select mission for target:</p>
+                    <div id="fleet_missions">
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_expedition" type="button"></button>
+                        <p class="fleet_objective_label">Expedition</p>
                       </div>
-                      <div id="fleet_destination">
-                        <p id="fleet_step_title">Destination</p>
-                        <div id="fleet_endpoint_data">
-                          <div id="fleet_endpoint_raw">
-                            <p id="fleet_endpoint_name">New horizons</p>
-                            <div id="fleet_endpoint_type">
-                              <img class="fleet_info_picture" src="img/planet.png" alt="Planet" />
-                              <img class="fleet_info_picture" src="img/moon.png" alt="Moon" />
-                              <img class="fleet_info_picture" src="img/debris.png" alt="Debris field" />
-                            </div>
-                            <div id="destination_selectors">
-                              <form class="destination_coord_selector">
-                                <input class="destination_coordinates_selector" method="post" type="number" name="destination_galaxy" id="destination_galaxy" value="5" min="1" max="9"/>
-                              </form>
-                              <form class="destination_coord_selector">
-                                <input class="destination_coordinates_selector" method="post" type="number" name="destination_system" id="destination_system" value="53" min="1" max="499"/>
-                              </form>
-                              <form class="destination_coord_selector">
-                                <input class="destination_coordinates_selector" method="post" type="number" name="destination_position" id="destination_position" value="7" min="1" max="15"/>
-                              </form>
-                            </div>
-                          </div>
-                          <div id="destination_quick_select">
-                            <p class="fleet_general_text">Shortcuts:</p>
-                            <form method="post">
-                              <select class="destination_selector" id="destination_shortcut" name="destination_shortcut">
-                                <option value="New Hypergate">New hypergate</option>
-                                <option value="Hyperion">Hyperion</option>
-                                <option value="Hypergate">Hypergate</option>
-                                <option value="Oasis Secundus">Oasis Secundus</option>
-                                <option value="Oasis">Oasis</option>
-                                <option value="Colonie">Colonie</option>
-                                <option value="Tau Ceti Central">Tau Ceti Central</option>
-                                <option value="New London">New London</option>
-                              </select>
-                            </form>
-                            <p class="fleet_general_text">Combat forces:</p>
-                            <form method="post">
-                              <select class="destination_selector" id="combat_forces" name="combat_forces"></select>
-                           </form>
-                          </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_colonization" type="button"></button>
+                        <p class="fleet_objective_label">Colonization</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_harvest" type="button"></button>
+                        <p class="fleet_objective_label">Recycle debris field</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_transport" type="button"></button>
+                        <p class="fleet_objective_label">Transport</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_deploy" type="button"></button>
+                        <p class="fleet_objective_label">Deployment</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_espionage" type="button"></button>
+                        <p class="fleet_objective_label">Espionage</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_acs_defend" type="button"></button>
+                        <p class="fleet_objective_label">ACS Defend</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_attack" type="button"></button>
+                        <p class="fleet_objective_label">Attack</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_destroy" type="button"></button>
+                        <p class="fleet_objective_label">Moon destruction</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_acs_attack" type="button"></button>
+                        <p class="fleet_objective_label">ACS Attack</p>
+                      </div>
+                    </div>
+                    <div id="fleet_mission_summary">
+                      <p id="fleet_mission_summary_title">Mission: deployment</p>
+                      <p id="fleet_mission_description">Sends your fleet permanently to another planet of your empire</p>
+                    </div>
+                  </div>
+
+                  <div id="fleet_flight_and_cargo">
+                    <div id="fleet_briefing">
+                      <p id="fleet_step_title">Briefing</p>
+                      <div class="flight_details">
+                        <div class="flight_detail_summary">
+                          <span class="flight_detail_entry">Target:</span>
+                          <span class="flight_detail_value"><a href="../galaxy/galaxy.html">[5:53:7]</a></span>
+                        </div>
+                        <div class="flight_detail_summary">
+                          <span class="flight_detail_entry">Duration of flight (one way):</span>
+                          <span class="flight_detail_value">0:02:55h</span>
+                        </div>
+                        <div class="flight_detail_summary">
+                          <span class="flight_detail_entry">Arrival:</span>
+                          <span class="flight_detail_value">25.01.17 20:46:42 Clock</span>
+                        </div>
+                        <div class="flight_detail_summary">
+                          <span class="flight_detail_entry">Return:</span>
+                          <span class="flight_detail_value">25.01.17 20:49:38 Clock</span>
+                        </div>
+                        <div class="flight_detail_summary">
+                          <span class="flight_detail_entry">Deuterium consumption:</span>
+                          <span class="flight_detail_valid_value">35 (1%)</span>
                         </div>
                       </div>
                     </div>
 
-                    <div id="fleet_briefing">
-                      <p id="fleet_step_title">Briefing</p>
-                      <div id="fleet_flight_details">
-                        <div class="flight_details">
-                          <div class="flight_detail_container">
-                            <span class="flight_detail_entry">Duration of flight (one way):</span>
-                            <span class="flight_detail_value">0:02:55h</span>
-                          </div>
-                          <div class="flight_detail_container">
-                            <span class="flight_detail_entry">Deuterium consumption:</span>
-                            <span class="flight_detail_valid_value">35 (1%)</span>
-                          </div>
-                          <div class="flight_detail_container">
-                            <span class="flight_detail_entry">Speed (max 22500):</span>
-                          </div>
-                        </div>
-                        <div class="flight_details">
-                          <div class="flight_detail_container">
-                            <span class="flight_detail_entry">Arrival:</span>
-                            <span class="flight_detail_value">25.01.17 20:46:42 Clock</span>
-                          </div>
-                          <div class="flight_detail_container">
-                            <span class="flight_detail_entry">Return:</span>
-                            <span class="flight_detail_value">25.01.17 20:49:38 Clock</span>
-                          </div>
-                          <div class="flight_detail_container">
-                            <span class="flight_detail_entry">Empty cargo bays:</span>
-                            <span class="flight_detail_valid_value">23250000</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div id="speed_and_next">
-                        <div id="speed_selection">
-                          <button class="fleet_speed speed_10" type="button">10</button>
-                          <button class="fleet_speed speed_20" type="button">20</button>
-                          <button class="fleet_speed speed_30" type="button">30</button>
-                          <button class="fleet_speed speed_40" type="button">40</button>
-                          <button class="fleet_speed speed_50" type="button">50</button>
-                          <button class="fleet_speed speed_60" type="button">60</button>
-                          <button class="fleet_speed speed_70" type="button">70</button>
-                          <button class="fleet_speed speed_80" type="button">80</button>
-                          <button class="fleet_speed speed_90" type="button">90</button>
-                          <button class="selected_fleet_speed speed_100" type="button">100</button>
-                          <span>%</span>
-                        </div>
-                        <div class="confirmation_element">
-                          <a href="fleets_step_1.html">
-                            <button id="fleet_previous_step" type="button">BACK</button>
-                          </a>
-                          <a href="fleets_step_3.html">
-                            <button id="fleet_next_step" type="button">NEXT</button>
-                          </a>
-                        </div>
-                      </div>
+                    <div id="fleet_cargo">
+                      <p id="fleet_step_title">Load resources</p>
+                    </div>
+                  </div>
+
+                  <div id="fleet_confirmation_panel">
+                    <div class="confirmation_element">
+                      <a href="fleets_step_2.html">
+                        <button id="fleet_previous_step" type="button">BACK</button>
+                      </a>
+                    </div>
+                    <div class="confirmation_element">
+                      <!-- Should use: https://www.youtube.com/watch?v=cVAqJyRyTIg to create step 3 -->
+                      <a href="fleets_step_1.html">
+                        <button id="fleet_next_step" type="button">SEND FLEET</button>
+                      </a>
                     </div>
                   </div>
                 </div>
