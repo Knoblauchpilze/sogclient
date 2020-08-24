@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>oberon oglike</title>
+        <link rel="stylesheet" href="style.css"/>
+        <link rel="icon" type="image/png" href="../img/oglike.png"/>
+    </head>
+
+    <body>
+      <div id="vertical_container">
+
+        <header id="top">
+          <div id="headerbar">
+            <div id="player_info">
+              <table>
+                <tbody>
+                  <tr>
+                    <td class="text_legend spaced_column">Player:</td>
+                    <td class="text_icon">Starlord</td>
+                    <td class="text_value spaced_column">tttttttttttttttttttt</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="player_links">
+              <table>
+                <tbody>
+                  <tr>
+                    <td class="spaced_column"><a href="../rankings/rankings.html">Ranking (172)</a></td>
+                    <td class="spaced_column"><a href="../options/search.html">Search</a></td>
+                    <td class="spaced_column"><a href="../options/preferences.html">Preferences</a></td>
+                    <td class="spaced_column"><a href="../../index.html">Logout</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="player_time">
+              <table>
+                <tbody>
+                  <tr>
+                    <td>03.08.2020 08:45:30</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="top_internal_container">
+            <a href="../overview/overview.html">
+              <img id="pagereloader" src="../img/oglike.png" alt="Reload page" title="Reload to overview menu"/>
+            </a>
+
+            <div id="top_events_container">
+              <div id="resources">
+                <div class="resource_info">
+                  <img src="../img/metal_mini.jpeg" alt="Metal resource visual" title="Metal" />
+                  <p>688745</p>
+                </div>
+                <div class="resource_info">
+                  <img src="../img/crystal_mini.jpeg" alt="Crystal resource visual" title="Crystal" />
+                  <p>1493616</p>
+                </div>
+                <div class="resource_info">
+                  <img src="../img/deuterium_mini.jpeg" alt="Deuterium resource visual" title="Deuterium" />
+                  <p>275170</p>
+                </div>
+                <div class="resource_info">
+                  <img src="../img/antimatter_mini.jpeg" alt="Antimatter resource visual" title="Antimatter" />
+                  <p>25989</p>
+                </div>
+                <div class="resource_info">
+                  <img src="../img/energy_mini.jpeg" alt="Energy resource visual" title="Energy"/>
+                  <p>2443</p>
+                </div>
+              </div>
+
+              <div id="eventsbar">
+                <a class="event_element" href="../messages/mailbox.html">
+                  <img src="../img/mail_icon.png" alt="Mail icon" title="You've got mail !" />
+                </a>
+                <h2 class="event_element">No active fleets</h2>
+                <a class="event_element" href="../fleets/fleets_movements.html">
+                  <img src="../img/attack_alert.png" alt="Attack alert" title="This is war !" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </header>
+
+        <div id="horizontal_container_wrapper">
+          <div id="horizontal_internal_container">
+            <div id="horizontal_container">
+              <nav id="left">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td class="menu_item"><a href="../overview/overview.html">General view</a></td>
+                      <td class="menu_icon"></td>
+                    </tr>
+                    <tr>
+                      <td class="menu_item"><a href="../resources/resources.html">Resources</a></td>
+                      <td>
+                        <a href="../resources/production_settings.html">
+                          <img class="menu_icon" src="../img/production_control.png" alt="Prod control" />
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="menu_item"><a href="../facilities/facilities.html">Facilities</a></td>
+                      <td class="menu_icon"></td>
+                    </tr>
+                    <tr>
+                      <td class="menu_item"><a href="../research_lab/research_lab.html">Research lab</a></td>
+                      <td>
+                        <a href="../research_lab/technologies_list.html">
+                          <img class="menu_icon" src="../img/tech_tree.png" alt="Technology tree" />
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="menu_item"><a href="../shipyard/shipyard.html">Shipyard</a></td>
+                      <td class="menu_icon"></td>
+                    </tr>
+                    <tr>
+                      <td class="menu_item"><a href="../defenses/defenses.html">Defenses</a></td>
+                      <td class="menu_icon"></td>
+                    </tr>
+                    <tr>
+                      <td id="menu_item_selected"><a href="../fleets/fleets_step_1.html">Fleets</a></td>
+                      <td>
+                        <a href="../fleets/fleets_movements.html">
+                          <img class="menu_icon" src="../img/fleet_movements.png" alt="Fleets" />
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="menu_item"><a href="../galaxy/galaxy.html">Galaxy</a></td>
+                      <td class="menu_icon"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </nav>
+
+              <section id="middle">
+                <div id ="overview">
+                  <h3 id="view_title">Fleets - New London</h3>
+                  <table id="overview_planet_info">
+                    <tbody>
+                      <tr>
+                        <td id="overview_planet_desc_key">Diameter:</td>
+                        <td id="overview_planet_desc_value">13215 (180/210)</td>
+                      </tr>
+                      <tr>
+                        <td id="overview_planet_desc_key">Temperature:</td>
+                        <td id="overview_planet_desc_value">11°C to 51°C</td>
+                      </tr>
+                      <tr>
+                        <td id="overview_planet_desc_key">Position:</td>
+                        <td id="overview_planet_desc_value"><a href="../galaxy/galaxy.html">[5:53:8]</a></td>
+                      </tr>
+                      <tr>
+                        <td id="overview_planet_desc_key">Points:</td>
+                        <td id="overview_planet_desc_value"><a href="../rankings/rankings.html">5702399 (Rank 172 out of 2815)</a></td>
+                      </tr>
+                      <tr>
+                        <td id="overview_planet_desc_key">Honorific points:</td>
+                        <td id="overview_planet_desc_value">48837</td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td id="overview_planet_bonus">
+                          <a href="../galaxy/galaxy.html">Move (2)</a>
+                        </td>
+                        <td id="overview_planet_options">Abandon/Rename</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+
+                <div id="fleet_creation_container">
+                  <div id="fleets_available_container">
+                    <div>
+                      <span class="fleet_mission_text">Mission:</span>
+                      <span class="fleet_mission_entry">Deployment</span>
+                      <span class="fleet_mission_text">Target:</span>
+                      <!-- TODO: Gets overriden by `fleets_available_container a` -->
+                      <span class="fleet_mission_entry"><a href="../galaxy/galaxy.html">[5:53:7]</a></span>
+                      <span class="fleet_mission_text">Player name:</span>
+                      <span class="fleet_mission_entry">tttttttttttttttttttt</span>
+                    </div>
+                    <a href="fleets_movements.html">Fleet movements</a>
+                  </div>
+                  
+                  <div id="fleet_mission">
+                    <p id="fleet_step_title">Select mission for target:</p>
+                    <div id="fleet_missions">
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_expedition" type="button"></button>
+                        <p class="fleet_objective_label">Expedition</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_colonization" type="button"></button>
+                        <p class="fleet_objective_label">Colonization</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_harvest" type="button"></button>
+                        <p class="fleet_objective_label">Recycle debris field</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_transport" type="button"></button>
+                        <p class="fleet_objective_label">Transport</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_deploy" type="button"></button>
+                        <p class="fleet_objective_label">Deployment</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_espionage" type="button"></button>
+                        <p class="fleet_objective_label">Espionage</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_acs_defend" type="button"></button>
+                        <p class="fleet_objective_label">ACS Defend</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_attack" type="button"></button>
+                        <p class="fleet_objective_label">Attack</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_destroy" type="button"></button>
+                        <p class="fleet_objective_label">Moon destruction</p>
+                      </div>
+                      <div class="fleet_objective_container">
+                        <button class="fleet_objective" id="fleet_acs_attack" type="button"></button>
+                        <p class="fleet_objective_label">ACS Attack</p>
+                      </div>
+                    </div>
+                    <div id="fleet_mission_summary">
+                      <p id="fleet_mission_summary_title">Mission: deployment</p>
+                      <p id="fleet_mission_description">Sends your fleet permanently to another planet of your empire</p>
+                    </div>
+                  </div>
+
+                  <div id="fleet_flight_and_cargo">
+                    <div id="fleet_briefing">
+                      <p id="fleet_step_title">Briefing</p>
+                      <div class="flight_details">
+                        <div class="flight_detail_summary">
+                          <span class="flight_detail_entry">Target:</span>
+                          <span class="flight_detail_value"><a href="../galaxy/galaxy.html">[5:53:7]</a></span>
+                        </div>
+                        <div class="flight_detail_summary">
+                          <span class="flight_detail_entry">Duration of flight (one way):</span>
+                          <span class="flight_detail_value">0:02:55h</span>
+                        </div>
+                        <div class="flight_detail_summary">
+                          <span class="flight_detail_entry">Arrival:</span>
+                          <span class="flight_detail_value">25.01.17 20:46:42 Clock</span>
+                        </div>
+                        <div class="flight_detail_summary">
+                          <span class="flight_detail_entry">Return:</span>
+                          <span class="flight_detail_value">25.01.17 20:49:38 Clock</span>
+                        </div>
+                        <div class="flight_detail_summary">
+                          <span class="flight_detail_entry">Deuterium consumption:</span>
+                          <span class="flight_detail_valid_value">35 (1%)</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div id="fleet_cargo">
+                      <p id="fleet_step_title">Load resources</p>
+                    </div>
+                  </div>
+
+                  <div id="fleet_confirmation_panel">
+                    <div class="confirmation_element">
+                      <a href="fleets_step_2.html">
+                        <button id="fleet_previous_step" type="button">BACK</button>
+                      </a>
+                    </div>
+                    <div class="confirmation_element">
+                      <!-- Should use: https://www.youtube.com/watch?v=cVAqJyRyTIg to create step 3 -->
+                      <a href="fleets_step_1.html">
+                        <button id="fleet_next_step" type="button">SEND FLEET</button>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section id="right">
+                <h2 id="planets_count_info">9/9 planet(s)</h2>
+                  <div class="selected_planet_link_container">
+                    <div class="planet_and_moon">
+                      <a href="../overview/overview.html">
+                        <img class="planet" src="../galaxy/img/planet1.png" alt="Planet visual" />
+                      </a>
+                      <a href="../overview/overview.html">
+                        <img class="moon" src="../galaxy/img/moon1.png" alt="Moon visual" />
+                      </a>
+                    </div>
+                    <div class="planet_info">
+                      <a class="planet_link" href="../overview/overview.html">New Hypergate</a>
+                      <p class="planet_coordinates">[2:222:9]</p>
+                    </div>
+                  </div>
+                  <div class="planet_link_container">
+                    <div class="planet_and_moon">
+                      <a href="../overview/overview.html">
+                        <img class="planet" src="../galaxy/img/planet1.png" alt="Planet visual" />
+                      </a>
+                      <a href="../overview/overview.html">
+                        <img class="moon" src="../galaxy/img/moon1.png" alt="Moon visual" />
+                      </a>
+                    </div>
+                    <div class="planet_info">
+                      <a class="planet_link" href="../overview/overview.html">Hyperion</a>
+                      <p class="planet_coordinates">[3:135:9]</p>
+                    </div>
+                  </div>
+                  <div class="planet_link_container">
+                    <div class="planet_and_moon">
+                      <a href="../overview/overview.html">
+                        <img class="planet" src="../galaxy/img/planet1.png" alt="Planet visual" />
+                      </a>
+                      <a href="../overview/overview.html">
+                        <img class="moon" src="../galaxy/img/moon1.png" alt="Moon visual" />
+                      </a>
+                    </div>
+                    <div class="planet_info">
+                      <a class="planet_link" href="../overview/overview.html">Hypergate</a>
+                      <p class="planet_coordinates">[3:138:9]</p>
+                    </div>
+                  </div>
+                  <div class="planet_link_container">
+                    <div class="planet_and_moon">
+                      <a href="../overview/overview.html">
+                        <img class="planet" src="../galaxy/img/planet1.png" alt="Planet visual" />
+                      </a>
+                      <a href="../overview/overview.html">
+                        <img class="moon" src="../galaxy/img/moon1.png" alt="Moon visual" />
+                      </a>
+                    </div>
+                    <div class="planet_info">
+                      <a class="planet_link" href="../overview/overview.html">Oasis Secundus</a>
+                      <p class="planet_coordinates">[4:129:8]</p>
+                    </div>
+                  </div>
+                  <div class="planet_link_container">
+                    <div class="planet_and_moon">
+                      <a href="../overview/overview.html">
+                        <img class="planet" src="../galaxy/img/planet1.png" alt="Planet visual" />
+                      </a>
+                      <a href="../overview/overview.html">
+                        <img class="moon" src="../galaxy/img/moon1.png" alt="Moon visual" />
+                      </a>
+                    </div>
+                    <div class="planet_info">
+                      <a class="planet_link" href="../overview/overview.html">Oasis</a>
+                      <p class="planet_coordinates">[4:130:8]</p>
+                    </div>
+                  </div>
+                  <div class="planet_link_container">
+                    <div class="planet_and_moon">
+                      <a href="../overview/overview.html">
+                        <img class="planet" src="../galaxy/img/planet1.png" alt="Planet visual" />
+                      </a>
+                      <a href="../overview/overview.html">
+                        <img class="moon" src="../galaxy/img/moon1.png" alt="Moon visual" />
+                      </a>
+                    </div>
+                    <div class="planet_info">
+                      <a class="planet_link" href="../overview/overview.html">Colonie</a>
+                      <p class="planet_coordinates">[5:53:1]</p>
+                    </div>
+                  </div>
+                  <div class="planet_link_container">
+                    <div class="planet_and_moon">
+                      <a href="../overview/overview.html">
+                        <img class="planet" src="../galaxy/img/planet1.png" alt="Planet visual" />
+                      </a>
+                      <a href="../overview/overview.html">
+                        <img class="moon" src="../galaxy/img/moon1.png" alt="Moon visual" />
+                      </a>
+                    </div>
+                    <div class="planet_info">
+                      <a class="planet_link" href="../overview/overview.html">Tau Ceti Central</a>
+                      <p class="planet_coordinates">[5:53:7]</p>
+                    </div>
+                  </div>
+                  <div class="planet_link_container">
+                    <div class="planet_and_moon">
+                      <a href="../overview/overview.html">
+                        <img class="planet" src="../galaxy/img/planet1.png" alt="Planet visual" />
+                      </a>
+                      <a href="../overview/overview.html">
+                        <img class="moon" src="../galaxy/img/moon1.png" alt="Moon visual" />
+                      </a>
+                    </div>
+                    <div class="planet_info">
+                      <a class="planet_link" href="../overview/overview.html">New London</a>
+                      <p class="planet_coordinates">[5:53:8]</p>
+                    </div>
+                  </div>
+                  <div class="planet_link_container">
+                    <div class="planet_and_moon">
+                      <a href="../overview/overview.html">
+                        <img class="planet" src="../galaxy/img/planet1.png" alt="Planet visual" />
+                      </a>
+                      <a href="../overview/overview.html">
+                        <img class="moon" src="../galaxy/img/moon1.png" alt="Moon visual" />
+                      </a>
+                    </div>
+                    <div class="planet_info">
+                      <a class="planet_link" href="../overview/overview.html">New Horizons</a>
+                      <p class="planet_coordinates">[5:53:9]</p>
+                    </div>
+                  </div>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <footer id="contact">
+          <a href="https://github.com/Knoblauchpilze">We need more Pilze</a>
+        </footer>
+
+      </div>
+
+    </body>
+</html>
