@@ -260,21 +260,64 @@
 
                     <div id="fleet_briefing">
                       <p id="fleet_briefing_title">Briefing</p>
+                      <div id="fleet_flight_details">
+                        <div class="flight_details">
+                          <div class="flight_detail_container">
+                            <span class="flight_detail_entry">Duration of flight (one way):</span>
+                            <span class="flight_detail_value">0:02:55h</span>
+                          </div>
+                          <div class="flight_detail_container">
+                            <span class="flight_detail_entry">Deuterium consumption:</span>
+                            <span class="flight_detail_valid_value">35 (1%)</span>
+                          </div>
+                          <div class="flight_detail_container">
+                            <span class="flight_detail_entry">Speed (max 22500):</span>
+                          </div>
+                        </div>
+                        <div class="flight_details">
+                          <div class="flight_detail_container">
+                            <span class="flight_detail_entry">Arrival:</span>
+                            <span class="flight_detail_value">25.01.17 20:46:42 Clock</span>
+                          </div>
+                          <div class="flight_detail_container">
+                            <span class="flight_detail_entry">Return:</span>
+                            <span class="flight_detail_value">25.01.17 20:49:38 Clock</span>
+                          </div>
+                          <div class="flight_detail_container">
+                            <span class="flight_detail_entry">Empty cargo bays:</span>
+                            <span class="flight_detail_valid_value">23250000</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="speed_and_next">
+                        <div id="speed_selection">
+                          <button class="fleet_speed speed_10" type="button">10</button>
+                          <button class="fleet_speed speed_20" type="button">20</button>
+                          <button class="fleet_speed speed_30" type="button">30</button>
+                          <button class="fleet_speed speed_40" type="button">40</button>
+                          <button class="fleet_speed speed_50" type="button">50</button>
+                          <button class="fleet_speed speed_60" type="button">60</button>
+                          <button class="fleet_speed speed_70" type="button">70</button>
+                          <button class="fleet_speed speed_80" type="button">80</button>
+                          <button class="fleet_speed speed_90" type="button">90</button>
+                          <button class="selected_fleet_speed speed_100" type="button">100</button>
+                          <span>%</span>
+                        </div>
+                        <div class="confirmation_element">
+                          <a href="fleets_step_1.html">
+                            <button id="fleet_previous_step" type="button">BACK</button>
+                          </a>
+                          <!-- Should use: https://www.youtube.com/watch?v=cVAqJyRyTIg to create step 3 -->
+                          <a href="fleets_step_2.html">
+                            <button id="fleet_next_step" type="button">NEXT</button>
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
                   <div id="fleet_confirmation_panel">
-                    <div class="confirmation_element">
-                      <button id="fleet_all_ships" type="button">All</button>
-                      <button id="fleet_no_ship" type="button">0</button>
-                    </div>
-                    <div class="confirmation_element">
-                      <a href="fleets_step_1.html">
-                        <button id="fleet_previous_step" type="button">BACK</button>
-                      </a>
-                      <a href="fleets_step_2.html">
-                        <button id="fleet_next_step" type="button">NEXT</button>
-                      </a>
+                      
                     </div>
                   </div>
                 </div>
