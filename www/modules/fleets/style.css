@@ -404,6 +404,8 @@ body
   padding-top: 5px;
   padding-bottom: 5px;
   flex-grow: 1;
+  min-height: 20px;
+  max-height: 20px;
 }
 
 #fleet_flight_info
