@@ -874,12 +874,13 @@ body
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  align-items: center;
 }
 #fleet_cargo_selectors, #fleet_cargo_details
 {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
   margin: 5px;
 }
 
@@ -955,10 +956,11 @@ body
 {
   background-color: #FF8825;
 }
-#fleet_load_all_cargo p
+#fleet_load_all_cargo span
 {
   color: #FFFFFF;
   font-size: smaller;
+  margin: 3px 0px 3px 0px;
 }
 
 #fleet_cargo_visualization
@@ -967,10 +969,26 @@ body
   flex-direction: column;
   align-items: center;
 }
-#fleet_cargo_visualization p
+#fleet_cargo_visualization span
 {
   color: #FFFFFF;
   font-size: smaller;
+  margin: 3px 0px 3px 0px;
+}
+#fleet_cargo_percentage
+{
+  min-width: 150px;
+  min-height: 8px;
+  border-radius: 4px;
+  border: 3px #030303 solid;
+}
+#fleet_cargo_progression
+{
+  width: 128px;
+  min-height: 8px;
+  border-radius: 4px;
+  box-shadow: inset 0 0 2px #000000;
+  background-color: #6B901F;
 }
 #fleet_available_cargo
 {
