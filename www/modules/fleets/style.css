@@ -385,12 +385,12 @@ body
   font-size: smaller;
   color: #FFFFFF;
 }
-#fleets_available_container a
+#fleets_available_container #fleet_link_to_movement
 {
   color: #529BC8;
   text-decoration: none;
 }
-#fleets_available_container a:hover
+#fleets_available_container #fleet_link_to_movement:hover
 {
   color: #529BC8;
   text-decoration: underline;
@@ -457,6 +457,16 @@ body
   font-size: smaller;
   text-decoration: none;
 }
+.fleet_mission_entry a
+{
+  color: inherit;
+  text-decoration: none;
+}
+.fleet_mission_entry a:hover
+{
+  text-decoration: underline;
+}
+
 
 #fleet_take_off
 {
