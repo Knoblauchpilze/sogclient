@@ -1,0 +1,10 @@
+
+.layout_inner {
+  display: flex;
+  flex-direction: row;
+}
+
+.content
+{
+  padding-bottom: 25px;
+}
