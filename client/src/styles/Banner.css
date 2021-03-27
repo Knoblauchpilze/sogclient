@@ -1,7 +1,7 @@
 
 .banner_layout {
   height: 15%;
-  background: #44000088;
+  background-color: #4000;
 
   display: flex;
   flex-direction: row;
