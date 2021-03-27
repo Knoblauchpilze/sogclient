@@ -1,11 +1,26 @@
 
-.footer {
-  color: black;
-  padding: 32px;
-  border-top: solid 3px black;
+.footer_layout {
+  height: 5%;
+  background: #000c;
+
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  font-weight: 500;
+}
+
+.footer_icon {
+  max-width: 40px;
+  max-height: 40px;
+
+  margin: 0px 10px 0px 10px;
+}
+
+.footer_layout a {
+  text-decoration: none;
+}
+.footer_layout a:visited {
+  color: #888888;
+}
+.footer_layout a:hover {
+  color: #BBBBBB;
 }

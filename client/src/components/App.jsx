@@ -6,7 +6,7 @@ import Banner from './Banner.jsx';
 
 function App() {
   return (
-    <div className="oglike">
+    <div className="app_layout">
       <Banner />
       <Lobby />
       <Footer />
