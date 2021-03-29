@@ -8,23 +8,76 @@ class Lobby extends React.Component {
     super(props);
 
     // Check whether the user already has a saved
-    // session: if this is the case we will show
-    // the game choosing panel otherwise we need
-    // to propose to register.
+    // account: if this is the case we will show
+    // the session choosing panel. Otherwise we
+    // need to propose to register.
       // TODO: Restore this.
-    const save = null;/*localStorage.getItem("session");*/
-    const def = {
+    const savedAccount = null;/*localStorage.getItem("account");*/
+    const defAccount = {
       mail: "",
       password: "",
     };
+    const account = savedAccount ? JSON.parse(savedAccount) : defAccount;
+    const hasAccount = account.mail !== "" && account.password !== "";
+
+    // Similarly, we will check whether an active
+    // session can be found: this only occurs in
+    // case an active account was found.
+    const savedSession = null;/*localStorage.getItem("session");*/
+    const defSession = {
+      universe: "",
+      player: "",
+    };
+    const session = savedSession ? JSON.parse(savedSession) : defSession;
+    const hasSession = session.universe !== "" && session.player !== "";
 
     this.state = {
-      hasSession: save ? true : false,
-      session: save ? JSON.parse(save) : def,
-      mode: "signin",
+      // Defines the current step in the lobby: it
+      // helps guide the user's journey with first
+      // the selection of its account ("account")
+      // then the selection of the session within
+      // this account ("session") and potentially
+      // the "game" selection where the user can
+      // choose to join a new universe.
+      // Note that the game state should trigger
+      // an exit from this menu.
+      step: "account",
+
+      // Defines whether the user is currently trying
+      // to define an account or to register to some
+      // existing one. Can either be "signin" in case
+      // the user wants to log in to a pre-existing
+      // account or "register" in case a new account
+      // should be created.
+      accountMode: "signin",
+      hasAccount: hasAccount,
+      account: account,
+
+      // Defines whether the user is currently trying
+      // to define a new session or to restore an
+      // existing one from the local data. Can either
+      // be "restore" or "create".
+      sessionMode: "restore",
+      hasSession: hasSession,
+      session: session,
     };
   }
 
+  /**
+   * @brief - Used to save the account selected by
+   *          the user to local storage.
+   */
+  saveAccount() {
+    const out = JSON.stringify(this.state.account);
+    localStorage.setItem("account", out);
+
+    console.log("Saving account " + out);
+  }
+
+  /**
+   * @brief - Used to save the session selected by
+   *          the user to local storage.
+   */
   saveSession() {
     const out = JSON.stringify(this.state.session);
     localStorage.setItem("session", out);
@@ -32,52 +85,151 @@ class Lobby extends React.Component {
     console.log("Saving session " + out);
   }
 
-  handleInput(mode, text) {
-    const session = this.state.session;
-
-    if (mode === "mail") {
-      session.mail = text;
-      this.setState({session: session});
-    }
-    else {
-      // Assume password.
-      session.password = text;
-      this.setState({session: session});
-    }
-
-    console.log("Session: " + JSON.stringify(this.state));
+  /**
+   * @brief - Callback used whenever the response from the
+   *          server is received to validate the account's
+   *          data before proceeding further.
+   */
+  onAccountValidated() {
+    // The user now has an account.
+    this.setState({
+      step: "session",
+      hasAccount: true,
+    });
   }
 
-  loginToSession() {
-    // Make sure that the session is valid.
-    const session = this.state.session;
+  /**
+   * @brief - Callback used whenever the response from the
+   *          server is received to validate the session's
+   *          data before proceeding further.
+   */
+  onSessionValidated() {
+    // The user now has a session.
+    this.setState({
+      step: "game",
+      hasSession: true,
+    });
+  }
 
-    if (session.mail === "" || session.password === "") {
-      console.log("No session");
+  /**
+   * @brief - Used to generate the request to the server
+   *          to either create or validate the account
+   *          defined by the user.
+   */
+  requestLogin() {
+    // Make sure that the account is valid.
+    const account = this.state.account;
+
+    if (account.mail === "" || account.password === "") {
+      console.log("No account");
       return;
     }
 
-    console.log("A session, yay: mail: " + session.mail + ", pwd: " + session.password);
+    // TODO: Should handle validation of account.
+    console.log("Validating account " + JSON.stringify(account));
+    this.onAccountValidated();
   }
 
+  /**
+   * @brief - Used to generate the request to the server to
+   *          either create or validate the session defined
+   *          by the user.
+   */
+  requestSession() {
+    // Make sure the session is valid: in case it is
+    // not we will assume the user wants to create a
+    // new one.
+    const session = this.state.session;
+
+    if (session.universe === "" || session.player === "") {
+      this.setState({sessionMode: "create"})
+      return;
+    }
+
+    // TODO: Should handle validation of session.
+    console.log("Validating session " + JSON.Stringify(session));
+    this.onSesionValidated();
+  }
+
+  /**
+   * @brief - Main render function: based on the current
+   *          step reached by the user in the logging
+   *          journey we will display the corresponding
+   *          menu.
+   */
   render() {
-    return (this.state.hasSession ? this.restoreLastSession() : this.createSession());
+    console.log("s:" + this.state.sessionMode + ", step: " + this.state.step);
+    return (
+      this.state.step === "account" ? this.logInOrRegister() :
+      // Assume this.state.step === "session"
+      // Check whether the session creation mode is
+      // set to create a new one or load an existing
+      // one.
+      this.state.sessionMode === "restore" ? this.selectGame() :
+      // Assume this.state.sessionMode === "create"
+      this.createGame()
+    );
   }
 
-  createSession() {
+  /**
+   * @brief - Used whenever the user enters some new data
+   *          to fill in one of the field available in the
+   *          lobby. Depending on the current step reached
+   *          in the log in journey the correct element
+   *          will be populated with the text.
+   */
+  handleInput(kind, text) {
+    // Check whether we should populate the account or the
+    // session data.
+    if (this.state.step == "account") {
+      const account = this.state.account;
+
+      if (kind === "mail") {
+        account.mail = text;
+        this.setState({account: account});
+      }
+      else {
+        // Assume password.
+        account.password = text;
+        this.setState({account: account});
+      }
+
+      return;
+    }
+
+    // Assume the session should be populated.
+    const session = this.state.session;
+
+    if (kind === "universe") {
+      session.universe = text;
+      this.setState({session: session});
+    }
+    else {
+      // Assume player.
+      session.player = text;
+      this.setState({session: session});
+    }
+  }
+
+  /**
+   * @brief - Handles the creation of the menu related to
+   *          the creation of a new account or the login
+   *          process on an existing account.
+   */
+  logInOrRegister() {
     return (
       <div className="lobby_layout">
         <div className="lobby_session_options">
           <div className="lobby_session_actions">
             <button
-              className={this.state.mode === "signin" ? "lobby_action_button_selected" : "lobby_action_button"}
-              onClick = {() => this.setState({mode: "signin"})}
+              className={this.state.accountMode === "signin" ? "lobby_action_button_selected" : "lobby_action_button"}
+              onClick = {() => this.setState({accountMode: "signin"})}
               >
               Sign in
             </button>
             <button
-              className={this.state.mode === "register" ? "lobby_action_button_selected" : "lobby_action_button"}
-              onClick = {() => this.setState({mode: "register"})}
+              className={this.state.accountMode === "register" ? "lobby_action_button_selected" : "lobby_action_button"}
+              onClick = {() => this.setState({accountMode: "register"})}
               >
               Register
             </button>
@@ -85,7 +237,7 @@ class Lobby extends React.Component {
           <div className="lobby_session_items">
             <div className="lobby_session_item">
               <span>E-mail address:</span>
-              {this.state.mode === "signin" && <a href="TODO: Get back email">Forgot your e-mail ?</a>}
+              {this.state.accountMode === "signin" && <a href="TODO: Get back email">Forgot your e-mail ?</a>}
               <input
                 placeholder = "Fill in your e-mail"
                 onChange = {(e) => this.handleInput("mail", e.target.value)}
@@ -93,14 +245,14 @@ class Lobby extends React.Component {
             </div>
             <div className="lobby_session_item">
               <span>Password:</span>
-              {this.state.mode === "signin" && <a href="TODO: Get back email">Forgot your password ?</a>}
+              {this.state.accountMode === "signin" && <a href="TODO: Get back email">Forgot your password ?</a>}
               <input
                 placeholder = "Fill in your password"
                 onChange = {(e) => this.handleInput("password", e.target.value)}
               />
             </div>
-            <button className="lobby_button lobby_play" onClick = {() => this.loginToSession()}>
-              {this.state.mode === "signin" ? "Login" : "Register"}
+            <button className="lobby_button lobby_play" onClick = {() => this.requestLogin()}>
+              {this.state.accountMode === "signin" ? "Login" : "Register"}
             </button>
           </div>
         </div>
@@ -108,31 +260,35 @@ class Lobby extends React.Component {
     );
   }
 
-  restoreLastSession() {
+  /**
+   * @brief - Handles the choice between loading the last
+   *          session of an account (if it exists) or the
+   *          creation of a new session.
+   */
+  selectGame() {
     return (
       <div className="lobby_layout">
         <div className="lobby_options">
-          <button className="lobby_button lobby_play" onClick = {() => chooseGame()}>Play</button>
-          <button className="lobby_button lobby_last_session" onClick = {() => restoreLastGame()}>Last session</button>
+          <button className="lobby_button lobby_play" onClick = {() => this.requestSession()}>Play</button>
+          <button className={this.state.hasSession ? "lobby_button lobby_last_session" : "lobby_button lobby_last_session_disabled"} onClick = {() => this.state.hasSession && this.requestSession()}>Last session</button>
         </div>
       </div>
     );
   }
-}
 
-/**
- * @brief - Choose a new game among the ones available
- *          for this user.
- */
-function chooseGame() {
-  console.log("Play");
-}
-
-/**
- * @brief - Restores the last game played by the user.
- */
-function restoreLastGame() {
-  console.log("Restore last game");
+  /**
+   * @brief - Handles the creation of the menu representing
+   *          the available universe into which the user is
+   *          able to create a new session.
+   */
+  createGame() {
+    console.log("haha");
+    return (
+      <div>
+        Haha
+      </div>
+    );
+  }
 }
 
 export default Lobby

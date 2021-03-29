@@ -134,3 +134,17 @@
 .lobby_last_session:hover {
   background-color: #101215;
 }
+
+.lobby_last_session_disabled {
+  color: #ccc;
+  background-color: #303630;
+}
+
+.lobby_last_session_disabled:hover {
+  width: 300px;
+  height: 50px;
+
+  margin: 10px 20px 10px 20px;
+
+  background-color: #303630;
+}
