@@ -2,7 +2,7 @@
 import '../styles/Footer.css';
 import logo from '../assets/65px-Stop_hand.jpeg';
 
-function Footer({cart}) {
+function Footer() {
   const altText = "KnoblauchPicture";
   const titleText = "Knoblauch picture";
 
