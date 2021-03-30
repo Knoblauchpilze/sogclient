@@ -2,8 +2,40 @@
 import '../styles/Lobby.css';
 import React from 'react';
 
-class Lobby extends React.Component {
+function UniverseHeader() {
+  return (
+    <div className="lobby_universe_headers">
+      <div className="lobby_universe_props">
+        <div className="lobby_universe_header">Universe</div>
+        <div className="lobby_universe_header">Country</div>
+        <div className="lobby_universe_header">Online</div>
+        <div className="lobby_universe_header">Kind</div>
+        <div className="lobby_universe_header">Age</div>
+        <div className="lobby_universe_header">Player</div>
+        <div className="lobby_universe_header">Rank</div>
+      </div>
+    </div>
+  );
+}
 
+function UniverseDesc(props) {
+  return (
+    <div className="lobby_universe_desc">
+      <div className="lobby_universe_props">
+        <div className="lobby_universe_value">{props.universe}</div>
+        <div className="lobby_universe_value">{props.country}</div>
+        <div className="lobby_universe_value">{props.online}</div>
+        <div className="lobby_universe_value">{props.kind}</div>
+        <div className="lobby_universe_value">{props.age}</div>
+        {props.player !== "" && <div className="lobby_universe_value">{props.player}</div>}
+        {props.player !== "" && <div className="lobby_universe_value">{props.rank}</div>}
+      </div>
+      <button onClick = {() => console.log("play")}>Play</button>
+    </div>
+  );
+}
+
+class Lobby extends React.Component {
   constructor(props) {
     super(props);
 
@@ -158,7 +190,6 @@ class Lobby extends React.Component {
    *          menu.
    */
   render() {
-    console.log("s:" + this.state.sessionMode + ", step: " + this.state.step);
     return (
       this.state.step === "account" ? this.logInOrRegister() :
       // Assume this.state.step === "session"
@@ -181,7 +212,7 @@ class Lobby extends React.Component {
   handleInput(kind, text) {
     // Check whether we should populate the account or the
     // session data.
-    if (this.state.step == "account") {
+    if (this.state.step === "account") {
       const account = this.state.account;
 
       if (kind === "mail") {
@@ -282,10 +313,43 @@ class Lobby extends React.Component {
    *          able to create a new session.
    */
   createGame() {
-    console.log("haha");
     return (
-      <div>
-        Haha
+      <div className="lobby_layout lobby_game_selection">
+        <div className="lobby_game_group">
+          <p className="lobby_game_group_title">Your universes</p>
+          <UniverseHeader />
+          <UniverseDesc universe={"Libra"}
+                        country={"France"}
+                        online={54}
+                        kind={"Balanced"}
+                        age={1933}
+                        player={"tttttttttttttttttttt"}
+                        rank={1383}
+                        />
+        </div>
+        <div className="lobby_game_group">
+          <p className="lobby_game_group_title">Start in a new universe</p>
+          <UniverseHeader />
+          <UniverseDesc universe={"Zenith"}
+                        country={"France"}
+                        online={339}
+                        kind={"Balanced"}
+                        age={18}
+                        player={""}
+                        rank={0}
+                        />
+          <UniverseDesc universe={"Ymir"}
+                        country={"France"}
+                        online={418}
+                        kind={"Peaceful"}
+                        age={61}
+                        player={""}
+                        rank={0}
+                        />
+        </div>
+        <div className="lobby_back_section">
+          <button className="lobby_game_back" onClick = {() => this.setState({sessionMode: "restore"})}>Back</button>
+        </div>
       </div>
     );
   }
