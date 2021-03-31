@@ -33,6 +33,8 @@ function UniverseDesc(props) {
       <button onClick = {() => console.log("play")}>Play</button>
     </div>
   );
+  // TODO: The onClick should trigger a request to the
+  // validate session somehow.
 }
 
 class Lobby extends React.Component {
@@ -121,13 +123,43 @@ class Lobby extends React.Component {
    * @brief - Callback used whenever the response from the
    *          server is received to validate the account's
    *          data before proceeding further.
+   * @param rawAccounts - the list of accounts returned by
+   *                      the server. This is returned as
+   *                      a raw object (not yet parsed).
    */
-  onAccountValidated() {
+  onAccountValidated(rawAccounts) {
+    // Decode the response.
+    const accounts = JSON.parse(rawAccounts);
+
+    // Search the account we're expecting to find.
+    const account = this.state.account;
+    const found = accounts.find(a => a.mail === account.mail && a.password === account.password);
+
+    // In case the account was not found, display
+    // an error.
+    if (!found) {
+      console.log("Unable to validate account " + account);
+      return;
+    }
+
+    console.log("Validated account " + found);
+
     // The user now has an account.
     this.setState({
       step: "session",
       hasAccount: true,
+      account: found,
     });
+  }
+
+  /**
+   * @brief - Callback used whenever the response from the
+   *          server to validate the account is rejected by
+   *          the server.
+   * @param err - the failure returned by the server.
+   */
+  onAccountRejected(err) {
+    // TODO: Handle error.
   }
 
   /**
@@ -135,12 +167,39 @@ class Lobby extends React.Component {
    *          server is received to validate the session's
    *          data before proceeding further.
    */
-  onSessionValidated() {
+  onSessionValidated(rawSessions) {
+    // Decode the response.
+    const sessions = JSON.parse(rawSessions);
+
+    // Search the session we're expecting to find.
+    const session = this.state.session;
+    const found = sessions.find(s => s.universe === session.universe && s.account === session.player);
+
+    // In case the account was not found, display
+    // an error.
+    if (!found) {
+      console.log("Unable to validate session " + session);
+      return;
+    }
+
+    console.log("Validated session " + found);
+
     // The user now has a session.
     this.setState({
       step: "game",
       hasSession: true,
+      session: found,
     });
+  }
+
+  /**
+   * @brief - Callback used whenever the response from the
+   *          server to validate the session is rejected by
+   *          the server.
+   * @param err - the failure returned by the server.
+   */
+  onSessionRejected(err) {
+    // TODO: Handle error.
   }
 
   /**
@@ -157,9 +216,16 @@ class Lobby extends React.Component {
       return;
     }
 
-    // TODO: Should handle validation of account.
-    console.log("Validating account " + JSON.stringify(account));
-    this.onAccountValidated();
+    // Attempt to validate the accounts through the server.
+    fetch("http://localhost:3001/accounts").then(
+      res => res.text().then(
+        data => this.onAccountValidated(data)
+      )
+    ).catch(
+      res => res.text().then(
+        data => this.onAccountRejected(data)
+      )
+    );
   }
 
   /**
@@ -181,6 +247,17 @@ class Lobby extends React.Component {
     // TODO: Should handle validation of session.
     console.log("Validating session " + JSON.Stringify(session));
     this.onSesionValidated();
+
+    // Attempt to validate the accounts through the server.
+    fetch("http://localhost:3001/players").then(
+      res => res.text().then(
+        data => this.onSesionValidated(data)
+      )
+    ).catch(
+      res => res.text().then(
+        data => this.onSessionRejected(data)
+      )
+    );
   }
 
   /**
