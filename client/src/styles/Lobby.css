@@ -67,33 +67,35 @@
 }
 
 .lobby_session_item {
+  margin: 20px 30px 20px 30px;
+}
+
+.lobby_session_group {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: left;
-
-  margin: 20px 30px 20px 30px;
 }
 
-.lobby_session_item a {
+.lobby_session_group a {
   color: #6f9fc8;
 
   text-decoration: none;
 }
-.lobby_session_item a:visited {
+.lobby_session_group a:visited {
   color: #6f9fc8;
 }
-.lobby_session_item a:hover {
+.lobby_session_group a:hover {
   color: #6f9fc8;
 
   text-decoration: underline;
 }
 
-.lobby_session_item span {
+.lobby_session_group span {
   font-weight: bold;
 }
 
-.lobby_session_item input {
+.lobby_session_group input {
   margin-top: 10px;
 }
 

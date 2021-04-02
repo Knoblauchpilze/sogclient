@@ -1,6 +1,7 @@
 
 import '../styles/Lobby.css';
 import React from 'react';
+import Server from '../datas/server.js';
 
 function UniverseHeader() {
   return (
@@ -66,6 +67,10 @@ class Lobby extends React.Component {
     const hasSession = session.universe !== "" && session.player !== "";
 
     this.state = {
+      // Defines the URL to use to contact the
+      // server.
+      server: new Server(),
+
       // Defines the current step in the lobby: it
       // helps guide the user's journey with first
       // the selection of its account ("account")
@@ -76,6 +81,12 @@ class Lobby extends React.Component {
       // Note that the game state should trigger
       // an exit from this menu.
       step: "account",
+
+      // Defines whether or not the account should
+      // be saved to local storage so that it can
+      // be restored afterwards (on the next user
+      // log in mainly).
+      autologin: false,
 
       // Defines whether the user is currently trying
       // to define an account or to register to some
@@ -102,6 +113,15 @@ class Lobby extends React.Component {
    *          the user to local storage.
    */
   saveAccount() {
+    // Only save the account if it exists, otherwise
+    // remove it from local storage.
+    if (!this.state.autologin) {
+      localStorage.removeItem("account");
+
+      console.log("Removing saved account");
+      return;
+    }
+
     const out = JSON.stringify(this.state.account);
     localStorage.setItem("account", out);
 
@@ -113,6 +133,15 @@ class Lobby extends React.Component {
    *          the user to local storage.
    */
   saveSession() {
+    // Only save the session if it exists, otherwise
+    // remove it from local storage.
+    if (!this.state.autologin) {
+      localStorage.removeItem("session");
+
+      console.log("Removing saved session");
+      return;
+    }
+
     const out = JSON.stringify(this.state.session);
     localStorage.setItem("session", out);
 
@@ -135,14 +164,55 @@ class Lobby extends React.Component {
     const account = this.state.account;
     const found = accounts.find(a => a.mail === account.mail && a.password === account.password);
 
-    // In case the account was not found, display
-    // an error.
-    if (!found) {
-      console.log("Unable to validate account " + account);
+    // Depending on whether we're trying to create
+    // a new account or using an existing one we
+    // will react differently.
+    if (this.state.accountMode === "register") {
+      if (found) {
+        // TODO: Account already exist, build a dialog.
+        console.log("Account " + JSON.stringify(account) + " already exists");
+        return;
+      }
+
+      // Register the account to the server.
+      const formData  = new FormData();
+      formData.append(this.state.server.accountsDataKey(), JSON.stringify(account));
+
+      fetch(
+        this.state.server.accountsURL(),
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: formData,
+        }
+      ).then(
+        res => res.text().then(
+          data => this.setState({
+            step: "session",
+            hasAccount: true,
+            account: account,
+          })
+        )
+      ).catch(
+        res => res.text().then(
+          data => this.onAccountRejected(data)
+        )
+      );
+
       return;
     }
 
-    console.log("Validated account " + found);
+    // In case the account was not found, display
+    // an error.
+    if (!found) {
+      console.log("Unable to validate account " + JSON.stringify(account));
+      return;
+    }
+
+    console.log("Validated account " + JSON.stringify(found));
 
     // The user now has an account.
     this.setState({
@@ -178,11 +248,11 @@ class Lobby extends React.Component {
     // In case the account was not found, display
     // an error.
     if (!found) {
-      console.log("Unable to validate session " + session);
+      console.log("Unable to validate session " + JSON.stringify(session));
       return;
     }
 
-    console.log("Validated session " + found);
+    console.log("Validated session " + JSON.stringify(found));
 
     // The user now has a session.
     this.setState({
@@ -217,7 +287,7 @@ class Lobby extends React.Component {
     }
 
     // Attempt to validate the accounts through the server.
-    fetch("http://localhost:3001/accounts").then(
+    fetch(this.state.server.accountsURL()).then(
       res => res.text().then(
         data => this.onAccountValidated(data)
       )
@@ -248,8 +318,8 @@ class Lobby extends React.Component {
     console.log("Validating session " + JSON.Stringify(session));
     this.onSesionValidated();
 
-    // Attempt to validate the accounts through the server.
-    fetch("http://localhost:3001/players").then(
+    // Attempt to validate the sessions through the server.
+    fetch(this.state.server.playersURL()).then(
       res => res.text().then(
         data => this.onSesionValidated(data)
       )
@@ -343,7 +413,7 @@ class Lobby extends React.Component {
             </button>
           </div>
           <div className="lobby_session_items">
-            <div className="lobby_session_item">
+            <div className="lobby_session_group lobby_session_item">
               <span>E-mail address:</span>
               {this.state.accountMode === "signin" && <a href="TODO: Get back email">Forgot your e-mail ?</a>}
               <input
@@ -351,13 +421,22 @@ class Lobby extends React.Component {
                 onChange = {(e) => this.handleInput("mail", e.target.value)}
               />
             </div>
-            <div className="lobby_session_item">
+            <div className="lobby_session_group lobby_session_item">
               <span>Password:</span>
               {this.state.accountMode === "signin" && <a href="TODO: Get back email">Forgot your password ?</a>}
               <input
                 placeholder = "Fill in your password"
                 onChange = {(e) => this.handleInput("password", e.target.value)}
               />
+            </div>
+            <div className="lobby_session_item">
+              <input type="checkbox"
+                     onChange={(e) => this.setState({autologin: e.target.checked})}
+                     key="autologin_checkbox"
+                     name="haha"
+                     checked={this.state.autologin}
+              />
+              <label htmlFor={"autologin_checkbox"}>Login automatically</label>
             </div>
             <button className="lobby_button lobby_play" onClick = {() => this.requestLogin()}>
               {this.state.accountMode === "signin" ? "Login" : "Register"}
