@@ -1,7 +1,7 @@
 
 import '../styles/Lobby.css';
 import React from 'react';
-import Server from '../datas/server.js';
+import Server from './server.js';
 
 function UniverseHeader() {
   return (
@@ -170,36 +170,26 @@ class Lobby extends React.Component {
     if (this.state.accountMode === "register") {
       if (found) {
         // TODO: Account already exist, build a dialog.
-        console.log("Account " + JSON.stringify(account) + " already exists");
+        this.onAccountRejected("Account already exist");
         return;
       }
 
       // Register the account to the server.
-      const formData  = new FormData();
-      formData.append(this.state.server.accountsDataKey(), JSON.stringify(account));
-
-      fetch(
-        this.state.server.accountsURL(),
-        {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: formData,
-        }
-      ).then(
-        res => res.text().then(
-          data => this.setState({
+      // See here as to why we need to save this to
+      // a local variable:
+      // https://expertcodeblog.wordpress.com/2017/12/28/typescript-call-a-this-function-inside-class-method-when-using-promises/
+      const lobby = this;
+      this.state.server.registerAccount(
+        account,
+        function (res) {
+          console.log("Account " + JSON.stringify(account) + " validated");
+          lobby.setState({
             step: "session",
             hasAccount: true,
             account: account,
-          })
-        )
-      ).catch(
-        res => res.text().then(
-          data => this.onAccountRejected(data)
-        )
+          });
+        },
+        lobby.onAccountRejected,
       );
 
       return;
@@ -208,7 +198,7 @@ class Lobby extends React.Component {
     // In case the account was not found, display
     // an error.
     if (!found) {
-      console.log("Unable to validate account " + JSON.stringify(account));
+      this.onAccountRejected("case1");
       return;
     }
 
@@ -229,7 +219,7 @@ class Lobby extends React.Component {
    * @param err - the failure returned by the server.
    */
   onAccountRejected(err) {
-    // TODO: Handle error.
+    alert(err);
   }
 
   /**
@@ -287,15 +277,18 @@ class Lobby extends React.Component {
     }
 
     // Attempt to validate the accounts through the server.
-    fetch(this.state.server.accountsURL()).then(
-      res => res.text().then(
-        data => this.onAccountValidated(data)
-      )
-    ).catch(
-      res => res.text().then(
-        data => this.onAccountRejected(data)
-      )
-    );
+    var lobby = this;
+
+    fetch(this.state.server.accountsURL())
+      .then(function (res) {
+        if (!res.ok) {
+          lobby.onAccountRejected(res.text);
+          return;
+        }
+
+        res.text().then((text) => lobby.onAccountValidated(text));
+      })
+      .catch(res => res.text().then(text => lobby.onAccountRejected(text)));
   }
 
   /**
@@ -364,6 +357,7 @@ class Lobby extends React.Component {
 
       if (kind === "mail") {
         account.mail = text;
+        account.name = text;
         this.setState({account: account});
       }
       else {
