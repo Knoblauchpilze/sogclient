@@ -2,86 +2,18 @@
 import '../styles/Lobby.css';
 import React from 'react';
 import Server from './server.js';
+import AccountValidator from './account_validator.js';
+import { DUPLICATES_VERIFICATION, CREDENTIALS_VERIFICATION } from './account_validator.js';
+import { VALID_ACCOUNT } from './account_validator.js';
 
-function UniverseHeader() {
-  return (
-    <div className="lobby_universe_headers">
-      <div className="lobby_universe_props">
-        <div className="lobby_universe_header">Universe</div>
-        <div className="lobby_universe_header">Country</div>
-        <div className="lobby_universe_header">Online</div>
-        <div className="lobby_universe_header">Kind</div>
-        <div className="lobby_universe_header">Age</div>
-        <div className="lobby_universe_header">Player</div>
-        <div className="lobby_universe_header">Rank</div>
-      </div>
-    </div>
-  );
-}
-
-function UniverseDesc(props) {
-  return (
-    <div className="lobby_universe_desc">
-      <div className="lobby_universe_props">
-        <div className="lobby_universe_value">{props.universe}</div>
-        <div className="lobby_universe_value">{props.country}</div>
-        <div className="lobby_universe_value">{props.online}</div>
-        <div className="lobby_universe_value">{props.kind}</div>
-        <div className="lobby_universe_value">{props.age}</div>
-        {props.player !== "" && <div className="lobby_universe_value">{props.player}</div>}
-        {props.player !== "" && <div className="lobby_universe_value">{props.rank}</div>}
-      </div>
-      <button onClick = {() => console.log("play")}>Play</button>
-    </div>
-  );
-  // TODO: The onClick should trigger a request to the
-  // validate session somehow.
-}
+import AccountRegistrator from './account_registrator.js';
+import { REGISTRATION_SUCCEEDED } from './account_registrator.js';
 
 class Lobby extends React.Component {
   constructor(props) {
     super(props);
 
-    // Check whether the user already has a saved
-    // account: if this is the case we will show
-    // the session choosing panel. Otherwise we
-    // need to propose to register.
-      // TODO: Restore this.
-    const savedAccount = null;/*localStorage.getItem("account");*/
-    const defAccount = {
-      mail: "",
-      password: "",
-    };
-    const account = savedAccount ? JSON.parse(savedAccount) : defAccount;
-    const hasAccount = account.mail !== "" && account.password !== "";
-
-    // Similarly, we will check whether an active
-    // session can be found: this only occurs in
-    // case an active account was found.
-    const savedSession = null;/*localStorage.getItem("session");*/
-    const defSession = {
-      universe: "",
-      player: "",
-    };
-    const session = savedSession ? JSON.parse(savedSession) : defSession;
-    const hasSession = session.universe !== "" && session.player !== "";
-
     this.state = {
-      // Defines the URL to use to contact the
-      // server.
-      server: new Server(),
-
-      // Defines the current step in the lobby: it
-      // helps guide the user's journey with first
-      // the selection of its account ("account")
-      // then the selection of the session within
-      // this account ("session") and potentially
-      // the "game" selection where the user can
-      // choose to join a new universe.
-      // Note that the game state should trigger
-      // an exit from this menu.
-      step: "account",
-
       // Defines whether or not the account should
       // be saved to local storage so that it can
       // be restored afterwards (on the next user
@@ -95,251 +27,17 @@ class Lobby extends React.Component {
       // account or "register" in case a new account
       // should be created.
       accountMode: "signin",
-      hasAccount: hasAccount,
-      account: account,
 
-      // Defines whether the user is currently trying
-      // to define a new session or to restore an
-      // existing one from the local data. Can either
-      // be "restore" or "create".
-      sessionMode: "restore",
-      hasSession: hasSession,
-      session: session,
+      // The account data as currently filled by the
+      // user. Will be checked against server's data
+      // when the user wants to log in (or register).
+      account: {
+        id: "",
+        mail: "",
+        name: "",
+        password: "",
+      },
     };
-  }
-
-  /**
-   * @brief - Used to save the account selected by
-   *          the user to local storage.
-   */
-  saveAccount() {
-    // Only save the account if it exists, otherwise
-    // remove it from local storage.
-    if (!this.state.autologin) {
-      localStorage.removeItem("account");
-
-      console.log("Removing saved account");
-      return;
-    }
-
-    const out = JSON.stringify(this.state.account);
-    localStorage.setItem("account", out);
-
-    console.log("Saving account " + out);
-  }
-
-  /**
-   * @brief - Used to save the session selected by
-   *          the user to local storage.
-   */
-  saveSession() {
-    // Only save the session if it exists, otherwise
-    // remove it from local storage.
-    if (!this.state.autologin) {
-      localStorage.removeItem("session");
-
-      console.log("Removing saved session");
-      return;
-    }
-
-    const out = JSON.stringify(this.state.session);
-    localStorage.setItem("session", out);
-
-    console.log("Saving session " + out);
-  }
-
-  /**
-   * @brief - Callback used whenever the response from the
-   *          server is received to validate the account's
-   *          data before proceeding further.
-   * @param rawAccounts - the list of accounts returned by
-   *                      the server. This is returned as
-   *                      a raw object (not yet parsed).
-   */
-  onAccountValidated(rawAccounts) {
-    // Decode the response.
-    const accounts = JSON.parse(rawAccounts);
-
-    // Search the account we're expecting to find.
-    const account = this.state.account;
-    const found = accounts.find(a => a.mail === account.mail && a.password === account.password);
-
-    // Depending on whether we're trying to create
-    // a new account or using an existing one we
-    // will react differently.
-    if (this.state.accountMode === "register") {
-      if (found) {
-        // TODO: Account already exist, build a dialog.
-        this.onAccountRejected("Account already exist");
-        return;
-      }
-
-      // Register the account to the server.
-      // See here as to why we need to save this to
-      // a local variable:
-      // https://expertcodeblog.wordpress.com/2017/12/28/typescript-call-a-this-function-inside-class-method-when-using-promises/
-      const lobby = this;
-      this.state.server.registerAccount(
-        account,
-        function (res) {
-          console.log("Account " + JSON.stringify(account) + " validated");
-          lobby.setState({
-            step: "session",
-            hasAccount: true,
-            account: account,
-          });
-        },
-        lobby.onAccountRejected,
-      );
-
-      return;
-    }
-
-    // In case the account was not found, display
-    // an error.
-    if (!found) {
-      this.onAccountRejected("case1");
-      return;
-    }
-
-    console.log("Validated account " + JSON.stringify(found));
-
-    // The user now has an account.
-    this.setState({
-      step: "session",
-      hasAccount: true,
-      account: found,
-    });
-  }
-
-  /**
-   * @brief - Callback used whenever the response from the
-   *          server to validate the account is rejected by
-   *          the server.
-   * @param err - the failure returned by the server.
-   */
-  onAccountRejected(err) {
-    alert(err);
-  }
-
-  /**
-   * @brief - Callback used whenever the response from the
-   *          server is received to validate the session's
-   *          data before proceeding further.
-   */
-  onSessionValidated(rawSessions) {
-    // Decode the response.
-    const sessions = JSON.parse(rawSessions);
-
-    // Search the session we're expecting to find.
-    const session = this.state.session;
-    const found = sessions.find(s => s.universe === session.universe && s.account === session.player);
-
-    // In case the account was not found, display
-    // an error.
-    if (!found) {
-      console.log("Unable to validate session " + JSON.stringify(session));
-      return;
-    }
-
-    console.log("Validated session " + JSON.stringify(found));
-
-    // The user now has a session.
-    this.setState({
-      step: "game",
-      hasSession: true,
-      session: found,
-    });
-  }
-
-  /**
-   * @brief - Callback used whenever the response from the
-   *          server to validate the session is rejected by
-   *          the server.
-   * @param err - the failure returned by the server.
-   */
-  onSessionRejected(err) {
-    // TODO: Handle error.
-  }
-
-  /**
-   * @brief - Used to generate the request to the server
-   *          to either create or validate the account
-   *          defined by the user.
-   */
-  requestLogin() {
-    // Make sure that the account is valid.
-    const account = this.state.account;
-
-    if (account.mail === "" || account.password === "") {
-      console.log("No account");
-      return;
-    }
-
-    // Attempt to validate the accounts through the server.
-    var lobby = this;
-
-    fetch(this.state.server.accountsURL())
-      .then(function (res) {
-        if (!res.ok) {
-          lobby.onAccountRejected(res.text);
-          return;
-        }
-
-        res.text().then((text) => lobby.onAccountValidated(text));
-      })
-      .catch(res => res.text().then(text => lobby.onAccountRejected(text)));
-  }
-
-  /**
-   * @brief - Used to generate the request to the server to
-   *          either create or validate the session defined
-   *          by the user.
-   */
-  requestSession() {
-    // Make sure the session is valid: in case it is
-    // not we will assume the user wants to create a
-    // new one.
-    const session = this.state.session;
-
-    if (session.universe === "" || session.player === "") {
-      this.setState({sessionMode: "create"})
-      return;
-    }
-
-    // TODO: Should handle validation of session.
-    console.log("Validating session " + JSON.Stringify(session));
-    this.onSesionValidated();
-
-    // Attempt to validate the sessions through the server.
-    fetch(this.state.server.playersURL()).then(
-      res => res.text().then(
-        data => this.onSesionValidated(data)
-      )
-    ).catch(
-      res => res.text().then(
-        data => this.onSessionRejected(data)
-      )
-    );
-  }
-
-  /**
-   * @brief - Main render function: based on the current
-   *          step reached by the user in the logging
-   *          journey we will display the corresponding
-   *          menu.
-   */
-  render() {
-    return (
-      this.state.step === "account" ? this.logInOrRegister() :
-      // Assume this.state.step === "session"
-      // Check whether the session creation mode is
-      // set to create a new one or load an existing
-      // one.
-      this.state.sessionMode === "restore" ? this.selectGame() :
-      // Assume this.state.sessionMode === "create"
-      this.createGame()
-    );
   }
 
   /**
@@ -350,45 +48,118 @@ class Lobby extends React.Component {
    *          will be populated with the text.
    */
   handleInput(kind, text) {
-    // Check whether we should populate the account or the
-    // session data.
-    if (this.state.step === "account") {
-      const account = this.state.account;
+    const acc = this.state.account;
 
-      if (kind === "mail") {
-        account.mail = text;
-        account.name = text;
-        this.setState({account: account});
-      }
-      else {
-        // Assume password.
-        account.password = text;
-        this.setState({account: account});
-      }
+    if (kind === "mail") {
+      acc.mail = text;
+      acc.name = text;
+    }
+    else {
+      // Assume password.
+      acc.password = text;
+    }
 
+    this.setState({account: acc});
+  }
+
+  loginFailure(err) {
+    alert(err);
+  }
+
+  loginSucceeded(acc) {
+    // Update internal state.
+    this.setState({
+      step: "session",
+      hasAccount: true,
+      account: acc,
+    });
+
+    console.info("Account " + JSON.stringify(acc) + " validated");
+
+    // Save account to local storage for automatic login on
+    // subsequent connections.
+    if (!this.state.autologin) {
+      localStorage.removeItem("account");
+
+      console.info("Removing saved account");
       return;
     }
 
-    // Assume the session should be populated.
-    const session = this.state.session;
+    const out = JSON.stringify(acc);
+    localStorage.setItem("account", out);
 
-    if (kind === "universe") {
-      session.universe = text;
-      this.setState({session: session});
+    console.info("Saving account " + out);
+  }
+
+  requestLogin(acc, mode) {
+    // Determine whether we're in login or registration mode.
+    // This will determine what kind of process we need to
+    // start on the account.
+    const server = new Server();
+    const accVal = new AccountValidator(server);
+    const accReg = new AccountRegistrator(server);
+
+    // The user wanst to signin to an existing account.
+    if (mode === "signin") {
+      const verif = CREDENTIALS_VERIFICATION;
+      const lobby = this;
+
+      accVal.validate(acc, verif)
+        .then(function (status) {
+          if (status !== VALID_ACCOUNT) {
+            lobby.loginFailure(status);
+          }
+          else {
+            lobby.setState({
+              step: "session",
+              hasAccount: true,
+              account: acc,
+            });
+          }
+        })
+        .catch(err => lobby.loginFailure(err));
     }
-    else {
-      // Assume player.
-      session.player = text;
-      this.setState({session: session});
+
+    // The user wants to create a new account.
+    if (mode === "register") {
+      const verif = DUPLICATES_VERIFICATION;
+      const lobby = this;
+
+      accVal.validate(acc, verif)
+        .then(function (status) {
+          if (status !== VALID_ACCOUNT) {
+            // lobby.loginFailure(status);
+            console.error("suc1: " + status);
+
+            return;
+          }
+          else {
+            accReg.register(acc)
+              .then(function (status) {
+                if (status !== REGISTRATION_SUCCEEDED) {
+                  lobby.loginFailure(status);
+                  console.error("suc2: " + status);
+
+                  return;
+                }
+                else {
+                  lobby.loginSucceeded(acc);
+                }
+              })
+              .catch(err => lobby.loginFailure(err));
+          }
+        })
+        .catch(err => lobby.loginFailure(err));
     }
   }
 
   /**
-   * @brief - Handles the creation of the menu related to
-   *          the creation of a new account or the login
-   *          process on an existing account.
+   * @brief - Main render function: based on the current
+   *          step reached by the user in the logging
+   *          journey we will display the corresponding
+   *          menu.
    */
-  logInOrRegister() {
+  render() {
     return (
       <div className="lobby_layout">
         <div className="lobby_session_options">
@@ -432,73 +203,10 @@ class Lobby extends React.Component {
               />
               <label htmlFor={"autologin_checkbox"}>Login automatically</label>
             </div>
-            <button className="lobby_button lobby_play" onClick = {() => this.requestLogin()}>
+            <button className="lobby_button lobby_play" onClick={() => this.requestLogin(this.state.account, this.state.accountMode)}>
               {this.state.accountMode === "signin" ? "Login" : "Register"}
             </button>
           </div>
-        </div>
-      </div>
-    );
-  }
-
-  /**
-   * @brief - Handles the choice between loading the last
-   *          session of an account (if it exists) or the
-   *          creation of a new session.
-   */
-  selectGame() {
-    return (
-      <div className="lobby_layout">
-        <div className="lobby_options">
-          <button className="lobby_button lobby_play" onClick = {() => this.requestSession()}>Play</button>
-          <button className={this.state.hasSession ? "lobby_button lobby_last_session" : "lobby_button lobby_last_session_disabled"} onClick = {() => this.state.hasSession && this.requestSession()}>Last session</button>
-        </div>
-      </div>
-    );
-  }
-
-  /**
-   * @brief - Handles the creation of the menu representing
-   *          the available universe into which the user is
-   *          able to create a new session.
-   */
-  createGame() {
-    return (
-      <div className="lobby_layout lobby_game_selection">
-        <div className="lobby_game_group">
-          <p className="lobby_game_group_title">Your universes</p>
-          <UniverseHeader />
-          <UniverseDesc universe={"Libra"}
-                        country={"France"}
-                        online={54}
-                        kind={"Balanced"}
-                        age={1933}
-                        player={"tttttttttttttttttttt"}
-                        rank={1383}
-                        />
-        </div>
-        <div className="lobby_game_group">
-          <p className="lobby_game_group_title">Start in a new universe</p>
-          <UniverseHeader />
-          <UniverseDesc universe={"Zenith"}
-                        country={"France"}
-                        online={339}
-                        kind={"Balanced"}
-                        age={18}
-                        player={""}
-                        rank={0}
-                        />
-          <UniverseDesc universe={"Ymir"}
-                        country={"France"}
-                        online={418}
-                        kind={"Peaceful"}
-                        age={61}
-                        player={""}
-                        rank={0}
-                        />
-        </div>
-        <div className="lobby_back_section">
-          <button className="lobby_game_back" onClick = {() => this.setState({sessionMode: "restore"})}>Back</button>
         </div>
       </div>
     );
