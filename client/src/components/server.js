@@ -17,6 +17,10 @@ class Server {
     return "account-data";
   }
 
+  accountURL(id) {
+    return this.serverURL() + "/accounts/" + id + "/players";
+  }
+
   universesURL() {
     return this.serverURL() + "/universes";
   }

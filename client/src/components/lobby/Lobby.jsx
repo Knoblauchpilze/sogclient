@@ -70,10 +70,10 @@ class Lobby extends React.Component {
   render() {
     return (
       this.state.loginStep === ACCOUNT_SELECTION ?
-      <AccountSelector updateAccount={acc => this.updateAccount(acc)}/> :
-      <SessionSelector />
+      <AccountSelector updateAccount={acc => this.updateAccount(acc)} /> :
+      <SessionSelector account={this.state.account} />
     );
   }
 }
 
-export default Lobby
+export default Lobby;

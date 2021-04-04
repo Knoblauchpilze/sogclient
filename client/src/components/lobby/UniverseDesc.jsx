@@ -3,16 +3,29 @@ import '../../styles/UniverseDesc.css';
 import React from 'react';
 
 function UniverseDesc(props) {
+  const {
+    universe,
+    player
+  } = props;
+
+  if (!universe) {
+    console.log("hohoh");
+  }
+
+  if (!player) {
+    console.log("hahah");
+  }
+
   return (
     <div className="universe_desc_layout">
       <div className="universe_desc_props">
-        <div className="universe_desc_value">{props.universe}</div>
-        <div className="universe_desc_value">{props.country}</div>
-        <div className="universe_desc_value">{props.online}</div>
-        <div className="universe_desc_value">{props.kind}</div>
-        <div className="universe_desc_value">{props.age}</div>
-        {props.player !== "" && <div className="universe_desc_value">{props.player}</div>}
-        {props.player !== "" && <div className="universe_desc_value">{props.rank}</div>}
+        <div className="universe_desc_value">{universe.name}</div>
+        <div className="universe_desc_value">{universe.country}</div>
+        <div className="universe_desc_value">{universe.online}</div>
+        <div className="universe_desc_value">{universe.kind}</div>
+        <div className="universe_desc_value">{universe.age}</div>
+        {player.name !== "" && <div className="universe_desc_value">{player.name}</div>}
+        {player.rank !== "" && <div className="universe_desc_value">{player.rank}</div>}
       </div>
       <button onClick = {() => console.log("play")}>Play</button>
     </div>
