@@ -21,6 +21,17 @@ class Server {
     return this.serverURL() + "/accounts/" + id + "/players";
   }
 
+  accountIDFromResponse(response) {
+    // The response is expected to look like so:
+    // '"[/accounts/id]"'. So first trim until
+    // the beginning of the identifier.
+    const parts = response.split('/');
+    const idAndExtra = parts[parts.length - 1];
+
+    // And then clean the end of the string.
+    return idAndExtra.slice(0, idAndExtra.length - 2);
+  }
+
   universesURL() {
     return this.serverURL() + "/universes";
   }

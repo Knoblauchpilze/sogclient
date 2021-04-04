@@ -3,17 +3,27 @@ import '../../styles/UniverseDesc.css';
 import React from 'react';
 
 function UniverseDesc(props) {
-  const {
+  let {
     universe,
     player
   } = props;
 
-  if (!universe) {
-    console.log("hohoh");
+  // Make sure we have a valid player and universe.
+  if (!player) {
+    player = {
+      name: "",
+      rank: ""
+    };
   }
 
-  if (!player) {
-    console.log("hahah");
+  if (!universe) {
+    universe = {
+      name: "",
+      country: "",
+      online: "",
+      kind: "",
+      age: "",
+    };
   }
 
   return (

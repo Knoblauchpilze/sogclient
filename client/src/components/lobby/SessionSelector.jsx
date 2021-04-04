@@ -130,11 +130,6 @@ class SessionSelector extends React.Component {
    */
   render() {
     // Default values for player and universe.
-    const defPlayer = {
-      name: "",
-      rank: ""
-    };
-
     return (
       <div className="lobby_layout session_selector_game_selection">
         <div className="session_selector_game_group">
@@ -144,7 +139,7 @@ class SessionSelector extends React.Component {
             this.state.sessions.map(sess => (
               <UniverseDesc key={`${sess.id}`}
                             universe={this.state.universes.find(uni => uni.id === sess.universe)}
-                            player={{name: sess.name, rank: "TODO"}}
+                            player={{}}
                             />
             ))
           }
@@ -154,7 +149,7 @@ class SessionSelector extends React.Component {
           <UniverseHeader />
           {
             this.state.availableUniverses.map(uni => (
-              <UniverseDesc key={`${uni.id}`} universe={uni} player={defPlayer}/>
+              <UniverseDesc key={`${uni.id}`} universe={uni} player={{}}/>
             ))
           }
         </div>
