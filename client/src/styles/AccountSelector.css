@@ -1,0 +1,108 @@
+
+.account_selector_session_options {
+  color: #fff;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+
+  border: solid #111;
+}
+
+.account_selector_session_actions {
+  min-height: 50px;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.account_selector_action_button {
+  color: #fff;
+  background-color: #031a23;
+
+  flex-grow: 1;
+
+  font-size: large;
+  font-weight: bold;
+
+  border: none;
+}
+
+.account_selector_action_button:hover, .account_selector_action_button_selected {
+  color: #fff;
+  background-color: #395b77;
+
+  flex-grow: 1;
+
+  font-size: large;
+  font-weight: bold;
+
+  border: none;
+}
+
+.account_selector_session_items {
+  background: linear-gradient(#395b77, #000000);
+}
+
+.account_selector_session_item {
+  margin: 20px 30px 20px 30px;
+}
+
+.account_selector_session_group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+}
+
+.account_selector_session_group a {
+  color: #6f9fc8;
+
+  text-decoration: none;
+}
+.account_selector_session_group a:visited {
+  color: #6f9fc8;
+}
+.account_selector_session_group a:hover {
+  color: #6f9fc8;
+
+  text-decoration: underline;
+}
+
+.account_selector_session_group span {
+  font-weight: bold;
+}
+
+.account_selector_session_group input {
+  margin-top: 10px;
+}
+
+.account_selector_button {
+  width: 300px;
+  height: 50px;
+
+  margin: 10px 20px 10px 20px;
+
+  font-size: large;
+  font-weight: bold;
+
+  border: none;
+  border-radius: 5px;
+}
+
+.account_selector_button:hover {
+  width: 320px;
+  height: 60px;
+
+  margin: 5px 10px 5px 10px;
+}
+
+.account_selector_play {
+  color: black;
+  background-color: #0c0a;
+}
+
+.account_selector_play:hover {
+  background-color: #0e0f;
+}

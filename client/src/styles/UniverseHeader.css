@@ -1,0 +1,24 @@
+
+.universe_header_layout {
+  width: 90%;
+
+  color: #fff;
+  background: linear-gradient(#0a1822, #05101a);
+}
+
+.universe_header_props {
+  width: 75%;
+
+  display: flex;
+  flex-direction: row;
+
+  padding: 5px;
+}
+
+.universe_header_prop {
+  flex-grow: 1;
+
+  text-align: center;
+
+  font-weight: bold;
+}

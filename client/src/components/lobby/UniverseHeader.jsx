@@ -1,17 +1,18 @@
 
+import '../../styles/UniverseHeader.css';
 import React from 'react';
 
 function UniverseHeader() {
   return (
-    <div className="lobby_universe_headers">
-      <div className="lobby_universe_props">
-        <div className="lobby_universe_header">Universe</div>
-        <div className="lobby_universe_header">Country</div>
-        <div className="lobby_universe_header">Online</div>
-        <div className="lobby_universe_header">Kind</div>
-        <div className="lobby_universe_header">Age</div>
-        <div className="lobby_universe_header">Player</div>
-        <div className="lobby_universe_header">Rank</div>
+    <div className="universe_header_layout">
+      <div className="universe_header_props">
+        <div className="universe_header_prop">Universe</div>
+        <div className="universe_header_prop">Country</div>
+        <div className="universe_header_prop">Online</div>
+        <div className="universe_header_prop">Kind</div>
+        <div className="universe_header_prop">Age</div>
+        <div className="universe_header_prop">Player</div>
+        <div className="universe_header_prop">Rank</div>
       </div>
     </div>
   );

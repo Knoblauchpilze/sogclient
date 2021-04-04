@@ -1,0 +1,58 @@
+
+.universe_desc_layout {
+  width: 90%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.universe_desc_layout:hover {
+  background-color: #6b99c0;
+
+  width: 90%;
+}
+
+.universe_desc_props {
+  width: 75%;
+
+  display: flex;
+  flex-direction: row;
+
+  padding: 5px;
+}
+
+.universe_desc_value {
+  color: #fff;
+  background-color: #071118;
+
+  flex-grow: 1;
+  padding: 10px 0px 10px 0px;
+
+  text-align: center;
+  vertical-align: center;
+
+  font-size: smaller;
+}
+
+.universe_desc_layout button {
+  color: #4f6f87;
+  background-color: #fff0;
+
+  width: 15%;
+
+  padding: 10px 40px 10px 40px;
+  margin-left: 20px;
+
+  font-size: larger;
+  font-weight: bold;
+
+  border: none;
+}
+
+.universe_desc_layout button:hover {
+  color: #000;
+  background: linear-gradient(#90e632, #079b34);
+
+  border: none;
+}

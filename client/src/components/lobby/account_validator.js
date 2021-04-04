@@ -52,9 +52,14 @@ class AccountValidator {
   }
 
   async validate(account, operation) {
+    let res = {
+      account: account,
+      status: INVALID_ACCOUNT,
+    };
+
     // In case the account is not valid, do nothing.
     if (account.mail === "" || account.name === "" || account.password === "") {
-      return INVALID_ACCOUNT;
+      return res;
     }
 
     // Fetch accounts;
@@ -63,7 +68,8 @@ class AccountValidator {
     // In case the fetching failed, do nothing.
     if (!this.hasAccounts || this.fetchStatus !== "") {
       console.error("Failed to fetch accounts: " + this.fetchStatus);
-      return VALIDATION_FAILURE;
+      res.status = VALIDATION_FAILURE;
+      return res;
     }
 
     // Attempt to find this account in the list fetched
@@ -72,19 +78,25 @@ class AccountValidator {
 
     // Return the validation status based on the type of
     // operation to perform on the account.
-    let status = VALID_ACCOUNT;
+    res.status = VALID_ACCOUNT;
     if (operation === DUPLICATES_VERIFICATION && foundAcc) {
-      status = DUPLICATED_ACCOUNT;
+      res.status = DUPLICATED_ACCOUNT;
     }
     if (operation === CREDENTIALS_VERIFICATION) {
       if (!foundAcc) {
-        status = ACCOUNT_NOT_FOUND;
+        res.status = ACCOUNT_NOT_FOUND;
       } else if (foundAcc && foundAcc.password !== account.password) {
-        status = WRONG_CREDENTIALS;
+        res.status = WRONG_CREDENTIALS;
       }
     }
 
-    return status;
+    // Update the account with the found account if the
+    // status indicates that it is valid.
+    if (res.status === VALID_ACCOUNT) {
+      res.account = foundAcc;
+    }
+
+    return res;
   }
 }
 
