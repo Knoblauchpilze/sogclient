@@ -124,17 +124,18 @@ class AccountSelector extends React.Component {
       const accSelector = this;
 
       accVal.validate(acc, verif)
-        .then(function (status) {
-          if (status !== VALID_ACCOUNT) {
-            accSelector.loginFailure(status);
+        .then(function (res) {
+          if (res.status !== VALID_ACCOUNT) {
+            accSelector.loginFailure(res.status);
           }
           else {
             accReg.register(acc)
-              .then(function (status) {
-                if (status !== REGISTRATION_SUCCEEDED) {
-                  accSelector.loginFailure(status);
+              .then(function (res) {
+                if (res.status !== REGISTRATION_SUCCEEDED) {
+                  accSelector.loginFailure(res.status);
                 }
                 else {
+                  acc.id = res.id;
                   accSelector.loginSucceeded(acc);
                 }
               })

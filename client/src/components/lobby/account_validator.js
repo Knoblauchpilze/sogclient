@@ -91,8 +91,9 @@ class AccountValidator {
     }
 
     // Update the account with the found account if the
-    // status indicates that it is valid.
-    if (res.status === VALID_ACCOUNT) {
+    // status indicates that it is valid and credentials
+    // were requested.
+    if (res.status === VALID_ACCOUNT && operation === CREDENTIALS_VERIFICATION) {
       res.account = foundAcc;
     }
 
