@@ -1,9 +1,9 @@
 
-import '../styles/Lobby.css';
+import '../../styles/Lobby.css';
 import React from 'react';
 
-import Server from './server.js';
-import { NullAccount } from './server.js';
+import Server from '../server.js';
+import { NullAccount } from '../server.js';
 
 import AccountValidator from './account_validator.js';
 import { DUPLICATES_VERIFICATION, CREDENTIALS_VERIFICATION } from './account_validator.js';
