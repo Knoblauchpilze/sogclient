@@ -3,15 +3,15 @@ import '../../styles/AccountSelector.css';
 import '../../styles/Lobby.css';
 import React from 'react';
 
-import Server from '../server.js';
-import { NullAccount } from '../server.js';
+import Server from '../game/server.js';
+import { NullAccount } from '../game/server.js';
 
-import AccountValidator from './account_validator.js';
-import { DUPLICATES_VERIFICATION, CREDENTIALS_VERIFICATION } from './account_validator.js';
-import { VALID_ACCOUNT } from './account_validator.js';
+import AccountValidator from '../game/account_validator.js';
+import { DUPLICATES_VERIFICATION, CREDENTIALS_VERIFICATION } from '../game/account_validator.js';
+import { VALID_ACCOUNT } from '../game/account_validator.js';
 
-import AccountRegistrator from './account_registrator.js';
-import { REGISTRATION_SUCCEEDED } from './account_registrator.js';
+import AccountRegistrator from '../game/account_registrator.js';
+import { ACCOUNT_REGISTRATION_SUCCEEDED } from '../game/account_registrator.js';
 
 class AccountSelector extends React.Component {
   constructor(props) {
@@ -131,7 +131,7 @@ class AccountSelector extends React.Component {
           else {
             accReg.register(acc)
               .then(function (res) {
-                if (res.status !== REGISTRATION_SUCCEEDED) {
+                if (res.status !== ACCOUNT_REGISTRATION_SUCCEEDED) {
                   accSelector.loginFailure(res.status);
                 }
                 else {

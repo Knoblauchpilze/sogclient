@@ -4,7 +4,8 @@ import React from 'react';
 import AccountSelector from './AccountSelector.jsx';
 import SessionSelector from './SessionSelector.jsx';
 
-import { NullAccount } from '../server.js';
+import { NullAccount } from '../game/server.js';
+import { NullSession } from '../game/session.js';
 
 // Defines the step corresponding to the selection of
 // the account. This is required before moving to the
@@ -34,16 +35,14 @@ class Lobby extends React.Component {
       // in charge of populating and validating it with
       // the server's data
       account: NullAccount,
-    };
 
-    // As explained in this topic:
-    // https://stackoverflow.com/questions/35537229/how-to-update-parents-state-in-react
-    // As we will be passing the `updateAccount` method
-    // around to children component, we need to bind it
-    // to this class so that the `this` refers to this
-    // class and not to the child.
-    // TODO: Check this.
-    // this.updateAccount.bind(this);
+      // The session data representing the game that the
+      // user chose to play. Initialized with a null value
+      // at first, the session selector will be in charge
+      // of populating and validating it with the server's
+      // data.
+      session: NullSession,
+    };
   }
 
   updateAccount(acc) {
@@ -61,6 +60,19 @@ class Lobby extends React.Component {
     });
   }
 
+  updateSession(sess) {
+    // Make sure the session is valid (at least from
+    // a syntax perspective).
+    if (sess.id === "") {
+      console.error("Failed to update session with no id " + JSON.stringify(sess));
+      return;
+    }
+
+    this.setState({
+      session: sess,
+    });
+  }
+
   /**
    * @brief - Main render function: based on the current
    *          step reached by the user in the logging
@@ -71,7 +83,7 @@ class Lobby extends React.Component {
     return (
       this.state.loginStep === ACCOUNT_SELECTION ?
       <AccountSelector updateAccount={acc => this.updateAccount(acc)} /> :
-      <SessionSelector account={this.state.account} />
+      <SessionSelector account={this.state.account} updateSession={sess => this.updateSession(sess)} />
     );
   }
 }

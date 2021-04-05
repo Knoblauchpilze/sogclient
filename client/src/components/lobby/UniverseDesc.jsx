@@ -2,46 +2,46 @@
 import '../../styles/UniverseDesc.css';
 import React from 'react';
 
-function UniverseDesc(props) {
-  let {
-    universe,
-    player
-  } = props;
+class UniverseDesc extends React.Component {
+  constructor(props) {
+    super(props);
 
-  // Make sure we have a valid player and universe.
-  if (!player) {
-    player = {
-      name: "",
-      rank: ""
+    // Gather info about the player and universe
+    // as defined in the props.
+    this.state = {
+      // Represents the session associated to this
+      // element. Contains at least the universe
+      // description and might contain also a player
+      // description representing the instance of the
+      // account in this universe.
+      player: props.player,
+
+      // This method fetched from the input properties
+      // allows to transmit the selected session to the
+      // parent component.
+      selectSession: props.selectSession,
     };
   }
 
-  if (!universe) {
-    universe = {
-      name: "",
-      country: "",
-      online: "",
-      kind: "",
-      age: "",
-    };
-  }
+  render() {
+    const uni = this.state.player.universe;
+    const player = this.state.player;
 
-  return (
-    <div className="universe_desc_layout">
-      <div className="universe_desc_props">
-        <div className="universe_desc_value">{universe.name}</div>
-        <div className="universe_desc_value">{universe.country}</div>
-        <div className="universe_desc_value">{universe.online}</div>
-        <div className="universe_desc_value">{universe.kind}</div>
-        <div className="universe_desc_value">{universe.age}</div>
-        {player.name !== "" && <div className="universe_desc_value">{player.name}</div>}
-        {player.rank !== "" && <div className="universe_desc_value">{player.rank}</div>}
+    return (
+      <div className="universe_desc_layout">
+        <div className="universe_desc_props">
+          <div className="universe_desc_value">{uni.name}</div>
+          <div className="universe_desc_value">{uni.country}</div>
+          <div className="universe_desc_value">{uni.online}</div>
+          <div className="universe_desc_value">{uni.kind}</div>
+          <div className="universe_desc_value">{uni.age}</div>
+          {player.exists() && <div className="universe_desc_value">{player.name}</div>}
+          {player.exists() && <div className="universe_desc_value">{player.rank}</div>}
+        </div>
+        <button onClick = {() => this.state.selectSession(player)}>Play</button>
       </div>
-      <button onClick = {() => console.log("play")}>Play</button>
-    </div>
-  );
-  // TODO: The onClick should trigger a request to the
-  // validate session somehow.
+    );
+  }
 }
 
 export default UniverseDesc;

@@ -18,7 +18,7 @@ class Server {
   }
 
   accountURL(id) {
-    return this.serverURL() + "/accounts/" + id + "/players";
+    return this.accountsURL() + "/" + id + "/players";
   }
 
   accountIDFromResponse(response) {
@@ -32,12 +32,31 @@ class Server {
     return idAndExtra.slice(0, idAndExtra.length - 2);
   }
 
-  universesURL() {
-    return this.serverURL() + "/universes";
-  }
-
   playersURL() {
     return this.serverURL() + "/players";
+  }
+
+  playerURL(id) {
+    return this.playersURL() + "/" + id;
+  }
+
+  playersDataKey() {
+    return "player-data";
+  }
+
+  playerIDFromResponse(response) {
+    // The response is expected to look like so:
+    // '"[/players/id]"'. So first trim until
+    // the beginning of the identifier.
+    const parts = response.split('/');
+    const idAndExtra = parts[parts.length - 1];
+
+    // And then clean the end of the string.
+    return idAndExtra.slice(0, idAndExtra.length - 2);
+  }
+
+  universesURL() {
+    return this.serverURL() + "/universes";
   }
 }
 

@@ -62,7 +62,7 @@ class AccountValidator {
       return res;
     }
 
-    // Fetch accounts;
+    // Fetch accounts.
     await this.fetchAccounts().catch(err => this.fetchStatus = err);
 
     // In case the fetching failed, do nothing.
@@ -101,7 +101,11 @@ class AccountValidator {
   }
 }
 
-export { DUPLICATES_VERIFICATION, CREDENTIALS_VERIFICATION };
+export {
+  DUPLICATES_VERIFICATION,
+  CREDENTIALS_VERIFICATION
+};
+
 export {
   VALID_ACCOUNT,
   VALIDATION_FAILURE,

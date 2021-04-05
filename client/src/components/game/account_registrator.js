@@ -1,7 +1,7 @@
 
 // Registration status.
-const REGISTRATION_SUCCEEDED = "Registration succeeded";
-const REGISTRATION_FAILURE = "Failed to perform registration";
+const ACCOUNT_REGISTRATION_SUCCEEDED = "Registration succeeded";
+const ACCOUNT_REGISTRATION_FAILURE = "Failed to perform registration";
 
 class AccountRegistrator {
   constructor(server) {
@@ -52,7 +52,7 @@ class AccountRegistrator {
   async register(account) {
     let res = {
       account: account,
-      status: REGISTRATION_FAILURE,
+      status: ACCOUNT_REGISTRATION_FAILURE,
     };
 
     // In case the account is not valid, do nothing.
@@ -60,7 +60,7 @@ class AccountRegistrator {
       return res;
     }
 
-    // Fetch accounts;
+    // Register accounts.
     const id = await this.registerAccount(account).catch(err => this.registrationStatus = err);
 
     // In case the fetching failed, return the status.
@@ -69,20 +69,21 @@ class AccountRegistrator {
       return res;
     }
 
+    // TODO: This is not working.
     if (id === "") {
-      res.status = REGISTRATION_FAILURE;
+      res.status = ACCOUNT_REGISTRATION_FAILURE;
     }
 
     res.id = id;
-    res.status = REGISTRATION_SUCCEEDED;
+    res.status = ACCOUNT_REGISTRATION_SUCCEEDED;
 
     return res;
   }
 }
 
 export {
-  REGISTRATION_SUCCEEDED,
-  REGISTRATION_FAILURE
+  ACCOUNT_REGISTRATION_SUCCEEDED,
+  ACCOUNT_REGISTRATION_FAILURE
 };
 
 export default AccountRegistrator;
