@@ -6,12 +6,17 @@ import React from 'react';
 import UniverseHeader from './UniverseHeader.jsx';
 import UniverseDesc from './UniverseDesc.jsx';
 
-import Server from '../server.js';
+import Server from '../game/server.js';
+import Universe from '../game/universe.js';
+import Session from '../game/session.js';
 
-import SessionsFetcher from './sessions_fetcher.js';
-import { SESSIONS_FETCH_SUCCEEDED } from './sessions_fetcher.js';
-import UniverseFetcher from './universe_fetcher.js';
-import { UNIVERSES_FETCH_SUCCEEDED } from './universe_fetcher.js';
+import SessionsModule from '../game/sessions.js';
+import { SESSIONS_FETCH_SUCCEEDED } from '../game/sessions.js';
+import { SESSION_FETCH_SUCCEEDED } from '../game/sessions.js';
+import { SESSION_REGISTRATION_SUCCEEDED } from '../game/sessions.js';
+
+import UniverseFetcher from '../game/universe_fetcher.js';
+import { UNIVERSES_FETCH_SUCCEEDED } from '../game/universe_fetcher.js';
 
 class SessionSelector extends React.Component {
   constructor(props) {
@@ -90,10 +95,76 @@ class SessionSelector extends React.Component {
     });
   }
 
+  fetchedSessionFailure(err) {
+    alert(err);
+  }
+
+  fetchedSession(sess) {
+    // Update internal state.
+    this.state.updateSession(sess);
+
+    console.info("Validated session " + JSON.stringify(sess));
+
+    // Save session to local storage for automatic login on
+    // subsequent connections.
+    const out = JSON.stringify(sess);
+    localStorage.setItem("session", out);
+
+    console.info("Saving session " + out);
+  }
+
+  selectSession(session) {
+    // Determine whether the session already exists or
+    // not: if not, we'll have to create it first.
+    const server = new Server();
+    const sess = new SessionsModule(server);
+
+    const sessSelector = this;
+
+    // Flatten the session to a format expected by the
+    // sessions module.
+    const inSess = {
+      name: session.name,
+      account: session.account,
+      universe: session.universe.id,
+    };
+
+    if (session.exists()) {
+      // We need first to fetch the session and then
+      // notify the parent component.
+      sess.fetch(inSess)
+        .then(function (res) {
+          if (res.status !== SESSION_FETCH_SUCCEEDED) {
+            sessSelector.fetchedSessionFailure(res.status);
+          }
+          else {
+            sessSelector.fetchedSession(res.session);
+          }
+        })
+        .catch(err => sessSelector.fetchedSessionFailure(err));
+
+      return;
+    }
+
+    // We need to first create the session, and then
+    // communicate it to the parent.
+    sess.register(inSess)
+      .then(function (res) {
+        if (res.status !== SESSION_REGISTRATION_SUCCEEDED) {
+          sessSelector.fetchedSessionFailure(res.status);
+        }
+        else {
+          inSess.id = res.id;
+          sessSelector.fetchedSession(inSess);
+        }
+      })
+      .catch(err => sessSelector.fetchedSessionFailure(err));
+  }
+
   componentDidMount() {
     // Fetch the list of universes from the server.
     const server = new Server();
-    const sess = new SessionsFetcher(server);
+    const sess = new SessionsModule(server);
     const unis = new UniverseFetcher(server);
 
     const sessSelector = this;
@@ -124,34 +195,95 @@ class SessionSelector extends React.Component {
   }
 
   /**
+   * @brief - Used to generate the list of components used
+   *          to represent the sessions where the player
+   *          already has an account.
+   */
+  generateExistingSessions() {
+    // In case universes haven't been fetched yet, we can't
+    // generate the existing sessions' data.
+    if (this.state.universes.length === 0) {
+      return [];
+    }
+
+    const sessSelec = this;
+    return this.state.sessions.map(function (sess) {
+      // Fetch the universe associated to this session.
+      const uniData = sessSelec.state.universes.find(uni => uni.id === sess.universe)
+
+      // Build the universe structure.
+      const uni = new Universe({
+        id: uniData.id,
+        name: uniData.name,
+        country: "TODO",
+        online: "TODO",
+        kind: "TODO",
+        age: "TODO"
+      });
+
+      // Generate the player's data.
+      const player = new Session({
+        universe: uni,
+        account: sess.account,
+        player: sess.id,
+        name: sess.name,
+        rank: "",
+      });
+
+      // Return the visual component.
+      return (
+        <UniverseDesc key={`${sess.id}`}
+                      player={player}
+                      selectSession={session => sessSelec.selectSession(session)}
+                      />
+      );
+    });
+  }
+
+  /**
+   * @brief - Used to generate the list of components used
+   *          to represent the sessions where the player
+   *          does not have an account yet.
+   */
+  generateAvailableSessions() {
+    return this.state.availableUniverses.map(uni => (
+      <UniverseDesc key={`${uni.id}`}
+                    player={new Session({
+                      universe: new Universe({
+                        id: uni.id,
+                        name: uni.name,
+                        country: "TODO",
+                        online: "TODO",
+                        kind: "TODO",
+                        age: "TODO",
+                      }),
+                      account: this.state.account.id,
+                      player: "",
+                      name: "",
+                      rank: "",
+                    })}
+                    selectSession={session => this.selectSession(session)}
+                    />
+    ));
+  }
+
+  /**
    * @brief - Handles the creation of the menu representing
    *          the available universe into which the user is
    *          able to create a new session.
    */
   render() {
-    // Default values for player and universe.
     return (
       <div className="lobby_layout session_selector_game_selection">
         <div className="session_selector_game_group">
           <p className="session_selector_game_group_title">Your universes</p>
           <UniverseHeader />
-          {
-            this.state.sessions.map(sess => (
-              <UniverseDesc key={`${sess.id}`}
-                            universe={this.state.universes.find(uni => uni.id === sess.universe)}
-                            player={{}}
-                            />
-            ))
-          }
+          {this.generateExistingSessions()}
         </div>
         <div className="session_selector_game_group">
           <p className="session_selector_game_group_title">Start in a new universe</p>
           <UniverseHeader />
-          {
-            this.state.availableUniverses.map(uni => (
-              <UniverseDesc key={`${uni.id}`} universe={uni} player={{}}/>
-            ))
-          }
+          {this.generateAvailableSessions()}
         </div>
         <div className="session_selector_back_section">
           <button className="session_selector_game_back" onClick = {() => this.setState({sessionMode: "restore"})}>Back</button>
