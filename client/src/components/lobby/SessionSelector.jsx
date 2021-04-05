@@ -15,8 +15,8 @@ import { SESSIONS_FETCH_SUCCEEDED } from '../game/sessions.js';
 import { SESSION_FETCH_SUCCEEDED } from '../game/sessions.js';
 import { SESSION_REGISTRATION_SUCCEEDED } from '../game/sessions.js';
 
-import UniverseFetcher from '../game/universe_fetcher.js';
-import { UNIVERSES_FETCH_SUCCEEDED } from '../game/universe_fetcher.js';
+import UniverseFetcher from '../game/universes.js';
+import { UNIVERSES_FETCH_SUCCEEDED } from '../game/universes.js';
 
 class SessionSelector extends React.Component {
   constructor(props) {
