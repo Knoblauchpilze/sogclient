@@ -70,12 +70,17 @@ class SessionsModule {
     }
 
     // Fetch sessions.
-    const out = await this.fetchSessions(session.account).catch(err => this.fetchStatus = err);
+    let reqStatus = "";
+    const out = await this.fetchSessions(session.account).catch(err => reqStatus = err);
 
     // In case the fetching failed, do nothing.
     if (out.status !== SESSIONS_FETCH_SUCCEEDED) {
       console.error("Failed to fetch sessions: " + out.status);
       res.status = VALIDATION_FAILURE;
+      return res;
+    }
+    if (reqStatus !== "") {
+      res.status = reqStatus;
       return res;
     }
 
@@ -103,8 +108,8 @@ class SessionsModule {
     }
 
     // Update the session with the found session if the
-    // status indicates that it is valid and credentials
-    // were requested.
+    // status indicates that it is valid and a fetch is
+    // requested.
     if (res.status === VALID_SESSION && operation === SESSION_FETCH) {
       res.session = foundSess;
     }
@@ -132,7 +137,7 @@ class SessionsModule {
     return res;
   }
 
-  async registerSession(acc) {
+  async registerSession(sess) {
     let out = {
       id: "",
       status: SESSION_REGISTRATION_FAILURE,
@@ -141,7 +146,7 @@ class SessionsModule {
     // Generate data to send to the server to register
     // the session.
     const formData  = new FormData();
-    formData.append(this.server.playersDataKey(), JSON.stringify(acc));
+    formData.append(this.server.playersDataKey(), JSON.stringify(sess));
 
     let opts = {
       method: 'POST',
@@ -173,6 +178,7 @@ class SessionsModule {
     // dedicated method.
     const id = await res.text();
     out.id = this.server.playerIDFromResponse(id);
+    out.status = SESSION_REGISTRATION_SUCCEEDED;
 
     return out;
   }
@@ -195,8 +201,8 @@ class SessionsModule {
     let reqStatus = "";
     const res = await this.registerSession(session).catch(err => reqStatus = err);
 
-    // In case the fetching failed, return the status.
-    if (res.status !== "") {
+    // In case the resitration failed, return the status.
+    if (res.status !== SESSION_REGISTRATION_SUCCEEDED) {
       out.status = res.status;
       return out;
     }
@@ -206,7 +212,6 @@ class SessionsModule {
     }
 
     if (res.id === "") {
-      out.status = SESSION_REGISTRATION_FAILURE;
       return out;
     }
 

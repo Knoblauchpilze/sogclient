@@ -192,6 +192,15 @@ class SessionSelector extends React.Component {
         }
       })
       .catch(err => sessSelector.fetchDataFailed(err));
+
+    
+    // Check whether the user already has a saved
+    // account: if this is the case we will show
+    // the session choosing panel. Otherwise we
+    // need to propose to register.
+    const storedSession = localStorage.getItem("session");
+    const asess = storedSession ? JSON.parse(storedSession) : "haha";
+    console.log("Session: " + JSON.stringify(asess));
   }
 
   /**
