@@ -6,12 +6,9 @@ import React from 'react';
 import Server from '../game/server.js';
 import { NullAccount } from '../game/server.js';
 
-import AccountValidator from '../game/account_validator.js';
-import { DUPLICATES_VERIFICATION, CREDENTIALS_VERIFICATION } from '../game/account_validator.js';
-import { VALID_ACCOUNT } from '../game/account_validator.js';
-
-import AccountRegistrator from '../game/account_registrator.js';
-import { ACCOUNT_REGISTRATION_SUCCEEDED } from '../game/account_registrator.js';
+import AccountsModule from '../game/accounts.js';
+import { ACCOUNT_FETCH_SUCCEEDED } from '../game/accounts.js';
+import { ACCOUNT_REGISTRATION_SUCCEEDED } from '../game/accounts.js';
 
 class AccountSelector extends React.Component {
   constructor(props) {
@@ -91,22 +88,20 @@ class AccountSelector extends React.Component {
     console.info("Saving account " + out);
   }
 
-  requestLogin(acc, mode) {
+  requestLogin(account, mode) {
     // Determine whether we're in login or registration mode.
     // This will determine what kind of process we need to
     // start on the account.
     const server = new Server();
-    const accVal = new AccountValidator(server);
-    const accReg = new AccountRegistrator(server);
+    const acc = new AccountsModule(server);
+
+    const accSelector = this;
 
     // The user wanst to signin to an existing account.
     if (mode === "signin") {
-      const verif = CREDENTIALS_VERIFICATION;
-      const accSelector = this;
-
-      accVal.validate(acc, verif)
+      acc.fetch(account)
         .then(function (res) {
-          if (res.status !== VALID_ACCOUNT) {
+          if (res.status !== ACCOUNT_FETCH_SUCCEEDED) {
             accSelector.loginFailure(res.status);
           }
           else {
@@ -120,31 +115,19 @@ class AccountSelector extends React.Component {
 
     // The user wants to create a new account.
     if (mode === "register") {
-      const verif = DUPLICATES_VERIFICATION;
-      const accSelector = this;
-
-      accVal.validate(acc, verif)
+      acc.register(account)
         .then(function (res) {
-          if (res.status !== VALID_ACCOUNT) {
+          if (res.status !== ACCOUNT_REGISTRATION_SUCCEEDED) {
             accSelector.loginFailure(res.status);
           }
           else {
-            accReg.register(acc)
-              .then(function (res) {
-                if (res.status !== ACCOUNT_REGISTRATION_SUCCEEDED) {
-                  accSelector.loginFailure(res.status);
-                }
-                else {
-                  acc.id = res.id;
-                  accSelector.loginSucceeded(acc);
-                }
-              })
-              .catch(err => accSelector.loginFailure(err));
+            account.id = res.id;
+            accSelector.loginSucceeded(account);
           }
         })
         .catch(err => accSelector.loginFailure(err));
 
-        return;
+      return;
     }
   }
 
