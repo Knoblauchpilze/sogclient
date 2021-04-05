@@ -3,7 +3,7 @@
 const UNIVERSES_FETCH_SUCCEEDED = "Universes fetched";
 const UNIVERSES_FETCH_FAILURE = "Failed to fetch universes";
 
-class UniverseFetcher {
+class UniversesModule {
   constructor(server) {
     this.server = server;
   }
@@ -13,7 +13,7 @@ class UniverseFetcher {
     // on the request's result.
     let out = {
       status: UNIVERSES_FETCH_FAILURE,
-      universes: []
+      universes: [],
     };
 
     let reqStatus = "";
@@ -32,7 +32,7 @@ class UniverseFetcher {
 
     out.status = UNIVERSES_FETCH_SUCCEEDED;
 
-    // Extract universes in the local array.
+    // Extract universes into a meaningful object.
     const rawUniverses = await res.text();
     out.universes = JSON.parse(rawUniverses);
 
@@ -42,7 +42,6 @@ class UniverseFetcher {
 
 export {
   UNIVERSES_FETCH_SUCCEEDED,
-  UNIVERSES_FETCH_FAILURE,
 };
 
-export default UniverseFetcher;
+export default UniversesModule;
