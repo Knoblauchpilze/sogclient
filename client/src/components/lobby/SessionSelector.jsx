@@ -193,7 +193,6 @@ class SessionSelector extends React.Component {
       })
       .catch(err => sessSelector.fetchDataFailed(err));
 
-    
     // Check whether the user already has a saved
     // account: if this is the case we will show
     // the session choosing panel. Otherwise we
@@ -224,10 +223,10 @@ class SessionSelector extends React.Component {
       const uni = new Universe({
         id: uniData.id,
         name: uniData.name,
-        country: "TODO",
+        country: uniData.country,
         online: "TODO",
         kind: "TODO",
-        age: "TODO"
+        age: uniData.age
       });
 
       // Generate the player's data.
@@ -261,10 +260,10 @@ class SessionSelector extends React.Component {
                       universe: new Universe({
                         id: uni.id,
                         name: uni.name,
-                        country: "TODO",
+                        country: uni.country,
                         online: "TODO",
                         kind: "TODO",
-                        age: "TODO",
+                        age: uni.age,
                       }),
                       account: this.state.account.id,
                       player: "",

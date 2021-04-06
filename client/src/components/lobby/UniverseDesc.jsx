@@ -27,6 +27,11 @@ class UniverseDesc extends React.Component {
     const uni = this.state.player.universe;
     const player = this.state.player;
 
+    const ageText = uni.age + " day";
+    if (uni.age > 1) {
+      ageText = uni.age + " days";
+    }
+
     return (
       <div className="universe_desc_layout">
         <div className="universe_desc_props">
@@ -34,7 +39,7 @@ class UniverseDesc extends React.Component {
           <div className="universe_desc_value">{uni.country}</div>
           <div className="universe_desc_value">{uni.online}</div>
           <div className="universe_desc_value">{uni.kind}</div>
-          <div className="universe_desc_value">{uni.age}</div>
+          <div className="universe_desc_value">{ageText}</div>
           {player.exists() && <div className="universe_desc_value">{player.name}</div>}
           {player.exists() && <div className="universe_desc_value">{player.rank}</div>}
         </div>
