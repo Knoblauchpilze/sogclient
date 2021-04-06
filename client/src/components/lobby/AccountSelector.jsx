@@ -19,7 +19,7 @@ class AccountSelector extends React.Component {
       // be saved to local storage so that it can
       // be restored afterwards (on the next user
       // log in mainly).
-      autologin: false,
+      autologin: true,
 
       // Defines whether the user is currently trying
       // to define an account or to register to some
