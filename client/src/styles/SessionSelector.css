@@ -11,54 +11,25 @@
   border: solid #111;
 }
 
-.session_selector_game_selection {
-  flex-direction: column;
+.session_selector_last_session {
+  color: #fff;
+  background-color: #070a10;
 }
 
-.session_selector_game_group {
-  background-color: #0004;
-  width: 70%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.session_selector_last_session:hover {
+  background-color: #101215;
 }
 
-.session_selector_game_group_title {
-  color: #6f9fc8;
-  background: linear-gradient(#354455, #19222e);
-
-  width: 100%;
-  padding: 5px 15px 5px 15px;
-
-  font-size: large;
-  font-weight: bold;
+.session_selector_last_session_disabled {
+  color: #ccc;
+  background-color: #303630;
 }
 
-.session_selector_back_section {
-  width: 70%;
+.session_selector_last_session_disabled:hover {
+  width: 300px;
+  height: 50px;
 
-  display: flex;
-  flex-direction: row;
-}
+  margin: 10px 20px 10px 20px;
 
-.session_selector_game_back {
-  color: #000;
-  background: linear-gradient(#e63290, #9b3407);
-
-  min-width: 150px;
-  min-height: 50px;
-
-  margin-top: 10px;
-
-  font-size: large;
-  font-weight: bold;
-
-  border: none;
-  border-radius: 5px;
-}
-
-.session_selector_game_back:hover {
-  color: #000;
-  background: linear-gradient(#9b3407, #e63290);
+  background-color: #303630;
 }

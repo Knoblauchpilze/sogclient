@@ -1,4 +1,6 @@
 
+import Universe from './universe.js';
+
 class Session {
   constructor(props) {
     // Defines the base properties for a player: these values
@@ -39,22 +41,25 @@ class Session {
 
 }
 
-const NullSession = {
-  universe: {
+const NullSession = new Session({
+  universe: new Universe({
     id: "",
     name: "",
     country: "",
-    online: "",
+    online: 0,
     kind: "",
-    age: "",
-  },
+    age: 0,
 
+    fleet_speed: 1,
+    economic_speed: 1,
+    research_speed: 1,
+  }),
   account: "",
 
   player: "",
   name: "",
-  rank: "",
-};
+  rank: -1,
+});
 
 export default Session;
 export { NullSession };
