@@ -95,11 +95,6 @@ class SessionsModule {
       if (foundSess) {
         res.status = DUPLICATED_SESSION;
       }
-      else {
-        // We need to make sure that a session with the
-        // same name does not already exist.
-        // TODO: Handle this.
-      }
     }
     if (operation === SESSION_FETCH) {
       if (!foundSess) {

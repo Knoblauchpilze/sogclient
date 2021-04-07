@@ -3,6 +3,7 @@
 import React from 'react';
 import AccountSelector from './AccountSelector.jsx';
 import SessionSelector from './SessionSelector.jsx';
+import SessionCreator from './SessionCreator.jsx';
 
 import { NullAccount } from '../game/server.js';
 import { NullSession } from '../game/session.js';
@@ -13,9 +14,13 @@ import { NullSession } from '../game/session.js';
 const ACCOUNT_SELECTION = "account";
 
 // Defines the step corresponding to the selection of
+// a saved session or the creation of a new one.
+const SESSION_SELECTION = "session_selection";
+
+// Defines the step corresponding to the selection of
 // the session. A session represents the universe into
 // which the account has a 'player' instance.
-const SESSION_SELECTION = "session";
+const SESSION_CREATION = "session_creation";
 
 class Lobby extends React.Component {
   constructor(props) {
@@ -60,6 +65,18 @@ class Lobby extends React.Component {
     });
   }
 
+  createSession() {
+    // Move to the session creation state if possible.
+    if (this.state.loginStep !== SESSION_SELECTION) {
+      console.error("Failed to perform creation of session, wrong state (" + this.state.loginStep + ")");
+      return;
+    }
+
+    this.setState({
+      loginStep: SESSION_CREATION
+    });
+  }
+
   updateSession(sess) {
     // Make sure the session is valid (at least from
     // a syntax perspective).
@@ -68,9 +85,13 @@ class Lobby extends React.Component {
       return;
     }
 
+    console.info("Selected session " + sess.id);
+
     this.setState({
       session: sess,
     });
+
+    // TODO: Move to game state.
   }
 
   /**
@@ -83,7 +104,9 @@ class Lobby extends React.Component {
     return (
       this.state.loginStep === ACCOUNT_SELECTION ?
       <AccountSelector updateAccount={acc => this.updateAccount(acc)} /> :
-      <SessionSelector account={this.state.account} updateSession={sess => this.updateSession(sess)} />
+      this.state.loginStep === SESSION_SELECTION ?
+      <SessionSelector account={this.state.account} updateSession={sess => this.updateSession(sess)} createSession={() => this.createSession()} /> :
+      <SessionCreator account={this.state.account} updateSession={sess => this.updateSession(sess)}/>
     );
   }
 }

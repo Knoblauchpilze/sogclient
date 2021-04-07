@@ -103,10 +103,13 @@ class SessionSelector extends React.Component {
 
     // Also verify that the session is linked to
     // the account we're connected to.
-    // TODO.
+    if (sess.account !== this.state.account.id) {
+      console.info("Removed session " + sess.id + " linked to account " + sess.account);
+      sess = NullSession;
+    }
 
     this.setState({
-      hasSavedSession: sess.id !== "",
+      hasSavedSession: sess.account !== "",
       session: sess
     });
   }
