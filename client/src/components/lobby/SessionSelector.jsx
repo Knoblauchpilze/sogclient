@@ -217,21 +217,11 @@ class SessionSelector extends React.Component {
     const sessSelec = this;
     return this.state.sessions.map(function (sess) {
       // Fetch the universe associated to this session.
-      const uniData = sessSelec.state.universes.find(uni => uni.id === sess.universe)
-
-      // Build the universe structure.
-      const uni = new Universe({
-        id: uniData.id,
-        name: uniData.name,
-        country: uniData.country,
-        online: "TODO",
-        kind: "TODO",
-        age: uniData.age
-      });
+      const uniData = sessSelec.state.universes.find(uni => uni.id === sess.universe);
 
       // Generate the player's data.
       const player = new Session({
-        universe: uni,
+        universe: new Universe(uniData),
         account: sess.account,
         player: sess.id,
         name: sess.name,
@@ -257,14 +247,7 @@ class SessionSelector extends React.Component {
     return this.state.availableUniverses.map(uni => (
       <UniverseDesc key={`${uni.id}`}
                     player={new Session({
-                      universe: new Universe({
-                        id: uni.id,
-                        name: uni.name,
-                        country: uni.country,
-                        online: "TODO",
-                        kind: "TODO",
-                        age: uni.age,
-                      }),
+                      universe: new Universe(uni),
                       account: this.state.account.id,
                       player: "",
                       name: "",
