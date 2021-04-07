@@ -27,7 +27,7 @@ class UniverseDesc extends React.Component {
     const uni = this.state.player.universe;
     const player = this.state.player;
 
-    const ageText = uni.age + " day";
+    let ageText = uni.age + " day";
     if (uni.age > 1) {
       ageText = uni.age + " days";
     }
