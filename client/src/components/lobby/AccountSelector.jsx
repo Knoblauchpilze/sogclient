@@ -19,7 +19,7 @@ class AccountSelector extends React.Component {
       // be saved to local storage so that it can
       // be restored afterwards (on the next user
       // log in mainly).
-      autologin: false,
+      autologin: true,
 
       // Defines whether the user is currently trying
       // to define an account or to register to some
@@ -208,12 +208,11 @@ class AccountSelector extends React.Component {
               <input type="checkbox"
                      onChange={(e) => this.updateAutologin(e.target.checked)}
                      key="autologin_checkbox"
-                     name="haha"
                      checked={this.state.autologin}
               />
               <label htmlFor={"autologin_checkbox"}>Login automatically</label>
             </div>
-            <button className="account_selector_button account_selector_play" onClick={() => this.requestLogin(this.state.account, this.state.accountMode)}>
+            <button className="lobby_validate_button" onClick={() => this.requestLogin(this.state.account, this.state.accountMode)}>
               {this.state.accountMode === "signin" ? "Login" : "Register"}
             </button>
           </div>

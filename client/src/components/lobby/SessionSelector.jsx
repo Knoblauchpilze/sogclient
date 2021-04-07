@@ -3,20 +3,12 @@ import '../../styles/SessionSelector.css';
 import '../../styles/Lobby.css';
 import React from 'react';
 
-import UniverseHeader from './UniverseHeader.jsx';
-import UniverseDesc from './UniverseDesc.jsx';
-
 import Server from '../game/server.js';
-import Universe from '../game/universe.js';
-import Session from '../game/session.js';
+
+import { NullSession } from '../game/session.js';
 
 import SessionsModule from '../game/sessions.js';
-import { SESSIONS_FETCH_SUCCEEDED } from '../game/sessions.js';
 import { SESSION_FETCH_SUCCEEDED } from '../game/sessions.js';
-import { SESSION_REGISTRATION_SUCCEEDED } from '../game/sessions.js';
-
-import UniverseFetcher from '../game/universes.js';
-import { UNIVERSES_FETCH_SUCCEEDED } from '../game/universes.js';
 
 class SessionSelector extends React.Component {
   constructor(props) {
@@ -33,66 +25,21 @@ class SessionSelector extends React.Component {
       // session to the parent component.
       updateSession: props.updateSession,
 
-      // The list of universes in which the user already
-      // has an account.
-      sessions: [],
+      // This method fetched from the input properties
+      // allows to transmit a request to create a new
+      // session rather than loading an existgin saved
+      // one.
+      createSession: props.createSession,
 
-      // The list of universes available for the user to
-      // create a new session in.
-      availableUniverses: [],
+      // Whether or not a saved session exists in local
+      // storage for this item.
+      hasSavedSession: false,
 
-      // The list of all universes: this is used so that
-      // we can associate valid data for a session.
-      universes: [],
+      // The session loaded from local storage. Will be
+      // used in case the user clicks on the restore last
+      // session option.
+      session: NullSession,
     };
-  }
-
-  fetchDataFailed(err) {
-    alert(err);
-  }
-
-  fetchUniversesSucceeded(universes) {
-    // Check in case the sessions are already registered
-    // in which case we can perform the analysis of the
-    // available universes.
-    // Otherwise we will just save everything and filter
-    // when the sessions are retrieved.
-    let filtUnis = universes;
-
-    if (this.state.sessions.length > 0) {
-      // Filter universes in case a sessions already exists
-      // for this universe.
-      const filtered = filtUnis.filter(
-        uni => !this.state.sessions.some(sess => sess.universe === uni.id)
-      );
-
-      filtUnis = filtered;
-    }
-
-    this.setState({
-      availableUniverses: filtUnis,
-      universes: universes,
-    });
-  }
-
-  fetchSessionsSucceeded(sessions) {
-    // Register the sessions: in case the universes are
-    // already registered we will also perform a filter
-    // to keep only the ones where no session already
-    // exists.
-    let unis = this.state.availableUniverses;
-    if (unis.length > 0) {
-      const filtered = unis.filter(
-        uni => !sessions.some(sess => sess.universe === uni.id)
-      );
-
-      unis = filtered;
-    }
-
-    this.setState({
-      sessions: sessions,
-      availableUniverses: unis,
-    });
   }
 
   fetchedSessionFailure(err) {
@@ -103,19 +50,19 @@ class SessionSelector extends React.Component {
     // Update internal state.
     this.state.updateSession(sess);
 
-    console.info("Validated session " + JSON.stringify(sess));
+    console.info("Validated session " + sess.id);
 
     // Save session to local storage for automatic login on
     // subsequent connections.
     const out = JSON.stringify(sess);
     localStorage.setItem("session", out);
 
-    console.info("Saving session " + out);
+    console.info("Saving session " + sess.id);
   }
 
   selectSession(session) {
-    // Determine whether the session already exists or
-    // not: if not, we'll have to create it first.
+    // Create elements to use to perform the validation of
+    // the input session.
     const server = new Server();
     const sess = new SessionsModule(server);
 
@@ -126,136 +73,42 @@ class SessionSelector extends React.Component {
     const inSess = {
       name: session.name,
       account: session.account,
-      universe: session.universe.id,
+      universe: session.universe,
     };
 
-    if (session.exists()) {
-      // We need first to fetch the session and then
-      // notify the parent component.
-      sess.fetch(inSess)
-        .then(function (res) {
-          if (res.status !== SESSION_FETCH_SUCCEEDED) {
-            sessSelector.fetchedSessionFailure(res.status);
-          }
-          else {
-            sessSelector.fetchedSession(res.session);
-          }
-        })
-        .catch(err => sessSelector.fetchedSessionFailure(err));
-
-      return;
-    }
-
-    // We need to first create the session, and then
-    // communicate it to the parent.
-    sess.register(inSess)
+    // We are sure that the session is actually valid, so
+    // we can proceed to consolidating it with the server.
+    sess.fetch(inSess)
       .then(function (res) {
-        if (res.status !== SESSION_REGISTRATION_SUCCEEDED) {
+        if (res.status !== SESSION_FETCH_SUCCEEDED) {
           sessSelector.fetchedSessionFailure(res.status);
         }
         else {
-          inSess.id = res.id;
-          sessSelector.fetchedSession(inSess);
+          sessSelector.fetchedSession(res.session);
         }
       })
       .catch(err => sessSelector.fetchedSessionFailure(err));
   }
 
   componentDidMount() {
-    // Fetch the list of universes from the server.
-    const server = new Server();
-    const sess = new SessionsModule(server);
-    const unis = new UniverseFetcher(server);
-
-    const sessSelector = this;
-
-    // Fetch the sessions from the server.
-    sess.fetchSessions(this.state.account.id)
-      .then(function (res) {
-        if (res.status !== SESSIONS_FETCH_SUCCEEDED) {
-          sessSelector.fetchDataFailed(res.status);
-        }
-        else {
-          sessSelector.fetchSessionsSucceeded(res.sessions);
-        }
-      })
-      .catch(err => sessSelector.fetchDataFailed(err));
-
-    // Fetch the data from the server.
-    unis.fetchUniverses()
-      .then(function (res) {
-        if (res.status !== UNIVERSES_FETCH_SUCCEEDED) {
-          sessSelector.fetchDataFailed(res.status);
-        }
-        else {
-          sessSelector.fetchUniversesSucceeded(res.universes);
-        }
-      })
-      .catch(err => sessSelector.fetchDataFailed(err));
-
     // Check whether the user already has a saved
-    // account: if this is the case we will show
-    // the session choosing panel. Otherwise we
-    // need to propose to register.
-    const storedSession = localStorage.getItem("session");
-    const asess = storedSession ? JSON.parse(storedSession) : "haha";
-    console.log("Session: " + JSON.stringify(asess));
-  }
+    // session: if this is the case we will enable
+    // the button allowing to restore the session.
+    const storedSess = localStorage.getItem("session");
+    let sess = storedSess ? JSON.parse(storedSess) : NullSession;
 
-  /**
-   * @brief - Used to generate the list of components used
-   *          to represent the sessions where the player
-   *          already has an account.
-   */
-  generateExistingSessions() {
-    // In case universes haven't been fetched yet, we can't
-    // generate the existing sessions' data.
-    if (this.state.universes.length === 0) {
-      return [];
+    if (sess.id === "") {
+      sess = NullSession;
     }
 
-    const sessSelec = this;
-    return this.state.sessions.map(function (sess) {
-      // Fetch the universe associated to this session.
-      const uniData = sessSelec.state.universes.find(uni => uni.id === sess.universe);
+    // Also verify that the session is linked to
+    // the account we're connected to.
+    // TODO.
 
-      // Generate the player's data.
-      const player = new Session({
-        universe: new Universe(uniData),
-        account: sess.account,
-        player: sess.id,
-        name: sess.name,
-        rank: "",
-      });
-
-      // Return the visual component.
-      return (
-        <UniverseDesc key={`${sess.id}`}
-                      player={player}
-                      selectSession={session => sessSelec.selectSession(session)}
-                      />
-      );
+    this.setState({
+      hasSavedSession: sess.id !== "",
+      session: sess
     });
-  }
-
-  /**
-   * @brief - Used to generate the list of components used
-   *          to represent the sessions where the player
-   *          does not have an account yet.
-   */
-  generateAvailableSessions() {
-    return this.state.availableUniverses.map(uni => (
-      <UniverseDesc key={`${uni.id}`}
-                    player={new Session({
-                      universe: new Universe(uni),
-                      account: this.state.account.id,
-                      player: "",
-                      name: "",
-                      rank: "",
-                    })}
-                    selectSession={session => this.selectSession(session)}
-                    />
-    ));
   }
 
   /**
@@ -264,20 +117,15 @@ class SessionSelector extends React.Component {
    *          able to create a new session.
    */
   render() {
+    const buttonClass = this.state.hasSavedSession ?
+      "lobby_validate_button session_selector_last_session" :
+      "lobby_validate_button session_selector_last_session_disabled";
+
     return (
-      <div className="lobby_layout session_selector_game_selection">
-        <div className="session_selector_game_group">
-          <p className="session_selector_game_group_title">Your universes</p>
-          <UniverseHeader />
-          {this.generateExistingSessions()}
-        </div>
-        <div className="session_selector_game_group">
-          <p className="session_selector_game_group_title">Start in a new universe</p>
-          <UniverseHeader />
-          {this.generateAvailableSessions()}
-        </div>
-        <div className="session_selector_back_section">
-          <button className="session_selector_game_back" onClick = {() => this.setState({sessionMode: "restore"})}>Back</button>
+      <div className="lobby_layout">
+        <div className="session_selector_options">
+          <button className="lobby_validate_button" onClick = {() => this.state.createSession()}>Play</button>
+          <button className={buttonClass} onClick = {() => this.state.hasSavedSession && this.selectSession(this.state.session)}>Last session</button>
         </div>
       </div>
     );
