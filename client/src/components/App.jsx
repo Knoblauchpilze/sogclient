@@ -12,6 +12,7 @@ import { NullAccount } from './game/server.js';
 import { NullSession } from './game/session.js';
 
 import { ACCOUNT_SELECTION } from './lobby/Lobby.jsx';
+import { SESSION_SELECTION } from './lobby/Lobby.jsx';
 
 // Defines the step corresponding to the selection of
 // the account. This is required before launching the
@@ -41,6 +42,11 @@ class App extends React.Component {
       // between the lobby and the status bar.
       loginStep: ACCOUNT_SELECTION,
 
+      // Defines whether or not the lobby should perform
+      // an automatic login of the user if an account
+      // exists in local storage.
+      autologin: true,
+
       // The account data representing the user which
       // is trying to connect. Initialized with a null
       // value at first, the account selector will be
@@ -63,10 +69,19 @@ class App extends React.Component {
     });
   }
 
+  updateAccount(account) {
+    this.setState({
+      account: account,
+      loginStep: SESSION_SELECTION,
+    });
+  }
+
   performLogin(account, session) {
     // Perform minimal checks.
-    console.log("acc: " + JSON.stringify(account));
-    console.log("ses: " + JSON.stringify(session));
+    if (account.id === "" || session.id === "") {
+      console.error("Failed to login, invalid account (" + account.id + ") or session (" + session.id + ")");
+      return;
+    }
 
     // Update the internal state with the account and
     // session and move to game screen.
@@ -79,7 +94,11 @@ class App extends React.Component {
 
   logout() {
     this.setState({
-      gameState: LOGIN
+      gameState: LOGIN,
+      account: NullAccount,
+      session: NullSession,
+      loginStep: ACCOUNT_SELECTION,
+      autologin: false,
     });
   }
 
@@ -90,9 +109,12 @@ class App extends React.Component {
         <Banner />
         {
           this.state.gameState === GAME ? <Game /> :
-          <Lobby updateLoginStep={(step) => this.updateLoginStep(step)}
-                 getLoginStep={() => this.state.loginStep}
+          <Lobby loginStep={this.state.loginStep}
+                 updateLoginStep={(step) => this.updateLoginStep(step)}
+                 account={this.state.account}
+                 updateAccount={(acc) => this.updateAccount(acc)}
                  performLogin={(acc, sess) => this.performLogin(acc, sess)}
+                 autologin={this.state.autologin}
                  />
         }
         <Footer />

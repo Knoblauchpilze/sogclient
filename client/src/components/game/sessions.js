@@ -180,7 +180,7 @@ class SessionsModule {
 
   async register(session) {
     let out = {
-      id: "",
+      session: session,
       status: SESSION_REGISTRATION_FAILURE,
     };
 
@@ -210,7 +210,15 @@ class SessionsModule {
       return out;
     }
 
-    out.id = res.id;
+    // Fetch this session.
+    session.id = res.id;
+    const sFetch = await this.validate(session, SESSION_FETCH);
+    if (sFetch.status !== VALID_SESSION) {
+      out.status = sFetch.status;
+      return out;
+    }
+
+    out.session = sFetch.session;
     out.status = SESSION_REGISTRATION_SUCCEEDED;
 
     return out;

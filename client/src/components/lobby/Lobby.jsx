@@ -4,9 +4,6 @@ import AccountSelector from './AccountSelector.jsx';
 import SessionSelector from './SessionSelector.jsx';
 import SessionCreator from './SessionCreator.jsx';
 
-import { NullAccount } from '../game/server.js';
-import { NullSession } from '../game/session.js';
-
 // Defines the step corresponding to the selection of
 // the account. This is required before moving to the
 // selection of a session.
@@ -25,32 +22,7 @@ class Lobby extends React.Component {
   constructor(props) {
     super(props);
 
-    // Initialize step from the props.
-    // let step = ACCOUNT_SELECTION;
-    // if (props.loginStep) {
-    //   step = props.loginStep;
-    // }
-
     this.state = {
-      // The account data representing the user which
-      // is trying to connect. Initialized with a null
-      // value at first, the account selector will be
-      // in charge of populating and validating it with
-      // the server's data
-      account: NullAccount,
-
-      // The session data representing the game that the
-      // user chose to play. Initialized with a null value
-      // at first, the session selector will be in charge
-      // of populating and validating it with the server's
-      // data.
-      session: NullSession,
-
-      // Definition of a function fetched from the input
-      // properties allowing to retrieve the current login
-      // step.
-      getLoginStep: props.getLoginStep,
-
       // Definition of a function fetched from the input
       // properties to propagate a modification of the
       // login step to the parent component.
@@ -61,8 +33,6 @@ class Lobby extends React.Component {
       // account and session to the parent component.
       performLogin: props.performLogin,
     };
-
-    console.log("g: " + this.state.getLoginStep());
   }
 
   updateAccount(acc) {
@@ -74,11 +44,7 @@ class Lobby extends React.Component {
     }
 
     // Update the account and the login step.
-    this.setState({
-      account: acc,
-    });
-
-    this.state.updateLoginStep(SESSION_SELECTION);
+    this.props.updateAccount(acc);
   }
 
   backToSessionList() {
@@ -90,8 +56,8 @@ class Lobby extends React.Component {
 
   createSession() {
     // Move to the session creation state if possible.
-    if (this.state.getLoginStep() !== SESSION_SELECTION) {
-      console.error("Failed to perform creation of session, wrong state (" + this.state.getLoginStep() + ")");
+    if (this.props.loginStep !== SESSION_SELECTION) {
+      console.error("Failed to perform creation of session, wrong state (" + this.props.loginStep + ")");
       return;
     }
 
@@ -108,12 +74,8 @@ class Lobby extends React.Component {
 
     console.info("Selected session " + sess.id);
 
-    this.setState({
-      session: sess,
-    });
 
-
-    this.state.performLogin(this.state.account, sess);
+    this.state.performLogin(this.props.account, sess);
   }
 
   /**
@@ -123,14 +85,12 @@ class Lobby extends React.Component {
    *          menu.
    */
   render() {
-    const loginStep = this.state.getLoginStep();
-
     return (
-      loginStep === ACCOUNT_SELECTION ?
-      <AccountSelector updateAccount={acc => this.updateAccount(acc)} /> :
-      loginStep === SESSION_SELECTION ?
-      <SessionSelector account={this.state.account} updateSession={sess => this.updateSession(sess)} createSession={() => this.createSession()} /> :
-      <SessionCreator account={this.state.account} updateSession={sess => this.updateSession(sess)} cancelCreation={() => this.backToSessionList()}/>
+      this.props.loginStep === ACCOUNT_SELECTION ?
+      <AccountSelector updateAccount={acc => this.updateAccount(acc)} autologin={this.props.autologin}/> :
+      this.props.loginStep === SESSION_SELECTION ?
+      <SessionSelector account={this.props.account} updateSession={sess => this.updateSession(sess)} createSession={() => this.createSession()} /> :
+      <SessionCreator account={this.props.account} updateSession={sess => this.updateSession(sess)} cancelCreation={() => this.backToSessionList()}/>
     );
   }
 }
