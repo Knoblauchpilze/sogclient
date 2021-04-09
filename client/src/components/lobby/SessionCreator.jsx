@@ -23,11 +23,6 @@ class SessionCreator extends React.Component {
     super(props);
 
     this.state = {
-      // The account identifier, provided by the parent
-      // component and corresponding to the account with
-      // which the user successfully logged in.
-      account: props.account,
-
       // This method fetched from the input properties
       // allows to transmit the result of the validated
       // session to the parent component.
@@ -129,6 +124,7 @@ class SessionCreator extends React.Component {
     // Flatten the session to a format expected by the
     // sessions module.
     const inSess = {
+      id: "",
       name: session.name,
       account: session.account,
       universe: session.universe.id,
@@ -159,8 +155,7 @@ class SessionCreator extends React.Component {
           sessSelector.fetchedSessionFailure(res.status);
         }
         else {
-          inSess.id = res.id;
-          sessSelector.fetchedSession(inSess);
+          sessSelector.fetchedSession(res.session);
         }
       })
       .catch(err => sessSelector.fetchedSessionFailure(err));
@@ -175,7 +170,7 @@ class SessionCreator extends React.Component {
     const sessSelector = this;
 
     // Fetch the sessions from the server.
-    sess.fetchSessions(this.state.account.id)
+    sess.fetchSessions(this.props.account.id)
       .then(function (res) {
         if (res.status !== SESSIONS_FETCH_SUCCEEDED) {
           sessSelector.fetchDataFailed(res.status);
@@ -245,7 +240,7 @@ class SessionCreator extends React.Component {
       <UniverseDesc key={`${uni.id}`}
                     player={new Session({
                       universe: new Universe(uni),
-                      account: this.state.account.id,
+                      account: this.props.account.id,
                       player: "",
                       name: "",
                       rank: "TODO",

@@ -19,7 +19,12 @@ class AccountSelector extends React.Component {
       // be saved to local storage so that it can
       // be restored afterwards (on the next user
       // log in mainly).
-      autologin: false,
+      autologin: props.autologin,
+
+      // Deifnes whether or not the selected account
+      // should be persisted to the local storage so
+      // that it can be remembered.
+      persistAccount: true,
 
       // Defines whether the user is currently trying
       // to define an account or to register to some
@@ -75,7 +80,7 @@ class AccountSelector extends React.Component {
 
     // Save account to local storage for automatic login on
     // subsequent connections.
-    if (!this.state.autologin) {
+    if (!this.state.persistAccount) {
       localStorage.removeItem("account");
 
       console.info("Removing saved account");
@@ -137,9 +142,9 @@ class AccountSelector extends React.Component {
     });
   }
 
-  updateAutologin(autologin) {
+  updatePersistAccount(persist) {
     this.setState({
-      autologin: autologin
+      persistAccount: persist
     });
   }
 
@@ -154,11 +159,12 @@ class AccountSelector extends React.Component {
     // Check whether the user already has a saved
     // account: if this is the case we will show
     // the session choosing panel. Otherwise we
-    // need to propose to register.
+    // need to propose to register. The autologin
+    // needs to be active for that to happen.
     const storedAcc = localStorage.getItem("account");
     const acc = storedAcc ? JSON.parse(storedAcc) : NullAccount;
 
-    if (acc.mail !== "" && acc.password !== "") {
+    if (acc.mail !== "" && acc.password !== "" && this.state.autologin) {
       this.requestLogin(acc, this.state.accountMode);
     }
   }
@@ -206,9 +212,9 @@ class AccountSelector extends React.Component {
             </div>
             <div className="account_selector_session_item">
               <input type="checkbox"
-                     onChange={(e) => this.updateAutologin(e.target.checked)}
+                     onChange={(e) => this.updatePersistAccount(e.target.checked)}
                      key="autologin_checkbox"
-                     checked={this.state.autologin}
+                     checked={this.state.persistAccount}
               />
               <label htmlFor={"autologin_checkbox"}>Login automatically</label>
             </div>

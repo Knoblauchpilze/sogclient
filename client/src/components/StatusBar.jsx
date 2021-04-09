@@ -3,55 +3,39 @@ import '../styles/StatusBar.css';
 import '../styles/Lobby.css';
 import React from 'react';
 
-class StatusBar extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      // Represents the account to which the user is currently
-      // logged into. Allows to display the name and the info
-      // of the account.
-      account: props.account,
-
-      // Represents the session currently being used by the
-      // user. It is always related to the account and is used
-      // to further refine the info displayed in the status
-      // bar.
-      session: props.session,
-
-      // The logout function allows to inform the parent component
-      // that the user should be logged out of their current session.
-      requestLogout: props.requestLogout,
-    };
+function StatusBar(props) {
+  const loggedIn = (props.account.id !== "" && props.session.id !== "");
+  let classes = "status_bar_logout_button";
+  if (loggedIn) {
+    classes += " lobby_reject_button";
+  }
+  else {
+    classes += " status_bar_logout_disabled_button";
   }
 
-  render() {
-    const loggedIn = (this.state.account.id !== "" && this.state.session.id !== "");
-    let classes = "status_bar_logout_button";
-    if (loggedIn) {
-      classes += " lobby_reject_button";
-    }
-    else {
-      classes += " status_bar_logout_disabled_button";
-    }
-
-    return (
-      <div className="status_bar_layout">
+  return (
+    <div className="status_bar_layout">
+      {loggedIn &&
         <div className="statis_bar_inner_container">
           <div className="status_bar_info_group">
-            <div className="status_bar_key">Player:</div>
-            <div className="status_bar_value">world</div>
+            {props.account.id !== "" && <div className="status_bar_key">Account:</div>}
+            <div className="status_bar_value">{props.account.name}</div>
           </div>
           <div className="status_bar_info_group">
-          <div className="status_bar_key">Middle</div>
-          <div className="status_bar_value">High</div>
-          <div className="status_bar_value">Ground</div>
+            {props.session.id !== "" && <div className="status_bar_key">Player:</div>}
+            <div className="status_bar_value">{props.session.name}</div>
           </div>
-          <button className={classes} onClick = {() => loggedIn && this.state.requestLogout()}>Logout</button>
-        </div>
+          <div className="status_bar_info_group">
+            <div className="status_bar_value">Notes</div>
+            <div className="status_bar_value">Friends</div>
+            <div className="status_bar_value">Options</div>
+            <div className="status_bar_value">Support</div>
+          </div>
+        <button className={classes} onClick = {() => loggedIn && props.requestLogout()}>Logout</button>
       </div>
-    );
-  }
+      }
+    </div>
+  );
 }
 
 export default StatusBar;

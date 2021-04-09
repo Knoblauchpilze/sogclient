@@ -33,12 +33,15 @@
 
 .status_bar_value {
   color: #6f9fc8;
+
+  margin: 0px 10px 0px 10px;
 }
 
 .status_bar_value:hover {
   color: #99c501;
 
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .status_bar_logout_button {
