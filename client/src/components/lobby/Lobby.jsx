@@ -26,21 +26,12 @@ class Lobby extends React.Component {
     super(props);
 
     // Initialize step from the props.
-    let step = ACCOUNT_SELECTION;
-    if (props.loginStep) {
-      step = props.loginStep;
-      console.log("Overriding step: " + props.loginStep);
-    }
-    // TODO: Remove debug log.
-    console.log("Final step: " + step + ", props: " + JSON.stringify(props));
+    // let step = ACCOUNT_SELECTION;
+    // if (props.loginStep) {
+    //   step = props.loginStep;
+    // }
 
     this.state = {
-      // Textual descritpion of the current login step.
-      // Helps guide the login process to make sure the
-      // user is verified before accessing to the game's
-      // data.
-      loginStep: step,
-
       // The account data representing the user which
       // is trying to connect. Initialized with a null
       // value at first, the account selector will be
@@ -55,11 +46,23 @@ class Lobby extends React.Component {
       // data.
       session: NullSession,
 
+      // Definition of a function fetched from the input
+      // properties allowing to retrieve the current login
+      // step.
+      getLoginStep: props.getLoginStep,
+
+      // Definition of a function fetched from the input
+      // properties to propagate a modification of the
+      // login step to the parent component.
+      updateLoginStep: props.updateLoginStep,
+
       // This method fetched from the input properties is
       // used to communicate the selection of a valid
       // account and session to the parent component.
       performLogin: props.performLogin,
     };
+
+    console.log("g: " + this.state.getLoginStep());
   }
 
   updateAccount(acc) {
@@ -72,30 +75,27 @@ class Lobby extends React.Component {
 
     // Update the account and the login step.
     this.setState({
-      loginStep: SESSION_SELECTION,
       account: acc,
     });
+
+    this.state.updateLoginStep(SESSION_SELECTION);
   }
 
   backToSessionList() {
     // Defines the state as being back to selecting whether
     // the local session should be loaded or if a new one
     // needs to be created.
-    this.setState({
-      loginStep: SESSION_SELECTION,
-    });
+    this.state.updateLoginStep(SESSION_SELECTION);
   }
 
   createSession() {
     // Move to the session creation state if possible.
-    if (this.state.loginStep !== SESSION_SELECTION) {
-      console.error("Failed to perform creation of session, wrong state (" + this.state.loginStep + ")");
+    if (this.state.getLoginStep() !== SESSION_SELECTION) {
+      console.error("Failed to perform creation of session, wrong state (" + this.state.getLoginStep() + ")");
       return;
     }
 
-    this.setState({
-      loginStep: SESSION_CREATION
-    });
+    this.state.updateLoginStep(SESSION_CREATION);
   }
 
   updateSession(sess) {
@@ -123,10 +123,12 @@ class Lobby extends React.Component {
    *          menu.
    */
   render() {
+    const loginStep = this.state.getLoginStep();
+
     return (
-      this.state.loginStep === ACCOUNT_SELECTION ?
+      loginStep === ACCOUNT_SELECTION ?
       <AccountSelector updateAccount={acc => this.updateAccount(acc)} /> :
-      this.state.loginStep === SESSION_SELECTION ?
+      loginStep === SESSION_SELECTION ?
       <SessionSelector account={this.state.account} updateSession={sess => this.updateSession(sess)} createSession={() => this.createSession()} /> :
       <SessionCreator account={this.state.account} updateSession={sess => this.updateSession(sess)} cancelCreation={() => this.backToSessionList()}/>
     );

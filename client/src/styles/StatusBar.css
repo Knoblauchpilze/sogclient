@@ -1,0 +1,54 @@
+
+.status_bar_layout {
+  background-color: #0004;
+
+  min-height: 30px;
+  max-height: 50px;
+
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.statis_bar_inner_container {
+  width: 90%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status_bar_info_group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.status_bar_key {
+  color: #fff;
+}
+
+.status_bar_value {
+  color: #6f9fc8;
+}
+
+.status_bar_value:hover {
+  color: #99c501;
+
+  text-decoration: underline;
+}
+
+.status_bar_logout_button {
+  font-weight: bold;
+
+  border: none;
+  border-radius: 5px;
+}
+
+.status_bar_logout_disabled_button {
+  color: #aaa;
+  background-color: #2e3436;
+}
