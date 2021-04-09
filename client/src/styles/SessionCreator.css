@@ -43,9 +43,6 @@
 }
 
 .session_creator_game_back {
-  color: #000;
-  background: linear-gradient(#e63290, #9b3407);
-
   min-width: 150px;
   min-height: 50px;
 
@@ -56,9 +53,4 @@
 
   border: none;
   border-radius: 5px;
-}
-
-.session_creator_game_back:hover {
-  color: #000;
-  background: linear-gradient(#9b3407, #e63290);
 }

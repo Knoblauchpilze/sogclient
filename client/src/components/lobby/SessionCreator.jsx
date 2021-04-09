@@ -33,6 +33,11 @@ class SessionCreator extends React.Component {
       // session to the parent component.
       updateSession: props.updateSession,
 
+      // This method fetched from the input properties
+      // allows to get back to cancel the creation of a
+      // new session and get back to the session choice.
+      cancelCreation: props.cancelCreation,
+
       // The list of universes in which the user already
       // has an account.
       sessions: [],
@@ -217,7 +222,7 @@ class SessionCreator extends React.Component {
         account: sess.account,
         player: sess.id,
         name: sess.name,
-        rank: "",
+        rank: "TODO",
       });
 
       // Return the visual component.
@@ -243,7 +248,7 @@ class SessionCreator extends React.Component {
                       account: this.state.account.id,
                       player: "",
                       name: "",
-                      rank: "",
+                      rank: "TODO",
                     })}
                     selectSession={session => this.selectSession(session)}
                     />
@@ -269,7 +274,7 @@ class SessionCreator extends React.Component {
           {this.generateAvailableSessions()}
         </div>
         <div className="session_creator_back_section">
-          <button className="session_creator_game_back" onClick = {() => this.setState({sessionMode: "restore"})}>Back</button>
+          <button className="session_creator_game_back lobby_reject_button" onClick = {() => this.state.cancelCreation()}>Back</button>
         </div>
       </div>
     );
