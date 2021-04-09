@@ -11,6 +11,8 @@ import Footer from './Footer.jsx';
 import { NullAccount } from './game/server.js';
 import { NullSession } from './game/session.js';
 
+import { ACCOUNT_SELECTION } from './lobby/Lobby.jsx';
+
 // Defines the step corresponding to the selection of
 // the account. This is required before launching the
 // game with the selected session.
@@ -32,6 +34,13 @@ class App extends React.Component {
       // render).
       gameState: LOGIN,
 
+      // Textual descritpion of the current login step.
+      // Helps guide the login process to make sure the
+      // user is verified before accessing to the game's
+      // data. This attribute is used to share the state
+      // between the lobby and the status bar.
+      loginStep: ACCOUNT_SELECTION,
+
       // The account data representing the user which
       // is trying to connect. Initialized with a null
       // value at first, the account selector will be
@@ -48,6 +57,12 @@ class App extends React.Component {
     };
   }
 
+  updateLoginStep(step) {
+    this.setState({
+      loginStep: step
+    });
+  }
+
   performLogin(account, session) {
     // Perform minimal checks.
     console.log("acc: " + JSON.stringify(account));
@@ -62,12 +77,24 @@ class App extends React.Component {
     })
   }
 
+  logout() {
+    this.setState({
+      gameState: LOGIN
+    });
+  }
+
   render() {
     return (
       <div className="app_layout">
-        <StatusBar account={this.state.account} session={this.state.session}/>
+        <StatusBar account={this.state.account} session={this.state.session} requestLogout={() => this.logout()}/>
         <Banner />
-        {this.state.gameState === GAME ? <Game /> : <Lobby performLogin={(acc, sess) => this.performLogin(acc, sess)}/>}
+        {
+          this.state.gameState === GAME ? <Game /> :
+          <Lobby updateLoginStep={(step) => this.updateLoginStep(step)}
+                 getLoginStep={() => this.state.loginStep}
+                 performLogin={(acc, sess) => this.performLogin(acc, sess)}
+                 />
+        }
         <Footer />
       </div>
     );
