@@ -54,6 +54,11 @@ class Lobby extends React.Component {
       // of populating and validating it with the server's
       // data.
       session: NullSession,
+
+      // This method fetched from the input properties is
+      // used to communicate the selection of a valid
+      // account and session to the parent component.
+      performLogin: props.performLogin,
     };
   }
 
@@ -107,7 +112,8 @@ class Lobby extends React.Component {
       session: sess,
     });
 
-    // TODO: Move to game state.
+
+    this.state.performLogin(this.state.account, sess);
   }
 
   /**
