@@ -1,5 +1,4 @@
 
-// import '../../styles/Lobby.css';
 import React from 'react';
 import AccountSelector from './AccountSelector.jsx';
 import SessionSelector from './SessionSelector.jsx';
@@ -26,13 +25,21 @@ class Lobby extends React.Component {
   constructor(props) {
     super(props);
 
+    // Initialize step from the props.
+    let step = ACCOUNT_SELECTION;
+    if (props.loginStep) {
+      step = props.loginStep;
+      console.log("Overriding step: " + props.loginStep);
+    }
+    // TODO: Remove debug log.
+    console.log("Final step: " + step + ", props: " + JSON.stringify(props));
+
     this.state = {
       // Textual descritpion of the current login step.
       // Helps guide the login process to make sure the
       // user is verified before accessing to the game's
       // data.
-      // Always starts by selecting an account.
-      loginStep: ACCOUNT_SELECTION,
+      loginStep: step,
 
       // The account data representing the user which
       // is trying to connect. Initialized with a null
@@ -62,6 +69,15 @@ class Lobby extends React.Component {
     this.setState({
       loginStep: SESSION_SELECTION,
       account: acc,
+    });
+  }
+
+  backToSessionList() {
+    // Defines the state as being back to selecting whether
+    // the local session should be loaded or if a new one
+    // needs to be created.
+    this.setState({
+      loginStep: SESSION_SELECTION,
     });
   }
 
@@ -106,9 +122,15 @@ class Lobby extends React.Component {
       <AccountSelector updateAccount={acc => this.updateAccount(acc)} /> :
       this.state.loginStep === SESSION_SELECTION ?
       <SessionSelector account={this.state.account} updateSession={sess => this.updateSession(sess)} createSession={() => this.createSession()} /> :
-      <SessionCreator account={this.state.account} updateSession={sess => this.updateSession(sess)}/>
+      <SessionCreator account={this.state.account} updateSession={sess => this.updateSession(sess)} cancelCreation={() => this.backToSessionList()}/>
     );
   }
 }
+
+export {
+  ACCOUNT_SELECTION,
+  SESSION_SELECTION,
+  SESSION_CREATION,
+};
 
 export default Lobby;
