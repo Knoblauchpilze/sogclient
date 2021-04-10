@@ -54,3 +54,45 @@
   border: none;
   border-radius: 5px;
 }
+
+.session_creator_universe_prop_layout {
+  max-width: 150px;
+
+  flex: 150 1 100px;
+}
+
+.session_creator_country_prop_layout {
+  max-width: 75px;
+
+  flex-grow: 20;
+}
+
+.session_creator_online_prop_layout {
+  max-width: 50px;
+
+  flex-grow: 10;
+}
+
+.session_creator_kind_prop_layout {
+  max-width: 50px;
+
+  flex: 1 1 30px;
+}
+
+.session_creator_age_prop_layout {
+  max-width: 75px;
+
+  flex: 20 1 50px;
+}
+
+.session_creator_player_prop_layout {
+  max-width: 200px;
+
+  flex: 100 1 150px;
+}
+
+.session_creator_rank_prop_layout {
+  max-width: 60px;
+
+  flex: 1 1 30px;
+}

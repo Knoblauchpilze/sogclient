@@ -26,7 +26,6 @@
   color: #fff;
   background-color: #071118;
 
-  flex-grow: 1;
   padding: 10px 0px 10px 0px;
 
   text-align: center;
@@ -54,4 +53,9 @@
   background: linear-gradient(#90e632, #079b34);
 
   border: none;
+}
+
+.universe_desc_country_image {
+  max-width: 15px;
+  max-height: 15px;
 }
