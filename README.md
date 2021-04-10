@@ -11,3 +11,7 @@ A desktop application to work with the amazing sogserver.
 # Usage
 
 Don't forget to add `/usr/local/lib` to your `LD_LIBRARY_PATH` to be able to load shared libraries at runtime.
+
+# Resources
+
+Countries icons were taken from [here](https://www.flaticon.com/fr/packs/countrys-flags).

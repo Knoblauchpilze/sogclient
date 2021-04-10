@@ -16,9 +16,8 @@
 }
 
 .universe_header_prop {
-  flex-grow: 1;
-
   text-align: center;
 
   font-weight: bold;
+  font-size: small;
 }
