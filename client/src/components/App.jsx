@@ -108,7 +108,11 @@ class App extends React.Component {
         <StatusBar account={this.state.account} session={this.state.session} requestLogout={() => this.logout()}/>
         <Banner />
         {
-          this.state.gameState === GAME ? <Game /> :
+          this.state.gameState === GAME ?
+          <Game account={this.state.account}
+                session={this.state.session}
+                />
+          :
           <Lobby loginStep={this.state.loginStep}
                  updateLoginStep={(step) => this.updateLoginStep(step)}
                  account={this.state.account}

@@ -15,7 +15,6 @@ import { BALANCED_UNIVERSE } from '../game/universe.js';
 import { MILITARY_UNIVERSE } from '../game/universe.js';
 import { PEACEFUL_UNIVERSE } from '../game/universe.js';
 
-
 function UniverseDesc (props) {
   const uni = props.player.universe;
   const player = props.player;
