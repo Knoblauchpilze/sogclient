@@ -1,0 +1,25 @@
+
+.game_layout {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  flex-grow: 1;
+}
+
+.game_internal_layout {
+  width: 70%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.game_center_layout {
+  display: flex;
+  flex-direction: column;
+
+  flex-grow: 1;
+}
