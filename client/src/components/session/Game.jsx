@@ -1,18 +1,24 @@
 
 import '../../styles/Game.css';
 import React from 'react';
+import Overview from './Overview.jsx';
+import NavigationMenu from './NavigationMenu.jsx';
+import ConstructionList from './ConstructionList.jsx';
+import PlanetsList from './PlanetsList.jsx';
 
 class Game extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-    };
   }
 
   render() {
     return (
-      <div>TODO: Game</div>
+      <div>
+        <NavigationMenu />
+        <Overview />
+        <ConstructionList />
+        <PlanetsList />
+      </div>
     );
   }
 }
