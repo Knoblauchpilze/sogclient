@@ -13,11 +13,15 @@ class Game extends React.Component {
 
   render() {
     return (
-      <div>
-        <NavigationMenu />
-        <Overview />
-        <ConstructionList />
-        <PlanetsList />
+      <div className="game_layout">
+        <div className="game_internal_layout">
+          <NavigationMenu />
+          <div className="game_center_layout">
+            <Overview />
+            <ConstructionList />
+          </div>
+          <PlanetsList />
+        </div>
       </div>
     );
   }

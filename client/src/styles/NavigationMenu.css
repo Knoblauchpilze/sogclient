@@ -1,4 +1,8 @@
 
 .navigation_menu_layout {
-  background-color: #040f;
+  background-color: #03030388;
+  height: 320px;
+
+  display: flex;
+  flex-direction: column;
 }
