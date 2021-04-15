@@ -1,0 +1,43 @@
+
+.construction_action_layout {
+  background-color: #0d1014;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 5px 2px;
+  vertical-align: bottom;
+}
+
+.construction_action_title {
+  color: #5B9FC1;
+  background-color: #12161C;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin: 2px;
+}
+
+.construction_action_title div {
+  text-align: center;
+
+  font-size: larger;
+  font-weight: bold;
+}
+
+.construction_action_value {
+  color: #fff;
+  background-color: #12161c;
+
+  margin: 2px;
+
+  border: 1px #171d23 solid;
+}
+
+.construction_action_value div {
+  text-align: center;
+
+  font-size: smaller;
+}
