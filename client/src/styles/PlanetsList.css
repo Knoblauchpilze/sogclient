@@ -1,5 +1,20 @@
 
 .planets_list_layout {
-  color: #fff;
-  background-color: #440f;
+  background-color: #03030388;
+
+  min-height: 320px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.planets_list_count {
+  color: #5b9fc1;
+  background-color: #10181f;
+
+  font-size: medium;
+  white-space: nowrap;
+  padding: 1px 10px;
+
+  border: 4px #030303 solid;
 }

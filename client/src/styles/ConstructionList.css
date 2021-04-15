@@ -1,5 +1,8 @@
 
 .construction_list_layout {
+  display: flex;
+  flex-direction: row;
+
   padding: 0px;
   margin-top: 5px;
 }
