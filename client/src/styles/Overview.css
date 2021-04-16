@@ -1,7 +1,54 @@
 
 .overview_layout {
-  color: #fff;
-  background-color: #004f;
+  height: 320px;
+  min-width: 650px;
+  background: url("planet_view.jpeg");
+  background-size: 100% 100%;
 
   width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.overview_title {
+  color: #fff;
+  background-color: #06060644;
+
+  margin-left: 5px;
+  padding-left: 10px;
+}
+
+.overview_planet_info {
+  background-color: #06060644;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+
+  margin-right: 0px;
+  margin: 0px 10px 10px auto;
+}
+
+.overview_planet_bonus {
+  color: #fff;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.overview_planet_bonus a {
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.overview_planet_bonus a:visited {
+  color: inherit;
+}
+
+.overview_planet_bonus a:hover {
+  color: inherit;
+  text-decoration: underline;
 }
