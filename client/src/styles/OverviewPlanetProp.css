@@ -1,0 +1,34 @@
+
+.overview_planet_prop_layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.overview_planet_prop_key {
+  color: #529BC8;
+
+  min-width: 150px;
+
+  text-align: left;
+}
+
+.overview_planet_prop_value, #overview_planet_options {
+  color: #fff;
+
+  text-align: right;
+}
+
+.overview_planet_prop_value a {
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.overview_planet_prop_value a:visited {
+  color: inherit;
+}
+
+.overview_planet_prop_value a:hover {
+  color: inherit;
+  text-decoration: underline;
+}
