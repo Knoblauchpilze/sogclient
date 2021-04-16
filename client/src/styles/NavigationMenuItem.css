@@ -1,18 +1,18 @@
 
 .navigation_menu_item_layout {
-  color: #888;
-  background-color: #222;
+  background-color: #03030388;
 
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 
-
   border: 6px #121815 groove;
 }
 
 .navigation_menu_item_wrapper {
+  color: #888;
+
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -25,6 +25,10 @@
 }
 
 .navigation_menu_item {
+  background-color: #222;
+
+  white-space: nowrap;
+
   text-decoration: none;
   cursor: pointer;
 }
@@ -43,7 +47,7 @@
 }
 
 .navigation_menu_item_data {
-
+  margin: 2px;
 }
 
 .navigation_menu_item_icon {
