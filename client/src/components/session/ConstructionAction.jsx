@@ -11,10 +11,10 @@ function ConstructionAction (props) {
 
   return (
     <div className="construction_action_layout">
-      <div class="construction_action_title">
+      <div className="construction_action_title">
         <div>{props.title}</div>
       </div>
-      <div class="construction_action_value">
+      <div className="construction_action_value">
         <div>{item}</div>
       </div>
     </div>
