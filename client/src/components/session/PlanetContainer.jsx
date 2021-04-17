@@ -11,6 +11,16 @@ function PlanetContainer (props) {
     classes += " planet_container_layout_selected";
   }
 
+  let coords = "[" + props.planet.coordinate.galaxy;
+  coords += ":";
+  coords += props.planet.coordinate.system;
+  coords += ":";
+  coords += props.planet.coordinate.position;
+  coords += "]";
+
+  // See here for how to attach the on click to elements
+  // defined for the planet container.
+  // https://stackoverflow.com/questions/28268835/react-onclick-event-on-component
   return (
     <div className={classes}>
       <div className="planet_container_icons">
@@ -27,11 +37,9 @@ function PlanetContainer (props) {
                />
         </a>
       </div>
-      <div>
-        <a className="planet_container_link" href="../overview/overview.html">{props.name}</a>
-        <p className="planet_container_coordinates">
-          {props.galaxy + ":" + props.solar_system + ":" + props.position}
-        </p>
+      <div className="planet_container_active_area" onClick={props.onClick}>
+        {props.planet.name}
+        <p className="planet_container_coordinates">{coords}</p>
       </div>
     </div>
   );

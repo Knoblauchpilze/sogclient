@@ -58,6 +58,10 @@ class Server {
   universesURL() {
     return this.serverURL() + "/universes";
   }
+
+  planetsURL(player) {
+    return this.serverURL() + "/planets?player=" + player;
+  }
 }
 
 const NullAccount = {

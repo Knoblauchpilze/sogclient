@@ -44,17 +44,9 @@
   left: -4px;
 }
 
-.planet_container_link {
-  text-decoration: none;
+.planet_container_active_area {
   white-space: nowrap;
-}
-
-.planet_container_link:visited {
-  color: inherit;
-}
-
-.planet_container_link:hover {
-  color: inherit;
+  cursor: pointer;
 }
 
 .planet_container_coordinates {

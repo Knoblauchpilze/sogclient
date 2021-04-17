@@ -2,8 +2,6 @@
 .planets_list_layout {
   background-color: #03030388;
 
-  min-height: 320px;
-
   display: flex;
   flex-direction: column;
 }
