@@ -44,6 +44,7 @@
 
   font-size: larger;
   font-weight: bold;
+  cursor: pointer;
 
   border: none;
 }

@@ -11,6 +11,10 @@
   border: solid #111;
 }
 
+.session_selector_options button {
+  cursor: pointer;
+}
+
 .session_selector_last_session {
   color: #fff;
   background-color: #070a10;
