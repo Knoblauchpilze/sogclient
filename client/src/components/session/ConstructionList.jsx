@@ -1,5 +1,5 @@
 
-import '../../styles/ConstructionList.css';
+import '../../styles/session/ConstructionList.css';
 import React from 'react';
 import ConstructionAction from './ConstructionAction.jsx';
 

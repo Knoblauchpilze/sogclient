@@ -1,6 +1,6 @@
 
-import '../../styles/UniverseDesc.css';
-import '../../styles/SessionCreator.css';
+import '../../styles/lobby/UniverseDesc.css';
+import '../../styles/lobby/SessionCreator.css';
 import React from 'react';
 
 import flag_ge from '../../assets/flag-ge.png';

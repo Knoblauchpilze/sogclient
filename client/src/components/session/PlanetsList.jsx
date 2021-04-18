@@ -1,5 +1,5 @@
 
-import '../../styles/PlanetsList.css';
+import '../../styles/session/PlanetsList.css';
 import React from 'react';
 import PlanetContainer from './PlanetContainer.jsx';
 

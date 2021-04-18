@@ -1,5 +1,5 @@
 
-import '../../styles/OverviewPlanetProp.css';
+import '../../styles/session/OverviewPlanetProp.css';
 import React from 'react';
 
 function OverviewPlanetProp (props) {

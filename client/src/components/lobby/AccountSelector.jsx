@@ -1,6 +1,6 @@
 
-import '../../styles/AccountSelector.css';
-import '../../styles/Lobby.css';
+import '../../styles/lobby/AccountSelector.css';
+import '../../styles/lobby/Lobby.css';
 import React from 'react';
 
 import Server from '../game/server.js';

@@ -1,15 +1,33 @@
 
-import '../../styles/Game.css';
+import '../../styles/session/Game.css';
 import React from 'react';
-import Overview from './Overview.jsx';
 import NavigationMenu from './NavigationMenu.jsx';
 import ConstructionList from './ConstructionList.jsx';
 import PlanetsList from './PlanetsList.jsx';
+
+
+import Overview from './Overview.jsx';
+import Resources from './Resources.jsx';
+import Facilities from './Facilities.jsx';
+import ResearchLab from './ResearchLab.jsx';
+import Shipyard from './Shipyard.jsx';
+import Defenses from './Defenses.jsx';
+import Fleets from './Fleets.jsx';
+import Galaxy from './Galaxy.jsx';
 
 import Server from '../game/server.js';
 
 import PlanetsModule from '../game/planets.js';
 import { PLANETS_FETCH_SUCCEEDED } from '../game/planets.js';
+
+import { TAB_OVERVIEW } from './NavigationMenu.jsx';
+import { TAB_RESOURCES } from './NavigationMenu.jsx';
+import { TAB_FACILITIES } from './NavigationMenu.jsx';
+import { TAB_RESEARCH_LAB } from './NavigationMenu.jsx';
+import { TAB_SHIPYARD } from './NavigationMenu.jsx';
+import { TAB_DEFENSES } from './NavigationMenu.jsx';
+import { TAB_FLEETS } from './NavigationMenu.jsx';
+import { TAB_GALAXY } from './NavigationMenu.jsx';
 
 class Game extends React.Component {
   constructor(props) {
@@ -24,6 +42,12 @@ class Game extends React.Component {
       // Defines the index of the selected planet among
       // the available list.
       selectedPlanet: -1,
+
+      // Current tab displayed in the central view. This
+      // allows to select various facets of the planet
+      // currently selected and allows to build various
+      // elements of the game.
+      selectedTab: TAB_OVERVIEW,
     };
   }
 
@@ -79,13 +103,55 @@ class Game extends React.Component {
     });
   }
 
+  updateGameTab(tab) {
+    // Update the tab displayed on the central view
+    // of the game.
+    this.setState({
+      selectedTab: tab,
+    });
+  }
+
+  generateCurrentTab() {
+    let tab;
+
+    switch (this.state.selectedTab) {
+      case TAB_RESOURCES:
+        tab = <Resources planet={this.state.planets[this.state.selectedPlanet]} />;
+          break;
+      case TAB_FACILITIES:
+        tab = <Facilities planet={this.state.planets[this.state.selectedPlanet]} />;
+          break;
+      case TAB_RESEARCH_LAB:
+        tab = <ResearchLab planet={this.state.planets[this.state.selectedPlanet]} />;
+          break;
+      case TAB_SHIPYARD:
+        tab = <Shipyard planet={this.state.planets[this.state.selectedPlanet]} />;
+          break;
+      case TAB_DEFENSES:
+        tab = <Defenses planet={this.state.planets[this.state.selectedPlanet]} />;
+          break;
+      case TAB_FLEETS:
+          tab = <Fleets planet={this.state.planets[this.state.selectedPlanet]} />;
+          break;
+      case TAB_GALAXY:
+          tab = <Galaxy planet={this.state.planets[this.state.selectedPlanet]} />;
+          break;
+      case TAB_OVERVIEW:
+      default:
+        tab = <Overview planet={this.state.planets[this.state.selectedPlanet]} />;
+        break;
+    }
+
+    return tab;
+  }
+
   render() {
     return (
       <div className="game_layout">
         <div className="game_internal_layout">
-          <NavigationMenu />
+          <NavigationMenu updateGameTab={(tab) => this.updateGameTab(tab)}/>
           <div className="game_center_layout">
-            <Overview planet={this.state.planets[this.state.selectedPlanet]}/>
+            {this.generateCurrentTab()}
             <ConstructionList />
           </div>
           <PlanetsList planets={this.state.planets}
