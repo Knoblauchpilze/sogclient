@@ -1,5 +1,5 @@
 
-import '../../styles/Overview.css';
+import '../../styles/session/Overview.css';
 import React from 'react';
 import OverviewPlanetProp from './OverviewPlanetProp.jsx';
 

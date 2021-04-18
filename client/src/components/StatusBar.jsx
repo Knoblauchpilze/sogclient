@@ -1,6 +1,6 @@
 
 import '../styles/StatusBar.css';
-import '../styles/Lobby.css';
+import '../styles/lobby/Lobby.css';
 import React from 'react';
 
 function StatusBar(props) {

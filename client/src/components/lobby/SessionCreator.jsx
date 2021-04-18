@@ -1,6 +1,6 @@
 
-import '../../styles/SessionCreator.css';
-import '../../styles/Lobby.css';
+import '../../styles/lobby/SessionCreator.css';
+import '../../styles/lobby/Lobby.css';
 import React from 'react';
 
 import UniverseHeader from './UniverseHeader.jsx';

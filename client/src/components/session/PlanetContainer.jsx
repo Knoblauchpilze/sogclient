@@ -1,5 +1,5 @@
 
-import '../../styles/PlanetContainer.css';
+import '../../styles/session/PlanetContainer.css';
 import React from 'react';
 
 import planet from '../../assets/planet1.png';
@@ -21,6 +21,7 @@ function PlanetContainer (props) {
   // See here for how to attach the on click to elements
   // defined for the planet container.
   // https://stackoverflow.com/questions/28268835/react-onclick-event-on-component
+  // TODO: Should change the <a> semantic.
   return (
     <div className={classes}>
       <div className="planet_container_icons">

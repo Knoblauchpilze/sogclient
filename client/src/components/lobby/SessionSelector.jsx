@@ -1,6 +1,6 @@
 
-import '../../styles/SessionSelector.css';
-import '../../styles/Lobby.css';
+import '../../styles/lobby/SessionSelector.css';
+import '../../styles/lobby/Lobby.css';
 import React from 'react';
 
 import Server from '../game/server.js';
