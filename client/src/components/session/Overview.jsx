@@ -1,5 +1,6 @@
 
 import '../../styles/session/Overview.css';
+import '../../styles/session/Game.css';
 import React from 'react';
 import OverviewPlanetProp from './OverviewPlanetProp.jsx';
 
@@ -31,8 +32,8 @@ function Overview (props) {
   }
 
   return (
-    <div className="overview_layout">
-      <h3 className="overview_title">{title}</h3>
+    <div className="cover_layout">
+      <h3 className="cover_title">{title}</h3>
       <div className="overview_planet_info">
         <OverviewPlanetProp title={"Diameter"}
                             value={diameterText}

@@ -1,0 +1,62 @@
+
+
+.element_container_layout {
+  background-color: #141e26;
+
+  min-width: 20px;
+  min-height: 20px;
+
+  display: flex;
+  flex-direction: column;
+
+  margin: 2px;
+}
+
+.element_container_icon {
+  max-width: 96px;
+  max-height: 96px;
+
+  flex-grow: 1;
+}
+
+.element_container_level {
+  color: #f80;
+  background-color: #283c52;
+
+  text-align: right;
+}
+
+.element_container_actions {
+  display: flex;
+  flex-direction: row;
+}
+
+.element_container_action {
+  height: 20px;
+
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #141e26;
+  border: none;
+}
+
+.element_container_action:hover {
+  background-color: #283f5288;
+}
+
+.element_container_action:active {
+  background-color: #283c52ff;
+}
+
+.element_container_upgrade {
+  background-image: url("element_upgrade.png");
+
+  width: 66%;
+}
+
+.element_container_demolish {
+  background-image: url("element_demolish.png");
+
+  width: 34%;
+}

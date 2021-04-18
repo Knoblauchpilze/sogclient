@@ -27,3 +27,24 @@
 
   margin: 5px;
 }
+
+.cover_layout {
+  height: 320px;
+  min-width: 650px;
+  background: url("planet_view.jpeg");
+  background-size: 100% 100%;
+
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cover_title {
+  color: #fff;
+  background-color: #06060644;
+
+  margin-left: 5px;
+  padding-left: 10px;
+}
