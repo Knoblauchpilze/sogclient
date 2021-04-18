@@ -1,4 +1,26 @@
 
-.resources_tab_layout {
-  color: #fff;
+.resources_layout {
+  width: 100%;
+}
+
+.resources_buildings_section {
+  background-color: #0d1014;
+
+  margin-top: 5px;
+}
+
+.resources_buildings_header {
+  color: #5b9fc1;
+  background-color: #141e26;
+
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  text-align: center;
+}
+
+.resources_buildings_layout {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
