@@ -1,0 +1,78 @@
+
+.unit_container_layout {
+  background-color: #141e26;
+
+  min-width: 20px;
+  min-height: 20px;
+
+  display: flex;
+  flex-direction: column;
+
+  margin: 2px;
+}
+
+.unit_container_icon {
+  max-width: 96px;
+  max-height: 96px;
+
+  flex-grow: 1;
+}
+
+.unit_container_count {
+  color: #f80;
+  background-color: #283c52;
+
+  text-align: right;
+}
+
+.unit_container_actions {
+  max-width: 96px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.unit_container_selected_count {
+  width: 66%;
+  min-width: 0;
+
+  margin: 0px;
+  padding: 0px;
+}
+
+.unit_container_selector {
+  min-width: 0;
+  width: 100%;
+  height: 20px;
+
+  border: none;
+
+  margin: 0px;
+  padding: 0px;
+
+  text-align: right;
+
+  -moz-appearance:textfield;
+}
+
+.unit_container_perform {
+  width: 34%;
+  height: 100%;
+
+  background-image: url("element_upgrade.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #141e26;
+  border: none;
+}
+
+.unit_container_perform:hover {
+  background-color: #283c5288;
+}
+
+.unit_container_perform:active {
+  background-color: #283c52ff;
+}

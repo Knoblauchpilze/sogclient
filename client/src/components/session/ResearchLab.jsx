@@ -1,5 +1,6 @@
 
 import '../../styles/session/ResearchLab.css';
+import '../../styles/session/Game.css';
 import React from 'react';
 import ElementContainer from './ElementContainer.jsx';
 
@@ -126,7 +127,7 @@ function ResearchLab (props) {
       </div>
       <div className="research_lab_researches_layout">
         <div className="research_lab_section">
-          <p className="research_lab_section_header">Basic research</p>
+          <p className="cover_header">Basic research</p>
           <div className="research_lab_section_layout">
             <ElementContainer icon={energy}
                               alt={"Energy"}
@@ -156,7 +157,7 @@ function ResearchLab (props) {
           </div>
         </div>
         <div className="research_lab_section">
-          <p className="research_lab_section_header">Propulsion research</p>
+          <p className="cover_header">Propulsion research</p>
           <div className="research_lab_section_layout">
             <ElementContainer icon={comb_drive}
                               alt={"Combustion drive"}
@@ -176,7 +177,7 @@ function ResearchLab (props) {
           </div>
         </div>
         <div className="research_lab_section">
-          <p className="research_lab_section_header">Advanced research</p>
+          <p className="cover_header">Advanced research</p>
           <div className="research_lab_section_layout">
             <ElementContainer icon={espionage}
                               alt={"Espionage"}
@@ -206,7 +207,7 @@ function ResearchLab (props) {
           </div>
         </div>
         <div className="research_lab_section">
-          <p className="research_lab_section_header">Combat research</p>
+          <p className="cover_header">Combat research</p>
           <div className="research_lab_section_layout">
             <ElementContainer icon={weapons}
                               alt={"Weapons"}

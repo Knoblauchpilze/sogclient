@@ -19,16 +19,6 @@
   margin: 1px;
 }
 
-.research_lab_section_header {
-  color: #5b9fc1;
-  background-color: #141e26;
-
-  padding-top: 5px;
-  padding-bottom: 5px;
-
-  text-align: center;
-}
-
 .research_lab_section_layout {
   display: flex;
   flex-direction: row;

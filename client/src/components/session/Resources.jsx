@@ -73,7 +73,7 @@ function Resources (props) {
         <h3 className="cover_title">{title}</h3>
       </div>
       <div className="resources_buildings_section">
-        <p className="resources_buildings_header">Energy and resources</p>
+        <p className="cover_header">Energy and resources</p>
         <div className="resources_buildings_layout">
           <ElementContainer icon={metal_mine}
                             alt={"Metal mine"}

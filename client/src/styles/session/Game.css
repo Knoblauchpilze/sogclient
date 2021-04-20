@@ -48,3 +48,13 @@
   margin-left: 5px;
   padding-left: 10px;
 }
+
+.cover_header {
+  color: #5b9fc1;
+  background-color: #141e26;
+
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  text-align: center;
+}
