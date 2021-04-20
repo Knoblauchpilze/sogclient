@@ -1,5 +1,6 @@
 
 import '../../styles/session/Facilities.css';
+import '../../styles/session/Game.css';
 import React from 'react';
 import ElementContainer from './ElementContainer.jsx';
 
@@ -66,7 +67,7 @@ function Facilities (props) {
         <h3 className="cover_title">{title}</h3>
       </div>
       <div className="facilities_buildings_section">
-        <p className="facilities_buildings_header">Production and research</p>
+        <p className="cover_header">Production and research</p>
         <div className="facilities_buildings_layout">
           <ElementContainer icon={robotics_factory}
                             alt={"Robotics factory"}

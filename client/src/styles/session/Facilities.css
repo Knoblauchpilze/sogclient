@@ -9,16 +9,6 @@
   margin-top: 5px;
 }
 
-.facilities_buildings_header {
-  color: #5b9fc1;
-  background-color: #141e26;
-
-  padding-top: 5px;
-  padding-bottom: 5px;
-
-  text-align: center;
-}
-
 .facilities_buildings_layout {
   display: flex;
   flex-direction: row;

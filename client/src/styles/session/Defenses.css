@@ -1,4 +1,16 @@
 
-.defenses_tab_layout {
-  color: #fff;
+.defenses_layout {
+  width: 100%;
+}
+
+.defenses_systems_section {
+  background-color: #0d1014;
+
+  margin-top: 5px;
+}
+
+.defenses_systems_layout {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
