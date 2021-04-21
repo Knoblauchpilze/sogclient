@@ -1,4 +1,26 @@
 
-.shipyard_tab_layout {
-  color: #fff;
+.shipyard_layout {
+  width: 100%;
+}
+
+.shipyard_ships_layout {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  margin-top: 5px;
+}
+
+.shipyard_section {
+  background-color: #0d1014;
+
+  margin: 1px;
+}
+
+.shipyard_section_layout {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
