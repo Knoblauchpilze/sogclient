@@ -1,5 +1,5 @@
 
-// Registration status.
+// Fetch status.
 const PLANETS_FETCH_SUCCEEDED = "Planets fetched";
 const PLANETS_FETCH_FAILURE = "Failed to fetch planets";
 

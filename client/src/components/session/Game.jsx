@@ -2,9 +2,9 @@
 import '../../styles/session/Game.css';
 import React from 'react';
 import NavigationMenu from './NavigationMenu.jsx';
+import ResourcesDisplay from './ResourcesDisplay.jsx';
 import ConstructionList from './ConstructionList.jsx';
 import PlanetsList from './PlanetsList.jsx';
-
 
 import Overview from './Overview.jsx';
 import Resources from './Resources.jsx';
@@ -19,6 +19,8 @@ import Server from '../game/server.js';
 
 import PlanetsModule from '../game/planets.js';
 import { PLANETS_FETCH_SUCCEEDED } from '../game/planets.js';
+import ResourcesModule from '../game/resources.js';
+import { RESOURCES_FETCH_SUCCEEDED } from '../game/resources.js';
 
 import { TAB_OVERVIEW } from './NavigationMenu.jsx';
 import { TAB_RESOURCES } from './NavigationMenu.jsx';
@@ -39,6 +41,12 @@ class Game extends React.Component {
       // the player currently logged in.
       planets: [],
 
+      // Defines the list of resources available for this
+      // game: it corresponds to constant data fetched
+      // from the server and describing the properties of
+      // the resources used in game.
+      resources: [],
+
       // Defines the index of the selected planet among
       // the available list.
       selectedPlanet: -1,
@@ -55,6 +63,7 @@ class Game extends React.Component {
     // Fetch the list of universes from the server.
     const server = new Server();
     const planets = new PlanetsModule(server);
+    const resources = new ResourcesModule(server);
 
     const game = this;
 
@@ -67,6 +76,18 @@ class Game extends React.Component {
         }
         else {
           game.fetchPlanetsSucceeded(res.planets);
+        }
+      })
+      .catch(err => game.fetchDataFailed(err));
+
+    // Fetch the resources from the server.
+    resources.fetchResources()
+      .then(function (res) {
+        if (res.status !== RESOURCES_FETCH_SUCCEEDED) {
+          game.fetchDataFailed(res.status);
+        }
+        else {
+          game.fetchResourcesSucceeded(res.resources);
         }
       })
       .catch(err => game.fetchDataFailed(err));
@@ -85,6 +106,13 @@ class Game extends React.Component {
     });
 
     console.info("Fetched " + planets.length + " planet(s) for " + this.props.session.id);
+  }
+
+  fetchResourcesSucceeded(resources) {
+    // Update internal state.
+    this.setState({
+      resources: resources,
+    });
   }
 
   updateSelectedPlanet(id) {
@@ -148,16 +176,21 @@ class Game extends React.Component {
   render() {
     return (
       <div className="game_layout">
-        <div className="game_internal_layout">
-          <NavigationMenu updateGameTab={(tab) => this.updateGameTab(tab)}/>
-          <div className="game_center_layout">
-            {this.generateCurrentTab()}
-            <ConstructionList />
+        <div className="game_page_layout">
+          <ResourcesDisplay planet={this.state.planets[this.state.selectedPlanet]}
+                            resources={this.state.resources}
+                            />
+          <div className="game_internal_layout">
+            <NavigationMenu updateGameTab={(tab) => this.updateGameTab(tab)}/>
+            <div className="game_center_layout">
+              {this.generateCurrentTab()}
+              <ConstructionList />
+            </div>
+            <PlanetsList planets={this.state.planets}
+                        selected={this.state.selectedPlanet}
+                        updateSelectedPlanet={(id) => this.updateSelectedPlanet(id)}
+                        />
           </div>
-          <PlanetsList planets={this.state.planets}
-                       selected={this.state.selectedPlanet}
-                       updateSelectedPlanet={(id) => this.updateSelectedPlanet(id)}
-                       />
         </div>
       </div>
     );

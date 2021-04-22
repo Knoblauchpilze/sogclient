@@ -62,6 +62,10 @@ class Server {
   planetsURL(player) {
     return this.serverURL() + "/planets?player=" + player;
   }
+
+  resourcesURL() {
+    return this.serverURL() + "/resources";
+  }
 }
 
 const NullAccount = {
