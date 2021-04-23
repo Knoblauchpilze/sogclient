@@ -37,6 +37,16 @@
   text-decoration: underline;
 }
 
+.fleet_ships_layout {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  margin-top: 5px;
+}
+
 .fleets_confirmation_panel {
   background-color: #141e26;
 
@@ -119,4 +129,168 @@
 
 .fleets_next_step:hover {
   background-color: #c9e68d;
+}
+
+.fleet_flight_info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.fleet_flight_coordinates {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+}
+
+.fleet_flight_growth {
+  flex-grow: 1;
+}
+
+.fleet_flight_briefing {
+  display: flex;
+  flex-direction: column;
+
+  flex-grow: 1;
+}
+
+.fleet_flight_step_title {
+  color: #5b9fc1;
+  background-color: #141e26;
+
+  min-height: 20px;
+  max-height: 20px;
+
+  flex-grow: 1;
+
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  text-align: center;
+}
+
+.fleet_flight_endpoint_data {
+  display: flex;
+  flex-direction: row;
+
+  padding: 5px;
+}
+
+.fleet_flight_endpoint_raw {
+  background-color: #141e26;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 5px;
+}
+
+.fleet_flight_endpoint_name {
+  color: #dc6400;
+
+  text-align: center;
+}
+
+.fleet_flight_endpoint_type {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+  padding: 5px 0px 5px 0px;
+}
+
+.fleet_flight_info_picture {
+  max-width: 60px;
+  max-height: 60px;
+
+  margin: 0px 5px 0px 5px;
+}
+
+.fleet_flight_destination_selectors {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  margin: 5px 0px 5px 0px;
+}
+
+.fleet_flight_destination_coord_selector {
+  display: flex;
+  flex-direction: row;
+
+  margin: 0px 2px 0px 2px;
+}
+
+.fleet_flight_destination_coord_selector_input {
+  min-width: 0;
+  width: 50px;
+  height: 30px;
+
+  margin: 0px;
+  padding: 0px;
+
+  border: none;
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px #000000;
+  -moz-appearance:textfield;
+
+  text-align: center;
+}
+
+.fleet_flight_distance_indicator {
+  color: #fff;
+
+  font-size: x-large;
+
+  margin: 5px;
+}
+
+.fleet_flight_general_text {
+  color: #a9a9a9;
+
+  text-align: center;
+
+  white-space: nowrap;
+}
+
+.fleet_flight_general_text a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.fleet_flight_destination_selector {
+  min-width: 150px;
+
+  flex-grow: 1;
+}
+
+.fleet_flight_general_text a:hover {
+  color: #fff;
+
+  text-decoration: underline;
+}
+
+.fleet_flight_distance {
+  background-color: #141e26;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  padding: 5px;
+}
+
+.fleet_flight_destination_quick_select {
+  background-color: #141e26;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 5px;
+}
+
+.fleet_flight_destination_quick_select p {
+  text-align: left;
 }
