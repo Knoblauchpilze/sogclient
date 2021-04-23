@@ -1,4 +1,122 @@
 
-.fleets_tab_layout {
+.fleets_layout {
+  width: 100%;
+}
+
+.fleets_creation_container {
+  background-color: #0d1014;
+
+  margin-top: 5px;
+  padding: 5px;
+}
+
+.fleets_slots_layout {
+  color: #529bc8;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.fleet_slot {
   color: #fff;
+
+  margin-right: 2px;
+
+  font-size: smaller;
+}
+
+.fleet_display_link {
+  color: #529bc8;
+
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.fleet_display_link:hover {
+  text-decoration: underline;
+}
+
+.fleets_confirmation_panel {
+  background-color: #141e26;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 5px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.fleets_confirmation_element {
+  display: flex;
+  flex-direction: row;
+
+  border: 1px #000 solid;
+  padding: 5px;
+}
+
+.fleets_all_ships, .fleets_no_ship {
+  margin: 0px 5px 0px 5px;
+}
+
+.fleets_all_ships {
+  color: #fff;
+  background-color: #dc6400;
+
+  min-height: 50px;
+
+  padding: 0px 15px 0px 15px;
+
+  border: none;
+  border-radius: 4px;
+  box-shadow: inset 0 0 10px #000;
+
+  font-weight: bold;
+  font-size: larger;
+}
+
+.fleets_all_ships:hover {
+  background-color: #ffaf6e;
+}
+
+.fleets_no_ship {
+  color: #fff;
+  background-color: #b00;
+
+  min-height: 50px;
+
+  padding: 0px 15px 0px 15px;
+
+  border: none;
+  border-radius: 4px;
+  box-shadow: inset 0 0 10px #000;
+
+  font-weight: bold;
+  font-size: larger;
+}
+
+.fleets_no_ship:hover {
+  background-color: #ff5858;
+}
+
+.fleets_next_step {
+  color: #fff;
+  background-color: #8fc02a;
+
+  min-width: 100px;
+  min-height: 50px;
+
+  border: none;
+  border-radius: 4px;
+  box-shadow: inset 0 0 10px #000;
+
+  font-weight: bold;
+  font-size: larger;
+}
+
+.fleets_next_step:hover {
+  background-color: #c9e68d;
 }
