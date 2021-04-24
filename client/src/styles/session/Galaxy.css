@@ -1,4 +1,70 @@
 
-.galaxy_tab_layout {
+.galaxy_layout {
+  display: flex;
+  flex-direction: column;
+
+  margin-left: 5px;
+  margin-right: 5px;
+
+  flex-grow: 1;
+}
+
+.galaxy_ships_info {
+  background-color: #121815;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+  padding: 5px;
+
+  font-size: smaller;
+}
+
+.galaxy_default_label {
+  color: #a9a9a9;
+}
+
+.galaxy_layout_description {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  flex-grow: 1;
+}
+
+.galaxy_system_header {
   color: #fff;
+  text-align: center;
+}
+
+.galaxy_system_layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.galaxy_view_messages {
+  background-color: #121815;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+
+  padding: 5px;
+
+  font-size: smaller;
+}
+
+.galaxy_system_info {
+  color: #5b9fc1;
+  background-color: #121815;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  padding: 5px;
+  margin-top: 2px;
 }

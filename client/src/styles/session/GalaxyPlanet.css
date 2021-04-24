@@ -1,0 +1,111 @@
+
+.galaxy_planet_layout {
+  width: 100%;
+
+  color: #fff;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+
+  margin: 2px 0px 2px 0px;
+}
+
+.galaxy_planet_label {
+  background-color: #111111aa;
+
+  padding: 3px;
+
+  text-align: center;
+  white-space: nowrap;
+
+  overflow: hidden;
+}
+
+.galaxy_planet_activity {
+  color: #a00;
+
+  font-weight: bold;
+}
+
+.galaxy_planet_action {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #6d8297;
+  border: none;
+
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.galaxy_planet_spy {
+  background-image: url("action_spy.png");
+}
+
+.galaxy_planet_friend {
+  background-image: url("action_friend.png");
+}
+
+.galaxy_planet_message {
+  background-image: url("action_message.png");
+}
+
+.galaxy_planet_mip {
+  background-image: url("action_mip.png");
+}
+
+.galaxy_planet_base {
+  height: 30px;
+}
+
+.galaxy_planet_1 {
+  width: 10px;
+}
+
+.galaxy_planet_2 {
+  width: 30px;
+}
+
+.galaxy_planet_3 {
+  width: 150px;
+}
+
+.galaxy_planet_4 {
+  width: 30px;
+}
+
+.galaxy_planet_5 {
+  width: 10px;
+}
+
+.galaxy_planet_6 {
+  width: 30px;
+  margin: 2px;
+}
+
+.galaxy_planet_7 {
+  width: 200px;
+}
+
+.galaxy_planet_8 {
+  width: 150px;
+}
+
+.galaxy_planet_9 {
+  width: 30px;
+}
+
+.galaxy_planet_10 {
+  width: 30px;
+}
+
+.galaxy_planet_11 {
+  width: 30px;
+}
+
+.galaxy_planet_12{
+  width: 30px;
+}
+

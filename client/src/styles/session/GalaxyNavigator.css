@@ -1,0 +1,77 @@
+
+.galaxy_navigator_layout {
+  background-color: #121815;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 5px;
+
+  border: 3px #000 solid;
+}
+
+.galaxy_navigator_inner_layout {
+  display: flex;
+  flex-direction: row;
+}
+
+.galaxy_navigator_button {
+  color: #fff;
+  background-color: #5b9fc1;
+
+  border: none;
+  border-radius: 4px;
+
+  cursor: pointer;
+}
+
+.galaxy_navigator_button:hover {
+  background-color: #adcfe0;
+}
+
+.galaxy_navigator_selector_layout {
+  display: flex;
+  flex-direction: row;
+
+  margin: 0px 5px 0px 5px;
+}
+
+.galaxy_navigator_selector_current {
+  min-width: 0;
+  width: 100px;
+  max-height: 20px;
+
+  margin: 0px;
+  padding: 0px;
+
+  border: none;
+  -moz-appearance:textfield;
+
+  text-align: center;
+}
+
+.galaxy_navigator_selector_button {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #16222c;
+
+  min-width: 15px;
+  min-height: 15px;
+
+  border: none;
+}
+
+.galaxy_navigator_selector_button:hover {
+  background-color: #6a93b5;
+}
+
+.galaxy_navigator_selector_previous {
+  background-image: url("arrow_previous.png");
+}
+
+.galaxy_navigator_selector_next {
+  background-image: url("arrow_next.png");
+}
