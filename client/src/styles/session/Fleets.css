@@ -68,7 +68,7 @@
   padding: 5px;
 }
 
-.fleets_all_ships, .fleets_no_ship {
+.fleets_button {
   margin: 0px 5px 0px 5px;
 }
 
@@ -129,6 +129,25 @@
 
 .fleets_next_step:hover {
   background-color: #c9e68d;
+}
+
+.fleets_previous_step {
+  color: #fff;
+  background-color: #b00;
+
+  min-width: 100px;
+  min-height: 50px;
+
+  border: none;
+  border-radius: 4px;
+  box-shadow: inset 0 0 10px #000;
+
+  font-weight: bold;
+  font-size: larger;
+}
+
+.fleets_previous_step:hover {
+  background-color: #ff5858;
 }
 
 .fleet_flight_info {
@@ -293,4 +312,92 @@
 
 .fleet_flight_destination_quick_select p {
   text-align: left;
+}
+
+.fleet_flight_details {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  margin-bottom: 5px;
+}
+
+.fleet_flight_flight_details {
+  display: flex;
+  flex-direction: column;
+
+  flex-grow: 1;
+
+  margin: 0px 5px 0px 5px;
+}
+
+.fleet_flight_detail_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.fleet_flight_detail_entry {
+  color: #5b9fc1;
+
+  padding-right: 5px;
+  
+  font-weight: bold;
+  font-size: smaller;
+}
+
+.fleet_flight_detail_value {
+  color: #5b9fc1;
+
+  font-size: smaller;
+}
+
+.fleet_flight_detail_valid_value {
+  color: #8dad09;
+
+  font-size: smaller;
+}
+
+.fleet_flight_speed_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fleet_flight_speed_selection {
+  color: #5b9fc1;
+
+  font-weight: bold;
+}
+
+.fleet_flight_confirmation_layout {
+  display: flex;
+  flex-direction: row;
+
+  padding: 5px;
+
+  border: 1px #000 solid;
+}
+
+.fleet_flight_speed {
+  color: #5b9fc1;
+  background: none;
+
+  border: none;
+  border-radius: 4px;
+
+  font-weight: bold;
+}
+
+.fleet_flight_speed:hover {
+  border: 2px #ff8c00 solid;
+}
+
+.fleet_flight_selected_speed {
+  color: #8dad09;
+  background: none;
+
+  border: 2px #ff8c00 solid;
+  border-radius: 4px;
 }
