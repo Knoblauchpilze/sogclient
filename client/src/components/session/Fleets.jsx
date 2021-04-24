@@ -15,6 +15,11 @@ const FLEET_INIT = "fleet_init";
 // the destination of the fleet and the flight speed.
 const FLEET_FLIGHT = "fleet_flight";
 
+// Defines the step where the player is asked to choose
+// the objective of the fleet along with the cargo that
+// will be carried with it.
+const FLEET_OBJECTIVE = "fleet_objective";
+
 class Fleets extends React.Component {
   constructor(props) {
     super(props);
@@ -189,8 +194,8 @@ class Fleets extends React.Component {
           this.state.step === FLEET_INIT &&
           <div className="fleets_confirmation_panel">
             <div className="fleets_confirmation_element">
-              <button className="fleets_all_ships" type="button">All</button>
-              <button className="fleets_no_ship" type="button">0</button>
+              <button className="fleets_button fleets_all_ships">All</button>
+              <button className="fleets_button fleets_no_ship">0</button>
             </div>
             <div className="fleets_confirmation_element">
               <button className="fleets_next_step" onClick = {() => this.updateFleetStep(FLEET_FLIGHT)}>NEXT</button>
@@ -269,60 +274,60 @@ class Fleets extends React.Component {
 
             <div className="fleet_flight_briefing">
               <p className="fleet_flight_step_title">Briefing</p>
-              <div id="fleet_flight_details">
-                <div class="flight_details">
-                  <div class="flight_detail_container">
-                    <span class="flight_detail_entry">Duration of flight (one way):</span>
-                    <span class="flight_detail_value">0:02:55h</span>
+              <div className="fleet_flight_details">
+                <div className="fleet_flight_flight_details">
+                  <div className="fleet_flight_detail_container">
+                    <span className="fleet_flight_detail_entry">Duration of flight (one way):</span>
+                    <span className="fleet_flight_detail_value">0:02:55h</span>
                   </div>
-                  <div class="flight_detail_container">
-                    <span class="flight_detail_entry">Deuterium consumption:</span>
-                    <span class="flight_detail_valid_value">35 (1%)</span>
+                  <div className="fleet_flight_detail_container">
+                    <span className="fleet_flight_detail_entry">Deuterium consumption:</span>
+                    <span className="fleet_flight_detail_valid_value">35 (1%)</span>
                   </div>
-                  <div class="flight_detail_container">
-                    <span class="flight_detail_entry">Speed (max 22500):</span>
+                  <div className="fleet_flight_detail_container">
+                    <span className="fleet_flight_detail_entry">Speed (max 22500):</span>
                   </div>
                 </div>
-                <div class="flight_details">
-                  <div class="flight_detail_container">
-                    <span class="flight_detail_entry">Arrival:</span>
-                    <span class="flight_detail_value">25.01.17 20:46:42 Clock</span>
+                <div className="fleet_flight_flight_details">
+                  <div className="fleet_flight_detail_container">
+                    <span className="fleet_flight_detail_entry">Arrival:</span>
+                    <span className="fleet_flight_detail_value">25.01.17 20:46:42</span>
                   </div>
-                  <div class="flight_detail_container">
-                    <span class="flight_detail_entry">Return:</span>
-                    <span class="flight_detail_value">25.01.17 20:49:38 Clock</span>
+                  <div className="fleet_flight_detail_container">
+                    <span className="fleet_flight_detail_entry">Return:</span>
+                    <span className="fleet_flight_detail_value">25.01.17 20:49:38</span>
                   </div>
-                  <div class="flight_detail_container">
-                    <span class="flight_detail_entry">Empty cargo bays:</span>
-                    <span class="flight_detail_valid_value">23250000</span>
+                  <div className="fleet_flight_detail_container">
+                    <span className="fleet_flight_detail_entry">Empty cargo bays:</span>
+                    <span className="fleet_flight_detail_valid_value">23250000</span>
                   </div>
                 </div>
               </div>
-              <div id="speed_and_next">
-                <div id="speed_selection">
-                  <button class="fleet_speed speed_10" type="button">10</button>
-                  <button class="fleet_speed speed_20" type="button">20</button>
-                  <button class="fleet_speed speed_30" type="button">30</button>
-                  <button class="fleet_speed speed_40" type="button">40</button>
-                  <button class="fleet_speed speed_50" type="button">50</button>
-                  <button class="fleet_speed speed_60" type="button">60</button>
-                  <button class="fleet_speed speed_70" type="button">70</button>
-                  <button class="fleet_speed speed_80" type="button">80</button>
-                  <button class="fleet_speed speed_90" type="button">90</button>
-                  <button class="selected_fleet_speed speed_100" type="button">100</button>
+              <div className="fleet_flight_speed_container">
+                <div className="fleet_flight_speed_selection">
+                  <button class="fleet_flight_speed" >10</button>
+                  <button class="fleet_flight_speed" >20</button>
+                  <button class="fleet_flight_speed" >30</button>
+                  <button class="fleet_flight_speed" >40</button>
+                  <button class="fleet_flight_speed" >50</button>
+                  <button class="fleet_flight_speed" >60</button>
+                  <button class="fleet_flight_speed" >70</button>
+                  <button class="fleet_flight_speed" >80</button>
+                  <button class="fleet_flight_speed" >90</button>
+                  <button class="fleet_flight_selected_speed" >100</button>
                   <span>%</span>
                 </div>
-                <div class="confirmation_element">
-                  <a href="fleets_step_1.html">
-                    <button id="fleet_previous_step" type="button">BACK</button>
-                  </a>
-                  <a href="fleets_step_3.html">
-                    <button id="fleet_next_step" type="button">NEXT</button>
-                  </a>
+                <div className="fleet_flight_confirmation_layout">
+                  <button className="fleets_button fleets_previous_step" onClick={() => this.updateFleetStep(FLEET_INIT)} >BACK</button>
+                  <button className="fleets_button fleets_next_step" onClick={() => this.updateFleetStep(FLEET_OBJECTIVE)}>NEXT</button>
                 </div>
               </div>
             </div>
           </div>
+        }
+        {
+          this.state.step === FLEET_OBJECTIVE &&
+          <div className="toto">TODO</div>
         }
       </div>
     );
