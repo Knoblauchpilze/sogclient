@@ -47,6 +47,18 @@
   margin-top: 5px;
 }
 
+.fleet_init_ships_layout {
+  background-color: #0d1014;
+
+  margin: 1px;
+}
+
+.fleet_init_section_layout {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 .fleets_confirmation_panel {
   background-color: #141e26;
 

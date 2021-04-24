@@ -1,6 +1,5 @@
 
 import '../../styles/session/FleetObjective.css';
-import '../../styles/session/Game.css';
 import React from 'react';
 
 function FleetObjective (props) {

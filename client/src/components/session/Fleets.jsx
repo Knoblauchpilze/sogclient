@@ -2,6 +2,7 @@
 import '../../styles/session/Fleets.css';
 import '../../styles/session/Game.css';
 import React from 'react';
+import FleetShip from './FleetShip.jsx';
 import FleetObjective from './FleetObjective.jsx';
 
 import planet from '../../assets/fleets/planet.png';
@@ -11,6 +12,22 @@ import debris from '../../assets/fleets/debris.png';
 import metal from '../../assets/metal_mini.jpeg';
 import crystal from '../../assets/crystal_mini.jpeg';
 import deuterium from '../../assets/deuterium_mini.jpeg';
+
+import light_fighter from '../../assets/light_fighter.jpeg';
+import heavy_fighter from '../../assets/heavy_fighter.jpeg';
+import cruiser from '../../assets/cruiser.jpeg';
+import battleship from '../../assets/battleship.jpeg';
+import battlecruiser from '../../assets/battlecruiser.jpeg';
+import bomber from '../../assets/bomber.jpeg';
+import destroyer from '../../assets/destroyer.jpeg';
+import deathstar from '../../assets/deathstar.jpeg';
+
+import small_cargo from '../../assets/small_cargo_ship.jpeg';
+import large_cargo from '../../assets/large_cargo_ship.jpeg';
+import colony_ship from '../../assets/colony_ship.jpeg';
+import recycler from '../../assets/recycler.jpeg';
+import espionage_probe from '../../assets/espionage_probe.jpeg';
+import solar_satellite from '../../assets/solar_satellite.jpeg';
 
 // Defines the initial step of the fleets view where the
 // player can select ships to include in the fleet.
@@ -63,141 +80,99 @@ class Fleets extends React.Component {
         {
           this.state.step === FLEET_INIT &&
           <div className="fleet_ships_layout">
-            <div className="shipyard_section">
+            <div className="fleet_init_ships_layout">
               <p class="cover_header">Combat ships</p>
-              <div className="shipyard_section_layout">
-                <div class="planet_ship_container">
-                  <img class="planet_ship_icon" src="../img/light_fighter.jpeg" alt="Light fighter" title="Light fighter"/>
-                  <span class="planet_ship_available_count">33035</span>
-                  <div class="planet_ship_action">
-                    <form class="planet_ship_selected_count">
-                      <input class="planet_ship_selector" method="post" type="number" name="light_fighter_ship_count" id="light_fighter_ship_count" value="0" min="0" max="33035"/>
-                    </form>
-                  </div>
-                </div>
-                <div class="planet_ship_container">
-                  <img class="planet_ship_icon" src="../img/heavy_fighter.jpeg" alt="Heavy fighter" title="Heavy fighter"/>
-                  <span class="planet_ship_available_count">45</span>
-                  <div class="planet_ship_action">
-                    <form class="planet_ship_selected_count">
-                      <input class="planet_ship_selector" method="post" type="number" name="heavy_fighter_ship_count" id="heavy_fighter_ship_count" value="0" min="0" max="45"/>
-                    </form>
-                  </div>
-                </div>
-                <div class="planet_ship_container">
-                  <img class="planet_ship_icon" src="../img/cruiser.jpeg" alt="Cruiser" title="Cruiser"/>
-                  <span class="planet_ship_available_count">3663</span>
-                  <div class="planet_ship_action">
-                    <form class="planet_ship_selected_count">
-                      <input class="planet_ship_selector" method="post" type="number" name="cruiser_ship_count" id="cruiser_ship_count" value="0" min="0" max="3663"/>
-                    </form>
-                  </div>
-                </div>
-                <div class="planet_ship_container">
-                  <img class="planet_ship_icon" src="../img/battleship.jpeg" alt="Battleship" title="Battleship"/>
-                  <span class="planet_ship_available_count">1500</span>
-                  <div class="planet_ship_action">
-                    <form class="planet_ship_selected_count">
-                      <input class="planet_ship_selector" method="post" type="number" name="battleship_ship_count" id="battleship_ship_count" value="0" min="0" max="1500"/>
-                    </form>
-                  </div>
-                </div>
-                <div class="planet_ship_container">
-                  <img class="planet_ship_icon" src="../img/battlecruiser.jpeg" alt="Battlecruiser" title="Battlecruiser"/>
-                  <span class="planet_ship_available_count">650</span>
-                  <div class="planet_ship_action">
-                    <form class="planet_ship_selected_count">
-                      <input class="planet_ship_selector" method="post" type="number" name="battlecruiser_ship_count" id="battlecruiser_ship_count" value="0" min="0" max="650"/>
-                    </form>
-                  </div>
-                </div>
-                <div class="planet_ship_container">
-                  <img class="planet_ship_icon" src="../img/bomber.jpeg" alt="Bomber" title="Bomber"/>
-                  <span class="planet_ship_available_count">100</span>
-                  <div class="planet_ship_action">
-                    <form class="planet_ship_selected_count">
-                      <input class="planet_ship_selector" method="post" type="number" name="bomber_ship_count" id="bomber_ship_count" value="0" min="0" max="100"/>
-                    </form>
-                  </div>
-                </div>
-                <div class="planet_ship_container">
-                  <img class="planet_ship_icon" src="../img/destroyer.jpeg" alt="Destroyer" title="Destroyer"/>
-                  <span class="planet_ship_available_count">450</span>
-                  <div class="planet_ship_action">
-                    <form class="planet_ship_selected_count">
-                      <input class="planet_ship_selector" method="post" type="number" name="destroyer_ship_count" id="destroyer_ship_count" value="0" min="0" max="450"/>
-                    </form>
-                  </div>
-                </div>
-                <div class="planet_ship_container">
-                  <img class="planet_ship_icon" src="../img/deathstar.jpeg" alt="Deathstar" title="Deathstar"/>
-                  <span class="planet_ship_available_count">0</span>
-                  <div class="planet_ship_action">
-                    <form class="planet_ship_selected_count">
-                      <input class="planet_ship_selector" method="post" type="number" name="deathstar_ship_count" id="deathstar_ship_count" value="0" min="0" max="0"/>
-                    </form>
-                  </div>
-                </div>
+              <div className="fleet_init_section_layout">
+                <FleetShip icon={light_fighter}
+                           alt="Light fighter"
+                           title="Light fighter"
+                           min={0}
+                           max={33035}
+                           />
+                <FleetShip icon={heavy_fighter}
+                           alt="Heavy fighter"
+                           title="Heavy fighter"
+                           min={0}
+                           max={14}
+                           />
+                <FleetShip icon={cruiser}
+                           alt="Cruiser"
+                           title="Cruiser"
+                           min={0}
+                           max={13}
+                           />
+                <FleetShip icon={battleship}
+                           alt="Battleship"
+                           title="Battleship"
+                           min={0}
+                           max={12}
+                           />
+                <FleetShip icon={battlecruiser}
+                           alt="Battlecruiser"
+                           title="Battlecruiser"
+                           min={0}
+                           max={17}
+                           />
+                <FleetShip icon={bomber}
+                           alt="Bomber"
+                           title="Bomber"
+                           min={0}
+                           max={18}
+                           />
+                <FleetShip icon={destroyer}
+                           alt="Destroyer"
+                           title="Destroyer"
+                           min={0}
+                           max={19}
+                           />
+                <FleetShip icon={deathstar}
+                           alt="Deathstar"
+                           title="Deathstar"
+                           min={0}
+                           max={20}
+                           />
               </div>
             </div>
 
-            <div className="shipyard_section">
-              <p class="cover_header">Combat ships</p>
-              <div className="shipyard_section_layout">
-                <div class="planet_ship_container">
-                  <img class="planet_ship_icon" src="../img/small_cargo_ship.jpeg" alt="Small cargo ship" title="Small cargo ship"/>
-                  <span class="planet_ship_available_count">341</span>
-                  <div class="planet_ship_action">
-                    <form class="planet_ship_selected_count">
-                      <input class="planet_ship_selector" method="post" type="number" name="small_cargo_ship_count" id="small_cargo_ship_count" value="0" min="0" max="341"/>
-                    </form>
-                  </div>
-                </div>
-                <div class="planet_ship_container">
-                  <img class="planet_ship_icon" src="../img/large_cargo_ship.jpeg" alt="Large cargo ship" title="Large cargo ship"/>
-                  <span class="planet_ship_available_count">894</span>
-                  <div class="planet_ship_action">
-                    <form class="planet_ship_selected_count">
-                      <input class="planet_ship_selector" method="post" type="number" name="large_cargo_ship_count" id="large_cargo_ship_count" value="0" min="0" max="894"/>
-                    </form>
-                  </div>
-                </div>
-                <div class="planet_ship_container">
-                  <img class="planet_ship_icon" src="../img/colony_ship.jpeg" alt="Colony ship" title="Colony ship"/>
-                  <span class="planet_ship_available_count">0</span>
-                  <div class="planet_ship_action">
-                    <form class="planet_ship_selected_count">
-                      <input class="planet_ship_selector" method="post" type="number" name="colony_ship_count" id="colony_ship_count" value="0" min="0" max="0"/>
-                    </form>
-                  </div>
-                </div>
-                <div class="planet_ship_container">
-                  <img class="planet_ship_icon" src="../img/recycler.jpeg" alt="Recycler" title="Recycler"/>
-                  <span class="planet_ship_available_count">3131</span>
-                  <div class="planet_ship_action">
-                    <form class="planet_ship_selected_count">
-                      <input class="planet_ship_selector" method="post" type="number" name="recycler_ship_count" id="recycler_ship_count" value="0" min="0" max="3131"/>
-                    </form>
-                  </div>
-                </div>
-                <div class="planet_ship_container">
-                  <img class="planet_ship_icon" src="../img/espionage_probe.jpeg" alt="Espionage probe" title="Espionage probe"/>
-                  <span class="planet_ship_available_count">0</span>
-                  <div class="planet_ship_action">
-                    <form class="planet_ship_selected_count">
-                      <input class="planet_ship_selector" method="post" type="number" name="espionage_probe_ship_count" id="espionage_probe_ship_count" value="0" min="0" max="0"/>
-                    </form>
-                  </div>
-                </div>
-                <div class="planet_ship_container">
-                  <img class="planet_ship_icon" src="../img/solar_satellite.jpeg" alt="Solar satellite" title="Solar satellite"/>
-                  <span class="planet_ship_available_count">0</span>
-                  <div class="planet_ship_action">
-                    <form class="planet_ship_selected_count">
-                      <input class="planet_ship_selector" method="post" type="number" name="solar_satellite_ship_count" id="solar_satellite_ship_count" value="0" min="0" max="0"/>
-                    </form>
-                  </div>
-                </div>
+            <div className="fleet_init_ships_layout">
+              <p class="cover_header">Civil ships</p>
+              <div className="fleet_init_section_layout">
+                <FleetShip icon={small_cargo}
+                           alt="Small cargo"
+                           title="Small cargo"
+                           min={0}
+                           max={30}
+                           />
+                <FleetShip icon={large_cargo}
+                           alt="Large cargo"
+                           title="Large cargo"
+                           min={0}
+                           max={31}
+                           />
+                <FleetShip icon={colony_ship}
+                           alt="Colony ship"
+                           title="Colony ship"
+                           min={0}
+                           max={32}
+                           />
+                <FleetShip icon={recycler}
+                           alt="Recycler"
+                           title="Recycler"
+                           min={0}
+                           max={33}
+                           />
+                <FleetShip icon={espionage_probe}
+                           alt="Espionage probe"
+                           title="Espionage probe"
+                           min={0}
+                           max={34}
+                           />
+                <FleetShip icon={solar_satellite}
+                           alt="Solar satellite"
+                           title="Solar satellite"
+                           min={0}
+                           max={35}
+                           />
               </div>
             </div>
           </div>
