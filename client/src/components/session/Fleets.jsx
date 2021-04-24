@@ -2,10 +2,15 @@
 import '../../styles/session/Fleets.css';
 import '../../styles/session/Game.css';
 import React from 'react';
+import FleetObjective from './FleetObjective.jsx';
 
 import planet from '../../assets/fleets/planet.png';
 import moon from '../../assets/fleets/moon.png';
 import debris from '../../assets/fleets/debris.png';
+
+import metal from '../../assets/metal_mini.jpeg';
+import crystal from '../../assets/crystal_mini.jpeg';
+import deuterium from '../../assets/deuterium_mini.jpeg';
 
 // Defines the initial step of the fleets view where the
 // player can select ships to include in the fleet.
@@ -36,6 +41,13 @@ class Fleets extends React.Component {
     this.setState({
       step: step,
     });
+  }
+
+  requestFleetSending() {
+    // TODO: Handle the sending.
+    console.error("Should send fleet");
+
+    this.updateFleetStep(FLEET_INIT);
   }
 
   render() {
@@ -282,7 +294,7 @@ class Fleets extends React.Component {
                   </div>
                   <div className="fleet_flight_detail_container">
                     <span className="fleet_flight_detail_entry">Deuterium consumption:</span>
-                    <span className="fleet_flight_detail_valid_value">35 (1%)</span>
+                    <span className="fleet_flight_detail_value fleet_flight_detail_valid_value">35 (1%)</span>
                   </div>
                   <div className="fleet_flight_detail_container">
                     <span className="fleet_flight_detail_entry">Speed (max 22500):</span>
@@ -299,7 +311,7 @@ class Fleets extends React.Component {
                   </div>
                   <div className="fleet_flight_detail_container">
                     <span className="fleet_flight_detail_entry">Empty cargo bays:</span>
-                    <span className="fleet_flight_detail_valid_value">23250000</span>
+                    <span className="fleet_flight_detail_value fleet_flight_detail_valid_value">23250000</span>
                   </div>
                 </div>
               </div>
@@ -327,10 +339,139 @@ class Fleets extends React.Component {
         }
         {
           this.state.step === FLEET_OBJECTIVE &&
-          <div className="toto">TODO</div>
+          <div className="fleets_creation_container">
+            <div className="fleet_flight_detail_container">
+              <span className="fleet_objective_mission_text">Mission:</span>
+              <span className="fleet_objective_mission_entry">Deployment</span>
+              <span className="fleet_objective_mission_text">Target:</span>
+              <span className="fleet_objective_mission_entry"><a href="../galaxy/galaxy.html">[5:53:7]</a></span>
+              <span className="fleet_objective_mission_text">Player name:</span>
+              <span className="fleet_objective_mission_entry">tttttttttttttttttttt</span>
+            </div>
+
+            <div className="fleet_objectives_layout">
+              <p className="fleet_flight_step_title">Select mission for target:</p>
+              <div className="fleet_objective_missions_layout">
+                <FleetObjective label={"Expedition"} icon={"expedition"}/>
+                <FleetObjective label={"Colonization"} icon={"colonization"}/>
+                <FleetObjective label={"Harvest debris field"} icon={"harvesting"}/>
+                <FleetObjective label={"Transport"} icon={"transport"}/>
+                <FleetObjective label={"Deployment"} icon={"deployment"}/>
+                <FleetObjective label={"Espionage"} icon={"espionage"}/>
+                <FleetObjective label={"ACS Defend"} icon={"acs_defend"}/>
+                <FleetObjective label={"Attack"} icon={"attack"}/>
+                <FleetObjective label={"Moon destruction"} icon={"destroy"}/>
+                <FleetObjective label={"ACS Attack"} icon={"acs_attack"}/>
+              </div>
+              <div>
+                <p className="fleet_objective_mission_desc fleet_objective_mission_title">Mission: deployment</p>
+                <p className="fleet_objective_mission_desc">Sends your fleet permanently to another planet of your empire</p>
+              </div>
+            </div>
+
+            <div className="fleet_objective_brief_and_cargo_layout">
+              <div className="fleet_flight_briefing">
+                <p className="fleet_flight_step_title">Briefing</p>
+                <div className="fleet_flight_flight_details">
+                  <div className="fleet_flight_objective_detail_summary">
+                    <span className="fleet_flight_detail_entry">Target:</span>
+                    <span className="fleet_flight_detail_value"><a href="../galaxy/galaxy.html">[5:53:7]</a></span>
+                  </div>
+                  <div className="fleet_flight_objective_detail_summary">
+                    <span className="fleet_flight_detail_entry">Duration of flight (one way):</span>
+                    <span className="fleet_flight_detail_value">0:02:55h</span>
+                  </div>
+                  <div className="fleet_flight_objective_detail_summary">
+                    <span className="fleet_flight_detail_entry">Arrival:</span>
+                    <span className="fleet_flight_detail_value">25.01.17 20:46:42 Clock</span>
+                  </div>
+                  <div className="fleet_flight_objective_detail_summary">
+                    <span className="fleet_flight_detail_entry">Return:</span>
+                    <span className="fleet_flight_detail_value">25.01.17 20:49:38 Clock</span>
+                  </div>
+                  <div className="fleet_flight_objective_detail_summary">
+                    <span className="fleet_flight_detail_entry">Deuterium consumption:</span>
+                    <span className="fleet_flight_detail_value fleet_flight_detail_valid_value">35 (1%)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p className="fleet_flight_step_title">Load resources</p>
+                <div className="fleet_objective_cargo_management">
+                  <div className="fleet_objective_cargo_selectors">
+                    <div className="fleet_objective_cargo_resource_container">
+                      <img className="fleet_objective_cargo_resource" src={metal} alt="Metal" />
+                      <div className="fleet_objective_cargo_resource_selector">
+                        <form class="">
+                          <input className="cargo_resource_selector" method="post" type="number" name="cargo_metal" id="cargo_metal" value="0" min="0" max="3104"/>
+                        </form>
+                        <div className="fleet_objective_cargo_quick_access">
+                          <button class="cargo_resource_access">&lt;&lt;</button>
+                          <button class="cargo_resource_access">&gt;&gt;</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="fleet_objective_cargo_resource_container">
+                      <img className="fleet_objective_cargo_resource" src={crystal} alt="Crystal" />
+                      <div className="fleet_objective_cargo_resource_selector">
+                        <form class="">
+                          <input className="cargo_resource_selector" method="post" type="number" name="cargo_crystal" id="cargo_crystal" value="0" min="0" max="3104"/>
+                        </form>
+                        <div className="fleet_objective_cargo_quick_access">
+                          <button className="cargo_resource_access">&lt;&lt;</button>
+                          <button className="cargo_resource_access">&gt;&gt;</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="fleet_objective_cargo_resource_container">
+                      <img className="fleet_objective_cargo_resource" src={deuterium} alt="Deuterium" />
+                      <div className="fleet_objective_cargo_resource_selector">
+                        <form class="">
+                          <input className="cargo_resource_selector" method="post" type="number" name="cargo_deuterium" id="cargo_deuterium" value="0" min="0" max="3104"/>
+                        </form>
+                        <div className="fleet_objective_cargo_quick_access">
+                          <button className="cargo_resource_access">&lt;&lt;</button>
+                          <button className="cargo_resource_access">&gt;&gt;</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="fleet_objective_cargo_selectors">
+                    <div className="fleet_objective_cargo_layout">
+                      <button className="cargo_resource_access cargo_fill_all">&gt;&gt;</button>
+                      <span className="fleet_objective_cargo_info">all resources</span>
+                    </div>
+                    <div className="fleet_objective_cargo_layout">
+                      <span className="fleet_objective_cargo_info">cargo bay:</span>
+                      <div className="fleet_objective_cargo_percentage">
+                        <div className="fleet_cargo_progression"></div>
+                      </div>
+                      <div>
+                        <span className="fleet_objective_cargo_info">19856321</span>
+                        <span className="fleet_objective_cargo_info">/</span>
+                        <span className="fleet_objective_cargo_info">23250000</span>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="fleet_objective_confirmation_layout">
+              <div className="fleet_flight_confirmation_layout">
+                <button className="fleets_button fleets_previous_step" onClick={() => this.updateFleetStep(FLEET_FLIGHT)}>BACK</button>
+              </div>
+              <div className="fleet_flight_confirmation_layout">
+                  <button className="fleets_button fleets_next_step" onClick={() => this.requestFleetSending()}>SEND FLEET</button>
+              </div>
+            </div>
+          </div>
         }
       </div>
     );
+    // Should use: https://www.youtube.com/watch?v=cVAqJyRyTIg to create step 3
   }
 }
 
