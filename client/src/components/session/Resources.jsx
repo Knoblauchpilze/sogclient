@@ -4,121 +4,122 @@ import '../../styles/session/Game.css';
 import React from 'react';
 import ElementContainer from './ElementContainer.jsx';
 
-import metal_mine from '../../assets/metal_mine.jpeg';
-import crystal_mine from '../../assets/crystal_mine.jpeg';
-import deuterium_synthetizer from '../../assets/deuterium_synthetizer.jpeg';
+import Server from '../game/server.js';
 
-import metal_storage from '../../assets/metal_storage.jpeg';
-import crystal_storage from '../../assets/crystal_storage.jpeg';
-import deuterium_tank from '../../assets/deuterium_tank.jpeg';
+import BuildingsModule from '../game/buildings.js';
+import { BUILDINGS_FETCH_SUCCEEDED } from '../game/buildings.js';
 
-import solar_plant from '../../assets/solar_plant.jpeg';
-import fusion_reactor from '../../assets/fusion_reactor.jpeg';
+import {buildings_list} from '../../datas/buildings.js';
 
-function Resources (props) {
-  let title = "Resources - Unknown planet";
-  let mmLevel = 0;
-  let cmLevel = 0;
-  let dsLevel = 0;
+function fetchBuildingLevel(buildings, name) {
+  const building = buildings.find(b => b.name === name);
 
-  let msLevel = 0;
-  let csLevel = 0;
-  let dtLevel = 0;
-
-  let spLevel = 0;
-  let frLevel = 0;
-
-  if (props.planet) {
-    title = "Resources - " + props.planet.name;
-
-    const mm = props.planet.buildings.find(b => b.name === "metal mine");
-    if (mm) {
-      mmLevel = mm.level;
-    }
-    const cm = props.planet.buildings.find(b => b.name === "crystal mine");
-    if (cm) {
-      cmLevel = cm.level;
-    }
-    const ds = props.planet.buildings.find(b => b.name === "deuterium synthetizer");
-    if (ds) {
-      dsLevel = ds.level;
-    }
-
-    const ms = props.planet.buildings.find(b => b.name === "metal storage");
-    if (ms) {
-      msLevel = ms.level;
-    }
-    const cs = props.planet.buildings.find(b => b.name === "crystal storage");
-    if (cs) {
-      csLevel = cs.level;
-    }
-    const dt = props.planet.buildings.find(b => b.name === "deuterium tank");
-    if (dt) {
-      dtLevel = dt.level;
-    }
-
-    const sp = props.planet.buildings.find(b => b.name === "solar plant");
-    if (sp) {
-      spLevel = sp.level;
-    }
-    const fr = props.planet.buildings.find(b => b.name === "fusion reactor");
-    if (fr) {
-      frLevel = fr.level;
-    }
+  if (building) {
+    return building.level;
   }
 
-  return (
-    <div className="resources_layout">
-      <div className="cover_layout">
-        <h3 className="cover_title">{title}</h3>
-      </div>
-      <div className="resources_buildings_section">
-        <p className="cover_header">Energy and resources</p>
-        <div className="resources_buildings_layout">
-          <ElementContainer icon={metal_mine}
-                            alt={"Metal mine"}
-                            title={"Metal mine"}
-                            level={mmLevel}
-                            />
-          <ElementContainer icon={crystal_mine}
-                            alt={"Crystal mine"}
-                            title={"Crystal mine"}
-                            level={cmLevel}
-                            />
-          <ElementContainer icon={deuterium_synthetizer}
-                            alt={"Deuterium synthetizer"}
-                            title={"Deuterium synthetizer"}
-                            level={dsLevel}
-                            />
-          <ElementContainer icon={solar_plant}
-                            alt={"Solar plant"}
-                            title={"Solar plant"}
-                            level={spLevel}
-                            />
-          <ElementContainer icon={fusion_reactor}
-                            alt={"Fusion reactor"}
-                            title={"Fusion reactor"}
-                            level={frLevel}
-                            />
-          <ElementContainer icon={metal_storage}
-                            alt={"Metal storage"}
-                            title={"Metal storage"}
-                            level={msLevel}
-                            />
-          <ElementContainer icon={crystal_storage}
-                            alt={"Crystal storage"}
-                            title={"Crystal storage"}
-                            level={csLevel}
-                            />
-          <ElementContainer icon={deuterium_tank}
-                            alt={"Deuterium tank"}
-                            title={"Deuterium tank"}
-                            level={dtLevel}
-                            />
+  // Assume no level is defined.
+  return 0;
+}
+
+class Resources extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      // Defines the information about the buildings that
+      // are registered for this component. This value is
+      // only available after the data has been fetched
+      // from the server.
+      buildings: [],
+    };
+  }
+
+  componentDidMount() {
+    // Fetch the list of buildings from the server.
+    const server = new Server();
+    const buildings = new BuildingsModule(server);
+
+    const game = this;
+
+    // Fetch the buildings from the server.
+    buildings.fetchBuildings()
+      .then(function (res) {
+        if (res.status !== BUILDINGS_FETCH_SUCCEEDED) {
+          game.fetchDataFailed(res.status);
+        }
+        else {
+          game.fetchBuildingsSucceeded(res.buildings);
+        }
+      })
+      .catch(err => game.fetchDataFailed(err));
+  }
+
+  fetchDataFailed(err) {
+    alert(err);
+  }
+
+  fetchBuildingsSucceeded(buildings) {
+    // Update internal state: this means parsing the
+    // fetched data to build the internal list of
+    // buildings available to build/demolish.
+    const resources = [];
+
+    for (let id = 0 ; id < buildings_list.length ; id++) {
+      const b = buildings.find(b => b.name === buildings_list[id].name);
+
+      if (b) {
+        // Fetch the level of this building on the planet.
+        let lvl = fetchBuildingLevel(this.props.planet.buildings, b.name);
+
+        resources.push({
+          id: b.id,
+          name: b.name,
+          level: lvl,
+          icon: buildings_list[id].icon,
+        });
+      }
+      else {
+        console.error("Failed to find building \"" + buildings_list[id].name + "\" from server's data");
+      }
+    }
+
+    this.setState({
+      buildings: resources,
+    });
+  }
+
+  render() {
+    let title = "Resources - Unknown planet";
+
+    if (this.props.planet) {
+      title = "Resources - " + this.props.planet.name;
+    }
+
+    return (
+      <div className="resources_layout">
+        <div className="cover_layout">
+          <h3 className="cover_title">{title}</h3>
+        </div>
+        <div className="resources_buildings_section">
+          <p className="cover_header">Energy and resources</p>
+          <div className="resources_buildings_layout">
+            {
+              this.state.buildings.map(b =>
+                <ElementContainer key={b.id}
+                                  id={b.id}
+                                  icon={b.icon}
+                                  alt={b.name}
+                                  title={b.name}
+                                  level={b.level}
+                                  />
+              )
+            }
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default Resources;

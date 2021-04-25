@@ -150,7 +150,9 @@ class Game extends React.Component {
         tab = <Facilities planet={this.state.planets[this.state.selectedPlanet]} />;
           break;
       case TAB_RESEARCH_LAB:
-        tab = <ResearchLab planet={this.state.planets[this.state.selectedPlanet]} />;
+        tab = <ResearchLab planet={this.state.planets[this.state.selectedPlanet]}
+                           player={this.props.session}
+                           />;
           break;
       case TAB_SHIPYARD:
         tab = <Shipyard planet={this.state.planets[this.state.selectedPlanet]} />;
