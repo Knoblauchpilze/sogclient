@@ -5,7 +5,7 @@ import React from 'react';
 
 function ElementContainer (props) {
   return (
-    <div className="element_container_layout" onClick={() => console.log("id: " + props.id)}>
+    <div className="element_container_layout" onClick={() => props.selectElement(props.id)}>
       <img className="element_container_icon"
            src={props.icon}
            alt={props.alt}
