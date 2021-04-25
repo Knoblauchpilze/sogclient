@@ -66,6 +66,14 @@ class Server {
   resourcesURL() {
     return this.serverURL() + "/resources";
   }
+
+  buildingsURL() {
+    return this.serverURL() + "/buildings";
+  }
+
+  technologiesURL() {
+    return this.serverURL() + "/technologies";
+  }
 }
 
 const NullAccount = {

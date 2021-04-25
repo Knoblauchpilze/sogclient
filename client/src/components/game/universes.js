@@ -1,5 +1,5 @@
 
-// Registration status.
+// Fecthing status.
 const UNIVERSES_FETCH_SUCCEEDED = "Universes fetched";
 const UNIVERSES_FETCH_FAILURE = "Failed to fetch universes";
 
