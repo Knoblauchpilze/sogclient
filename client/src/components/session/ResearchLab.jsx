@@ -3,6 +3,7 @@ import '../../styles/session/ResearchLab.css';
 import '../../styles/session/Game.css';
 import React from 'react';
 import ElementContainer from './ElementContainer.jsx';
+import ElementUpgrade from './ElementUpgrade.jsx';
 
 import Server from '../game/server.js';
 
@@ -43,6 +44,10 @@ class ResearchLab extends React.Component {
       // Defines the info about combat technologies that
       // are researched by the player.
       combat_techs: [],
+
+      // Defines the selected element so far. This is
+      // assigned when the user clicks on a child item.
+      id: "",
     };
   }
 
@@ -137,8 +142,10 @@ class ResearchLab extends React.Component {
   }
 
   selectElement(technology) {
-    // TODO: Handle this.
-    console.log("Selected technology " + technology);
+    // Update selected technology.
+    this.setState({
+      id: technology,
+    });
   }
 
   render() {
@@ -152,6 +159,10 @@ class ResearchLab extends React.Component {
       <div className="research_lab_layout">
         <div className="cover_layout">
           <h3 className="cover_title">{title}</h3>
+          {
+            this.state.id !== "" &&
+            <ElementUpgrade />
+          }
         </div>
         <div className="research_lab_researches_layout">
           <div className="research_lab_section">

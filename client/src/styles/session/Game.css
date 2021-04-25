@@ -52,6 +52,12 @@
   justify-content: space-between;
 }
 
+.cover_upgrade_layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
 .cover_title {
   color: #fff;
   background-color: #06060644;

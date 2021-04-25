@@ -3,6 +3,7 @@ import '../../styles/session/Resources.css';
 import '../../styles/session/Game.css';
 import React from 'react';
 import ElementContainer from './ElementContainer.jsx';
+import ElementUpgrade from './ElementUpgrade.jsx';
 
 import Server from '../game/server.js';
 
@@ -32,6 +33,10 @@ class Resources extends React.Component {
       // only available after the data has been fetched
       // from the server.
       buildings: [],
+
+      // Defines the selected element so far. This is
+      // assigned when the user clicks on a child item.
+      id: "",
     };
   }
 
@@ -90,8 +95,10 @@ class Resources extends React.Component {
   }
 
   selectElement(building) {
-    // TODO: Handle this.
-    console.log("Selected building " + building);
+    // Update selected building.
+    this.setState({
+      id: building,
+    });
   }
 
   render() {
@@ -105,6 +112,10 @@ class Resources extends React.Component {
       <div className="resources_layout">
         <div className="cover_layout">
           <h3 className="cover_title">{title}</h3>
+          {
+            this.state.id !== "" &&
+            <ElementUpgrade />
+          }
         </div>
         <div className="resources_buildings_section">
           <p className="cover_header">Energy and resources</p>

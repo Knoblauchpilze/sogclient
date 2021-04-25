@@ -3,6 +3,7 @@ import '../../styles/session/Facilities.css';
 import '../../styles/session/Game.css';
 import React from 'react';
 import ElementContainer from './ElementContainer.jsx';
+import ElementUpgrade from './ElementUpgrade.jsx';
 
 import Server from '../game/server.js';
 
@@ -32,6 +33,10 @@ class Facilities extends React.Component {
       // only available after the data has been fetched
       // from the server.
       buildings: [],
+
+      // Defines the selected element so far. This is
+      // assigned when the user clicks on a child item.
+      id: "",
     };
   }
 
@@ -90,8 +95,10 @@ class Facilities extends React.Component {
   }
 
   selectElement(facility) {
-    // TODO: Handle this.
-    console.log("Selected facility " + facility);
+    // Update selected facility.
+    this.setState({
+      id: facility,
+    });
   }
 
   render() {
@@ -105,6 +112,10 @@ class Facilities extends React.Component {
       <div className="facilities_layout">
         <div className="cover_layout">
           <h3 className="cover_title">{title}</h3>
+          {
+            this.state.id !== "" &&
+            <ElementUpgrade />
+          }
         </div>
         <div className="facilities_buildings_section">
           <p className="cover_header">Production and research</p>
