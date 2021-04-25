@@ -89,6 +89,11 @@ class Facilities extends React.Component {
     });
   }
 
+  selectElement(facility) {
+    // TODO: Handle this.
+    console.log("Selected facility " + facility);
+  }
+
   render() {
     let title = "Facilities - Unknown planet";
 
@@ -112,6 +117,7 @@ class Facilities extends React.Component {
                                   alt={b.name}
                                   title={b.name}
                                   level={b.level}
+                                  selectElement={(id) => this.selectElement(id)}
                                   />
               )
             }

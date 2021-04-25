@@ -136,6 +136,11 @@ class ResearchLab extends React.Component {
     });
   }
 
+  selectElement(technology) {
+    // TODO: Handle this.
+    console.log("Selected technology " + technology);
+  }
+
   render() {
     let title = "Research - Unknown planet";
 
@@ -160,6 +165,7 @@ class ResearchLab extends React.Component {
                                     alt={t.name}
                                     title={t.name}
                                     level={t.level}
+                                    selectElement={(id) => this.selectElement(id)}
                                     />
                 )
               }
@@ -176,6 +182,7 @@ class ResearchLab extends React.Component {
                                     alt={t.name}
                                     title={t.name}
                                     level={t.level}
+                                    selectElement={(id) => this.selectElement(id)}
                                     />
                 )
               }
@@ -192,6 +199,7 @@ class ResearchLab extends React.Component {
                                     alt={t.name}
                                     title={t.name}
                                     level={t.level}
+                                    selectElement={(id) => this.selectElement(id)}
                                     />
                 )
               }
@@ -208,6 +216,7 @@ class ResearchLab extends React.Component {
                                     alt={t.name}
                                     title={t.name}
                                     level={t.level}
+                                    selectElement={(id) => this.selectElement(id)}
                                     />
                 )
               }

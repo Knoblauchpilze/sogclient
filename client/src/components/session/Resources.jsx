@@ -89,6 +89,11 @@ class Resources extends React.Component {
     });
   }
 
+  selectElement(building) {
+    // TODO: Handle this.
+    console.log("Selected building " + building);
+  }
+
   render() {
     let title = "Resources - Unknown planet";
 
@@ -112,6 +117,7 @@ class Resources extends React.Component {
                                   alt={b.name}
                                   title={b.name}
                                   level={b.level}
+                                  selectElement={(id) => this.selectElement(id)}
                                   />
               )
             }
