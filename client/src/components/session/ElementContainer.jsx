@@ -13,13 +13,6 @@ function ElementContainer (props) {
            />
       <span className="element_container_level">{props.level}</span>
     </div>
-
-    /*
-    <div className="element_container_actions">
-      <button className="element_container_action element_container_upgrade" type="button"></button>
-      <button className="element_container_action element_container_demolish" type="button"></button>
-    </div>
-    */
   );
 }
 
