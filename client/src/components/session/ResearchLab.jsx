@@ -48,6 +48,10 @@ class ResearchLab extends React.Component {
       // Defines the selected element so far. This is
       // assigned when the user clicks on a child item.
       id: "",
+
+      // Defines the kind of technology to which the `id`
+      // is referring to.
+      kind: "",
     };
   }
 
@@ -142,9 +146,52 @@ class ResearchLab extends React.Component {
   }
 
   selectElement(technology) {
-    // Update selected technology.
+    // Update selected technology: we need to find the index
+    // of the research corresponding to the input element
+    // if possible.
+    if (technology === "") {
+      this.setState({
+        id: -1,
+        kind: "",
+      });
+    }
+
+    // Search technologies in order.
+    let id = this.state.fundamental_techs.findIndex(t => t.id === technology);
+    let kind = FUNDAMENTAL_TECHNOLOGY;
+
+    if (id === -1) {
+      id = this.state.propulsion_techs.findIndex(t => t.id === technology);
+      kind = PROPULSION_TECHNOLOGY;
+    }
+    if (id === -1) {
+      id = this.state.advanced_techs.findIndex(t => t.id === technology);
+      kind = ADVANCED_TECHNOLOGY;
+    }
+    if (id === -1) {
+      id = this.state.combat_techs.findIndex(t => t.id === technology);
+      kind = COMBAT_TECHNOLOGY;
+    }
+
+    if (id === -1) {
+      console.error("Failed to select technology \"" + technology + "\"");
+    }
+
+    // In case the technology is the same as the one
+    // already selected we will deactivate the upgrade
+    // panel.
+    if (this.state.id === id && this.state.kind === kind) {
+      this.setState({
+        id: -1,
+        kind: "",
+      });
+
+      return;
+    }
+
     this.setState({
-      id: technology,
+      id: id,
+      kind: kind,
     });
   }
 
@@ -155,13 +202,60 @@ class ResearchLab extends React.Component {
       title = "Research - " + this.props.planet.name;
     }
 
+    let technology;
+    if (this.state.id !== -1) {
+      switch (this.state.kind) {
+        case FUNDAMENTAL_TECHNOLOGY:
+          technology = this.state.fundamental_techs[this.state.id];
+          break;
+        case PROPULSION_TECHNOLOGY:
+          technology = this.state.propulsion_techs[this.state.id];
+          break;
+        case ADVANCED_TECHNOLOGY:
+          technology = this.state.advanced_techs[this.state.id];
+          break;
+        case COMBAT_TECHNOLOGY:
+          technology = this.state.combat_techs[this.state.id];
+          break;
+        default:
+            // Unhandled.
+            break;
+      }
+    }
+
     return (
       <div className="research_lab_layout">
         <div className="cover_layout">
           <h3 className="cover_title">{title}</h3>
           {
-            this.state.id !== "" &&
-            <ElementUpgrade />
+            technology &&
+            <ElementUpgrade title={technology.name}
+                            level={technology.level}
+                            icon={technology.icon}
+                            duration={"6j 1h 26m"}
+                            energy={1808}
+
+                            buildable={true}
+                            demolishable={false}
+
+                            resources={[
+                              {
+                                icon: "haha",
+                                name: "metal",
+                                amount: 8917,
+                                enough: false,
+                              },
+                              {
+                                icon: "iuyy",
+                                name: "crystal",
+                                amount: 4917,
+                                enough: true,
+                              }
+                            ]}
+                            description={"This is a description"}
+
+                            selectElement={(id) => this.selectElement(id)}
+                            />
           }
         </div>
         <div className="research_lab_researches_layout">

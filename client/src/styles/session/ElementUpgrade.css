@@ -1,4 +1,178 @@
 
-.element_upgrade_layout {
+.element_upgrade_general_layout {
+  background-color: #000a;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.element_upgrade_item_layout {
+  display: flex;
+  flex-direction: row;
+}
+
+.element_upgrade_icon {
+  min-width: 250px;
+  min-height: 250px;
+  max-width: 250px;
+  max-height: 250px;
+
+  flex-grow: 1;
+}
+
+.element_upgrade_props_layout {
+  display: flex;
+  flex-direction: column;
+
+  flex-grow: 1;
+}
+
+.element_upgrade_header {
+  color: #ff8a0c;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.element_upgrade_desc {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-right: 5px;
+
+  flex-grow: 1;
+}
+
+.element_upgrade_title {
+  font-weight: bold;
+  font-size: larger;
+}
+
+.element_upgrade_level {
+  font-size: smaller;
+}
+
+.element_upgrade_close {
+  max-width: 20px;
+  max-height: 20px;
+
+  text-align: center;
+
+  border: none;
+  border-radius: 4px;
+  box-shadow: inset 0 0 5px #000;
+
+  cursor: pointer;
+}
+
+.element_upgrade_close:hover {
   color: #fff;
+  background-color: #222;
+}
+
+.element_upgrade_close span {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.element_upgrade_prop {
+  display: flex;
+  flex-direction: row;
+
+  font-size: smaller;
+}
+
+.element_upgrade_prop_key {
+  color: #6a7075;
+}
+
+.element_upgrade_prop_value {
+  color: #fff;
+}
+
+.element_upgrade_resources {
+  display: flex;
+  flex-direction: row;
+}
+
+.element_upgrade_resource {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin: 5px;
+}
+
+.element_upgrade_resource_icon {
+  max-width: 50px;
+  max-height: 50px;
+}
+
+.element_upgrade_resource_amount {
+  color: #fff;
+}
+
+.element_upgrade_resource_amount_invalid {
+  color: #ac2f38;
+}
+
+.element_upgrade_buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+
+  flex-grow: 1;
+}
+
+.element_upgrade_button {
+  color: #fff;
+
+  min-width: 100px;
+  min-height: 50px;
+
+  border: none;
+  border-radius: 4px;
+  box-shadow: inset 0 0 10px #000;
+
+  font-weight: bold;
+  font-size: larger;
+  background-color: #fff;
+
+  cursor: pointer;
+}
+
+.element_upgrade_inactive {
+  color: #bbb;
+  background-color: #8c8c8c;
+}
+
+.element_upgrade_build {
+  background-color: #8fc02a;
+}
+
+.element_upgrade_build:hover {
+  background-color: #c9e68d;
+}
+
+.element_upgrade_demolish {
+  background-color: #b00;
+}
+
+.element_upgrade_demolish:hover {
+  background-color: #ff5858;
+}
+
+.element_upgrade_description {
+  background-color: #151f2988;
+
+  flex-grow: 1;
 }
