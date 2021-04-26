@@ -464,7 +464,7 @@
   justify-content: space-evenly;
 }
 
-.fleet_objective_cargo_selectors, #fleet_cargo_details {
+.fleet_objective_cargo_selectors {
   display: flex;
   flex-direction: column;
   justify-content: space-between;

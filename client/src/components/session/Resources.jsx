@@ -36,7 +36,7 @@ class Resources extends React.Component {
 
       // Defines the selected element so far. This is
       // assigned when the user clicks on a child item.
-      id: "",
+      id: -1,
     };
   }
 
@@ -95,9 +95,33 @@ class Resources extends React.Component {
   }
 
   selectElement(building) {
-    // Update selected building.
+    // Update selected building: we need to find the index
+    // of the building corresponding to the input element
+    // if possible.
+    if (building === "") {
+      this.setState({
+        id: -1,
+      });
+    }
+
+    const id = this.state.buildings.findIndex(b => b.id === building);
+
+    if (id === -1) {
+      console.error("Failed to select building \"" + building + "\"");
+    }
+
+    // In case the building is the same as the one already
+    // selected we will deactivate the upgrade panel.
+    if (this.state.id === id) {
+      this.setState({
+        id: -1
+      });
+
+      return;
+    }
+
     this.setState({
-      id: building,
+      id: id,
     });
   }
 
@@ -108,13 +132,44 @@ class Resources extends React.Component {
       title = "Resources - " + this.props.planet.name;
     }
 
+    let building;
+    if (this.state.id !== -1) {
+      building = this.state.buildings[this.state.id];
+    }
+
     return (
       <div className="resources_layout">
         <div className="cover_layout">
           <h3 className="cover_title">{title}</h3>
           {
-            this.state.id !== "" &&
-            <ElementUpgrade />
+            building &&
+            <ElementUpgrade title={building.name}
+                            level={building.level}
+                            icon={building.icon}
+                            duration={"6j 1h 26m"}
+                            energy={1808}
+
+                            buildable={true}
+                            demolishable={false}
+
+                            resources={[
+                              {
+                                icon: "haha",
+                                name: "metal",
+                                amount: 8917,
+                                enough: false,
+                              },
+                              {
+                                icon: "iuyy",
+                                name: "crystal",
+                                amount: 4917,
+                                enough: true,
+                              }
+                            ]}
+                            description={"This is a description"}
+
+                            selectElement={(id) => this.selectElement(id)}
+                            />
           }
         </div>
         <div className="resources_buildings_section">
