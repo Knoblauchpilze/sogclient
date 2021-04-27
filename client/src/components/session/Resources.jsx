@@ -10,6 +10,7 @@ import Server from '../game/server.js';
 import BuildingsModule from '../game/buildings.js';
 import { BUILDINGS_FETCH_SUCCEEDED } from '../game/buildings.js';
 
+import {resources_list} from '../../datas/resources.js';
 import {buildings_list} from '../../datas/buildings.js';
 
 function fetchBuildingLevel(buildings, name) {
@@ -77,11 +78,45 @@ class Resources extends React.Component {
         // Fetch the level of this building on the planet.
         let lvl = fetchBuildingLevel(this.props.planet.buildings, b.name);
 
+        // Compute the costs and register the resources.
+        const costs = [];
+        const iCosts = b.cost.init_costs;
+
+        for (let rID = 0 ; rID < iCosts.length ; rID++) {
+          // We need to find the name of the resource based
+          // on the id from the `resources` value of the
+          // props of the component.
+          const r = this.props.resources.find(res => res.id === iCosts[rID].resource);
+
+          if (!r) {
+            console.error("Failed to register resource \"" + iCosts[rID].resource + "\"");
+            continue;
+          }
+
+          // From there the resource data from the name.
+          const rData = resources_list.find(res => res.name === r.name);
+
+          if (!rData) {
+            console.error("Failed to register resource data \"" + iCosts[rID].resource + "\"");
+            continue;
+          }
+
+          // We can now register the resource.
+          costs.push({
+            icon: rData.mini,
+            name: rData.name,
+            amount: iCosts[rID].amount,
+            enough: false,
+          });
+        }
+
+        // Package the info in a single object.
         resources.push({
           id: b.id,
           name: b.name,
           level: lvl,
           icon: buildings_list[id].icon,
+          resources: costs,
         });
       }
       else {
@@ -152,20 +187,7 @@ class Resources extends React.Component {
                             buildable={true}
                             demolishable={false}
 
-                            resources={[
-                              {
-                                icon: "haha",
-                                name: "metal",
-                                amount: 8917,
-                                enough: false,
-                              },
-                              {
-                                icon: "iuyy",
-                                name: "crystal",
-                                amount: 4917,
-                                enough: true,
-                              }
-                            ]}
+                            resources={building.resources}
                             description={"This is a description"}
 
                             selectElement={(id) => this.selectElement(id)}

@@ -10,6 +10,7 @@ import Server from '../game/server.js';
 import TechnologiesModule from '../game/technologies.js';
 import { TECHNOLOGIES_FETCH_SUCCEEDED } from '../game/technologies.js';
 
+import {resources_list} from '../../datas/resources.js';
 import {technologies_list} from '../../datas/technologies.js';
 import { FUNDAMENTAL_TECHNOLOGY, PROPULSION_TECHNOLOGY, ADVANCED_TECHNOLOGY, COMBAT_TECHNOLOGY } from '../../datas/technologies.js';
 
@@ -93,6 +94,38 @@ class ResearchLab extends React.Component {
         // Fetch the level of this technology on the planet.
         let lvl = fetchTechnologyLevel(this.props.player.technologies, t.name);
 
+        // Compute the costs and register the resources.
+        const costs = [];
+        const iCosts = t.cost.init_costs;
+
+        for (let rID = 0 ; rID < iCosts.length ; rID++) {
+          // We need to find the name of the resource based
+          // on the id from the `resources` value of the
+          // props of the component.
+          const r = this.props.resources.find(res => res.id === iCosts[rID].resource);
+
+          if (!r) {
+            console.error("Failed to register resource \"" + iCosts[rID].resource + "\"");
+            continue;
+          }
+
+          // From there the resource data from the name.
+          const rData = resources_list.find(res => res.name === r.name);
+
+          if (!rData) {
+            console.error("Failed to register resource data \"" + iCosts[rID].resource + "\"");
+            continue;
+          }
+
+          // We can now register the resource.
+          costs.push({
+            icon: rData.mini,
+            name: rData.name,
+            amount: iCosts[rID].amount,
+            enough: false,
+          });
+        }
+
         switch (technologies_list[id].type) {
           case FUNDAMENTAL_TECHNOLOGY:
             fundResearches.push({
@@ -100,6 +133,7 @@ class ResearchLab extends React.Component {
               name: t.name,
               level: lvl,
               icon: technologies_list[id].icon,
+              resources: costs,
             });
             break;
           case PROPULSION_TECHNOLOGY:
@@ -108,6 +142,7 @@ class ResearchLab extends React.Component {
               name: t.name,
               level: lvl,
               icon: technologies_list[id].icon,
+              resources: costs,
             });
             break;
           case ADVANCED_TECHNOLOGY:
@@ -116,6 +151,7 @@ class ResearchLab extends React.Component {
               name: t.name,
               level: lvl,
               icon: technologies_list[id].icon,
+              resources: costs,
             });
             break;
           case COMBAT_TECHNOLOGY:
@@ -124,6 +160,7 @@ class ResearchLab extends React.Component {
               name: t.name,
               level: lvl,
               icon: technologies_list[id].icon,
+              resources: costs,
             });
             break;
           default:
@@ -238,20 +275,7 @@ class ResearchLab extends React.Component {
                             buildable={true}
                             demolishable={false}
 
-                            resources={[
-                              {
-                                icon: "haha",
-                                name: "metal",
-                                amount: 8917,
-                                enough: false,
-                              },
-                              {
-                                icon: "iuyy",
-                                name: "crystal",
-                                amount: 4917,
-                                enough: true,
-                              }
-                            ]}
+                            resources={technology.resources}
                             description={"This is a description"}
 
                             selectElement={(id) => this.selectElement(id)}
