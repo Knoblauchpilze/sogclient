@@ -5,7 +5,7 @@ import React from 'react';
 function generateResourceContainer(icon, alt, amount, allowed) {
   const color = allowed ? "element_upgrade_resource_amount" : "element_upgrade_resource_amount_invalid";
   return (
-    <div className="element_upgrade_resource">
+    <div key={alt} className="element_upgrade_resource">
       <img className="element_upgrade_resource_icon" src={icon} alt={alt} title={alt} />
       <span className={color}>{amount}</span>
     </div>
