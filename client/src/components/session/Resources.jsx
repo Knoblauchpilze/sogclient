@@ -82,30 +82,32 @@ class Resources extends React.Component {
         const costs = [];
         const iCosts = b.cost.init_costs;
 
-        for (let rID = 0 ; rID < iCosts.length ; rID++) {
-          // We need to find the name of the resource based
-          // on the id from the `resources` value of the
-          // props of the component.
-          const r = this.props.resources.find(res => res.id === iCosts[rID].resource);
+        // Make sure to traverse the resources as defined
+        // in the list as we know they are sorted by order
+        // of 'importance'.
+        for (let rID = 0 ; rID < resources_list.length ; rID++) {
+          // We need to find the description of the resource
+          // based on the name defined in the data store.
+          const r = this.props.resources.find(res => res.name === resources_list[rID].name);
 
           if (!r) {
-            console.error("Failed to register resource \"" + iCosts[rID].resource + "\"");
+            console.error("Failed to register find description for \"" + resources_list[rID].name + "\"");
             continue;
           }
 
-          // From there the resource data from the name.
-          const rData = resources_list.find(res => res.name === r.name);
+          // We can now determine whether this building uses
+          // this resource based on the identifier.
+          const rData = iCosts.find(res => res.resource === r.id);
 
           if (!rData) {
-            console.error("Failed to register resource data \"" + iCosts[rID].resource + "\"");
             continue;
           }
 
           // We can now register the resource.
           costs.push({
-            icon: rData.mini,
-            name: rData.name,
-            amount: iCosts[rID].amount,
+            icon: resources_list[rID].mini,
+            name: resources_list[rID].name,
+            amount: rData.amount,
             enough: false,
           });
         }
