@@ -40,13 +40,13 @@ function formatAmount(amount) {
     // Insert dot separator in the amount to make
     // it more readable.
     const lead = Math.floor(amount / dotSeparatorThreshold);
-    const trailing = (amount - lead * dotSeparatorThreshold) / dotSeparatorThreshold;
+    const trailing = amount - lead * dotSeparatorThreshold;
 
     return lead + "." + toFixedDigits(trailing, 3);
   }
 
   const lead = Math.floor(amount / shortNotationThreshold);
-  const trailing = (amount - lead * shortNotationThreshold)/ shortNotationThreshold;
+  const trailing = (amount - lead * shortNotationThreshold)/ dotSeparatorThreshold;
 
   if (trailing === 0) {
     return "" + lead + "M";
