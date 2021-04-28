@@ -116,11 +116,15 @@ class ResearchLab extends React.Component {
             continue;
           }
 
+          // Compute the total amount based on the progression
+          // rule defined for this building.
+          const amount = Math.floor(rData.amount * Math.pow(t.cost.progression, lvl));
+
           // We can now register the resource.
           costs.push({
             icon: resources_list[rID].mini,
             name: resources_list[rID].name,
-            amount: rData.amount,
+            amount: amount,
             enough: false,
           });
         }
