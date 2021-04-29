@@ -104,12 +104,24 @@ class Facilities extends React.Component {
           // rule defined for this building.
           const amount = Math.floor(rData.amount * Math.pow(b.cost.progression, lvl));
 
+          // Find whether or not the planet holds enough resources
+          // to build this level.
+          let enough = false;
+
+          const available = this.props.planet.resources.find(res => res.resource === r.id);
+          if (!available) {
+            console.error("Failed to find amount of resource \"" + resources_list[rID].name + "\" on planet");
+          }
+          else {
+            enough = (available.amount >= amount);
+          }
+
           // We can now register the resource.
           costs.push({
             icon: resources_list[rID].mini,
             name: resources_list[rID].name,
             amount: amount,
-            enough: false,
+            enough: enough,
           });
         }
 
