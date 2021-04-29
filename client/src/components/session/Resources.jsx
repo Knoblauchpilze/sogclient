@@ -71,8 +71,6 @@ class Resources extends React.Component {
     // buildings available to build/demolish.
     const resources = [];
 
-    console.log("p: " + JSON.stringify(this.props.planet.resources));
-
     for (let id = 0 ; id < buildings_list.length ; id++) {
       const b = buildings.find(b => b.name === buildings_list[id].name);
 
@@ -83,6 +81,10 @@ class Resources extends React.Component {
         // Compute the costs and register the resources.
         const costs = [];
         const iCosts = b.cost.init_costs;
+
+        let buildable = true;
+        // TODO: Handle demolishable.
+        let demolishable = false;
 
         // Make sure to traverse the resources as defined
         // in the list as we know they are sorted by order
@@ -121,6 +123,10 @@ class Resources extends React.Component {
             enough = (available.amount >= amount);
           }
 
+          if (!enough) {
+            buildable = false;
+          }
+
           // We can now register the resource.
           costs.push({
             icon: resources_list[rID].mini,
@@ -130,6 +136,18 @@ class Resources extends React.Component {
           });
         }
 
+        let energy = 0;
+        if (b.production) {
+          const e = this.props.resources.find(res => res.name === "energy");
+          const eData = b.production.find(r => r.resource === e.id);
+
+          if (eData) {
+            const avgTemp = (this.props.planet.min_temperature + this.props.planet.max_temperature) / 2.0;
+            const tempDep = eData.temp_offset + avgTemp * eData.temp_coeff;
+            energy = Math.floor(eData.init_production * tempDep * Math.pow(eData.progression, lvl));
+          }
+        }
+
         // Package the info in a single object.
         resources.push({
           id: b.id,
@@ -137,6 +155,9 @@ class Resources extends React.Component {
           level: lvl,
           icon: buildings_list[id].icon,
           resources: costs,
+          energy: energy,
+          buildable: buildable,
+          demolishable: demolishable,
         });
       }
       else {
@@ -202,10 +223,10 @@ class Resources extends React.Component {
                             level={building.level}
                             icon={building.icon}
                             duration={"6j 1h 26m"}
-                            energy={1808}
+                            energy={building.energy}
 
-                            buildable={true}
-                            demolishable={false}
+                            buildable={building.buildable}
+                            demolishable={building.demolishable}
 
                             resources={building.resources}
                             description={"This is a description"}
