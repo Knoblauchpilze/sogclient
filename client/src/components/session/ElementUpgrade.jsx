@@ -100,10 +100,13 @@ function ElementUpgrade (props) {
               <span className="element_upgrade_prop_key">Construction time:</span>
               <span className="element_upgrade_prop_value">{props.duration}</span>
             </div>
-            <div className="element_upgrade_prop">
-              <span className="element_upgrade_prop_key">Energy required:</span>
-              <span className="element_upgrade_prop_value">{props.energy}</span>
-            </div>
+            {
+              props.energy !== 0 &&
+              <div className="element_upgrade_prop">
+                <span className="element_upgrade_prop_key">{props.energy < 0 ? "Energy required:" : "Production:"}</span>
+                <span className="element_upgrade_prop_value">{formatAmount(Math.abs(props.energy))}</span>
+              </div>
+            }
             <span className="element_upgrade_prop_key">{"Required for level " + (props.level + 1) + ":"}</span>
             <div className="element_upgrade_resources">
               {props.resources.map(r => generateResourceContainer(r.icon, r.name, r.amount, r.enough))}

@@ -98,6 +98,8 @@ class ResearchLab extends React.Component {
         const costs = [];
         const iCosts = t.cost.init_costs;
 
+        let buildable = true;
+
         for (let rID = 0 ; rID < resources_list.length ; rID++) {
           // We need to find the description of the resource
           // based on the name defined in the data store.
@@ -132,6 +134,10 @@ class ResearchLab extends React.Component {
             enough = (available.amount >= amount);
           }
 
+          if (!enough) {
+            buildable = false;
+          }
+
           // We can now register the resource.
           costs.push({
             icon: resources_list[rID].mini,
@@ -141,42 +147,31 @@ class ResearchLab extends React.Component {
           });
         }
 
+        const tech = {
+          id: t.id,
+          name: t.name,
+          level: lvl,
+          icon: technologies_list[id].icon,
+          resources: costs,
+          // Technologies don't produce energy.
+          energy: 0,
+          buildable: buildable,
+          // Technologies can't be 'demolished'.
+          demolishable: false,
+        };
+
         switch (technologies_list[id].type) {
           case FUNDAMENTAL_TECHNOLOGY:
-            fundResearches.push({
-              id: t.id,
-              name: t.name,
-              level: lvl,
-              icon: technologies_list[id].icon,
-              resources: costs,
-            });
+            fundResearches.push(tech);
             break;
           case PROPULSION_TECHNOLOGY:
-            propResearches.push({
-              id: t.id,
-              name: t.name,
-              level: lvl,
-              icon: technologies_list[id].icon,
-              resources: costs,
-            });
+            propResearches.push(tech);
             break;
           case ADVANCED_TECHNOLOGY:
-            advaResearches.push({
-              id: t.id,
-              name: t.name,
-              level: lvl,
-              icon: technologies_list[id].icon,
-              resources: costs,
-            });
+            advaResearches.push(tech);
             break;
           case COMBAT_TECHNOLOGY:
-            combResearches.push({
-              id: t.id,
-              name: t.name,
-              level: lvl,
-              icon: technologies_list[id].icon,
-              resources: costs,
-            });
+            combResearches.push(tech);
             break;
           default:
             // Unknown research type.
@@ -285,10 +280,10 @@ class ResearchLab extends React.Component {
                             level={technology.level}
                             icon={technology.icon}
                             duration={"6j 1h 26m"}
-                            energy={1808}
+                            energy={technology.energy}
 
-                            buildable={true}
-                            demolishable={false}
+                            buildable={technology.buildable}
+                            demolishable={technology.demolishable}
 
                             resources={technology.resources}
                             description={"This is a description"}

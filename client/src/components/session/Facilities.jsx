@@ -82,6 +82,10 @@ class Facilities extends React.Component {
         const costs = [];
         const iCosts = b.cost.init_costs;
 
+        let buildable = true;
+        // TODO: Handle demolishable.
+        let demolishable = false;
+
         for (let rID = 0 ; rID < resources_list.length ; rID++) {
           // We need to find the description of the resource
           // based on the name defined in the data store.
@@ -116,6 +120,10 @@ class Facilities extends React.Component {
             enough = (available.amount >= amount);
           }
 
+          if (!enough) {
+            buildable = false;
+          }
+
           // We can now register the resource.
           costs.push({
             icon: resources_list[rID].mini,
@@ -125,12 +133,27 @@ class Facilities extends React.Component {
           });
         }
 
+        let energy = 0;
+        if (b.production) {
+          const e = this.props.resources.find(res => res.name === "energy");
+          const eData = b.production.find(r => r.resource === e.id);
+
+          if (eData) {
+            const avgTemp = (this.props.planet.min_temperature + this.props.planet.max_temperature) / 2.0;
+            const tempDep = eData.temp_offset + avgTemp * eData.temp_coeff;
+            energy = Math.floor(eData.init_production * tempDep * Math.pow(eData.progression, lvl));
+          }
+        }
+
         facilities.push({
           id: b.id,
           name: b.name,
           level: lvl,
           icon: facilities_list[id].icon,
           resources: costs,
+          energy: energy,
+          buildable: buildable,
+          demolishable: demolishable,
         });
       }
       else {
@@ -196,10 +219,10 @@ class Facilities extends React.Component {
                             level={building.level}
                             icon={building.icon}
                             duration={"6j 1h 26m"}
-                            energy={1808}
+                            energy={building.energy}
 
-                            buildable={true}
-                            demolishable={false}
+                            buildable={building.buildable}
+                            demolishable={building.demolishable}
 
                             resources={building.resources}
                             description={"This is a description"}
