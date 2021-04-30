@@ -5,10 +5,6 @@ import React from 'react';
 import ElementContainer from './ElementContainer.jsx';
 import ElementUpgrade from './ElementUpgrade.jsx';
 
-import Server from '../game/server.js';
-
-import BuildingsModule from '../game/buildings.js';
-import { BUILDINGS_FETCH_SUCCEEDED } from '../game/buildings.js';
 import Planet from '../game/planet.js';
 
 import {buildings_list} from '../../datas/buildings.js';
@@ -18,56 +14,16 @@ class Facilities extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      // Defines the information about the facilities that
-      // are registered for this component. This value is
-      // only available after the data has been fetched
-      // from the server.
-      buildings: [],
-
-      // Defines the selected element so far. This is
-      // assigned when the user clicks on a child item.
-      id: -1,
-    };
-  }
-
-  componentDidMount() {
-    // Fetch the list of buildings from the server.
-    const server = new Server();
-    const buildings = new BuildingsModule(server);
-
-    const game = this;
-
-    // Fetch the buildings from the server.
-    buildings.fetchBuildings()
-      .then(function (res) {
-        if (res.status !== BUILDINGS_FETCH_SUCCEEDED) {
-          game.fetchDataFailed(res.status);
-        }
-        else {
-          game.fetchBuildingsSucceeded(res.buildings);
-        }
-      })
-      .catch(err => game.fetchDataFailed(err));
-  }
-
-  fetchDataFailed(err) {
-    alert(err);
-  }
-
-  fetchBuildingsSucceeded(buildings) {
-    // Update internal state: this means parsing the
-    // fetched data to build the internal list of
-    // facilities available to build/demolish.
+    // Generate properties from the buildings and
+    // the technologies defined in the server.
     const facilities = [];
 
-    // TODO: Fix technologies
     const p = new Planet(
       this.props.planet,
       this.props.player.technologies,
       this.props.resources,
-      buildings,
-      []
+      this.props.buildings,
+      this.props.technologies,
     );
 
     for (let id = 0 ; id < buildings_list.length ; id++) {
@@ -88,9 +44,15 @@ class Facilities extends React.Component {
       }
     }
 
-    this.setState({
+    this.state = {
+      // Defines the information about the facilities that
+      // are registered for this component.
       buildings: facilities,
-    });
+
+      // Defines the selected element so far. This is
+      // assigned when the user clicks on a child item.
+      id: -1,
+    };
   }
 
   selectElement(facility) {
