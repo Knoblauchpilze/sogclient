@@ -9,20 +9,10 @@ import Server from '../game/server.js';
 
 import BuildingsModule from '../game/buildings.js';
 import { BUILDINGS_FETCH_SUCCEEDED } from '../game/buildings.js';
+import Planet from '../game/planet.js';
 
-import {resources_list} from '../../datas/resources.js';
-import {facilities_list} from '../../datas/facilities.js';
-
-function fetchBuildingLevel(buildings, name) {
-  const building = buildings.find(b => b.name === name);
-
-  if (building) {
-    return building.level;
-  }
-
-  // Assume no level is defined.
-  return 0;
-}
+import {buildings_list} from '../../datas/buildings.js';
+import { FACILITY } from '../../datas/buildings.js';
 
 class Facilities extends React.Component {
   constructor(props) {
@@ -71,93 +61,30 @@ class Facilities extends React.Component {
     // facilities available to build/demolish.
     const facilities = [];
 
-    for (let id = 0 ; id < facilities_list.length ; id++) {
-      const b = buildings.find(b => b.name === facilities_list[id].name);
+    // TODO: Fix technologies
+    const p = new Planet(
+      this.props.planet,
+      this.props.player.technologies,
+      this.props.resources,
+      buildings,
+      []
+    );
 
-      if (b) {
-        // Fetch the level of this building on the planet.
-        let lvl = fetchBuildingLevel(this.props.planet.buildings, b.name);
+    for (let id = 0 ; id < buildings_list.length ; id++) {
+      // Only consider buildings that are used to
+      // improve the infrastructure of the planet.
+      if (buildings_list[id].kind !== FACILITY) {
+        continue;
+      }
 
-        // Compute the costs and register the resources.
-        const costs = [];
-        const iCosts = b.cost.init_costs;
+      // Fetch the data for this building.
+      const out = p.getBuildingData(buildings_list[id].name);
 
-        let buildable = true;
-        // TODO: Handle demolishable.
-        let demolishable = false;
-
-        for (let rID = 0 ; rID < resources_list.length ; rID++) {
-          // We need to find the description of the resource
-          // based on the name defined in the data store.
-          const r = this.props.resources.find(res => res.name === resources_list[rID].name);
-
-          if (!r) {
-            console.error("Failed to register find description for \"" + resources_list[rID].name + "\"");
-            continue;
-          }
-
-          // We can now determine whether this facility uses
-          // this resource based on the identifier.
-          const rData = iCosts.find(res => res.resource === r.id);
-
-          if (!rData) {
-            continue;
-          }
-
-          // Compute the total amount based on the progression
-          // rule defined for this building.
-          const amount = Math.floor(rData.amount * Math.pow(b.cost.progression, lvl));
-
-          // Find whether or not the planet holds enough resources
-          // to build this level.
-          let enough = false;
-
-          const available = this.props.planet.resources.find(res => res.resource === r.id);
-          if (!available) {
-            console.error("Failed to find amount of resource \"" + resources_list[rID].name + "\" on planet");
-          }
-          else {
-            enough = (available.amount >= amount);
-          }
-
-          if (!enough) {
-            buildable = false;
-          }
-
-          // We can now register the resource.
-          costs.push({
-            icon: resources_list[rID].mini,
-            name: resources_list[rID].name,
-            amount: amount,
-            enough: enough,
-          });
-        }
-
-        let energy = 0;
-        if (b.production) {
-          const e = this.props.resources.find(res => res.name === "energy");
-          const eData = b.production.find(r => r.resource === e.id);
-
-          if (eData) {
-            const avgTemp = (this.props.planet.min_temperature + this.props.planet.max_temperature) / 2.0;
-            const tempDep = eData.temp_offset + avgTemp * eData.temp_coeff;
-            energy = Math.floor(eData.init_production * tempDep * Math.pow(eData.progression, lvl));
-          }
-        }
-
-        facilities.push({
-          id: b.id,
-          name: b.name,
-          level: lvl,
-          icon: facilities_list[id].icon,
-          resources: costs,
-          energy: energy,
-          buildable: buildable,
-          demolishable: demolishable,
-        });
+      if (!out.found) {
+        console.error("Failed to find building \"" + buildings_list[id].name + "\" from server's data");
       }
       else {
-        console.error("Failed to find building \"" + facilities_list[id].name + "\" from server's data");
+        facilities.push(out.building);
       }
     }
 
@@ -215,20 +142,7 @@ class Facilities extends React.Component {
           <h3 className="cover_title">{title}</h3>
           {
             building &&
-            <ElementUpgrade title={building.name}
-                            level={building.level}
-                            icon={building.icon}
-                            duration={"6j 1h 26m"}
-                            energy={building.energy}
-
-                            buildable={building.buildable}
-                            demolishable={building.demolishable}
-
-                            resources={building.resources}
-                            description={"This is a description"}
-
-                            selectElement={(id) => this.selectElement(id)}
-                            />
+            <ElementUpgrade item={building} selectElement={(id) => this.selectElement(id)} />
           }
         </div>
         <div className="facilities_buildings_section">

@@ -145,11 +145,13 @@ class Game extends React.Component {
     switch (this.state.selectedTab) {
       case TAB_RESOURCES:
         tab = <Resources planet={this.state.planets[this.state.selectedPlanet]}
+                         player={this.props.session}
                          resources={this.state.resources}
                          />;
           break;
       case TAB_FACILITIES:
         tab = <Facilities planet={this.state.planets[this.state.selectedPlanet]}
+                          player={this.props.session}
                           resources={this.state.resources}
                           />;
           break;

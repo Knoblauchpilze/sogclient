@@ -69,13 +69,13 @@ function ElementUpgrade (props) {
   let ub = "element_upgrade_button";
   let db = "element_upgrade_button";
 
-  if (props.buildable) {
+  if (props.item.buildable) {
     ub += " element_upgrade_build";
   }
   else {
     ub += " element_upgrade_inactive";
   }
-  if (props.demolishable) {
+  if (props.item.demolishable) {
     db += " element_upgrade_demolish";
   }
   else {
@@ -87,29 +87,29 @@ function ElementUpgrade (props) {
     <div className="cover_upgrade_layout">
       <div className="element_upgrade_general_layout">
         <div className="element_upgrade_item_layout">
-          <img className="element_upgrade_icon" src={props.icon} alt={props.title} title={props.title} />
+          <img className="element_upgrade_icon" src={props.item.icon} alt={props.item.name} title={props.item.name} />
           <div className="element_upgrade_props_layout">
             <div className="element_upgrade_header">
               <div className="element_upgrade_desc">
-                <span className="element_upgrade_title">{props.title}</span>
-                <span className="element_upgrade_level">{"Level: " + props.level}</span>
+                <span className="element_upgrade_title">{props.item.name}</span>
+                <span className="element_upgrade_level">{"Level: " + props.item.level}</span>
               </div>
               <button className="element_upgrade_close" onClick={() => props.selectElement("")}><span>X</span></button>
             </div>
             <div className="element_upgrade_prop">
               <span className="element_upgrade_prop_key">Construction time:</span>
-              <span className="element_upgrade_prop_value">{props.duration}</span>
+              <span className="element_upgrade_prop_value">{props.item.duration}</span>
             </div>
             {
-              props.energy !== 0 &&
+              props.item.energy !== 0 &&
               <div className="element_upgrade_prop">
-                <span className="element_upgrade_prop_key">{props.energy < 0 ? "Energy required:" : "Production:"}</span>
-                <span className="element_upgrade_prop_value">{formatAmount(Math.abs(props.energy))}</span>
+                <span className="element_upgrade_prop_key">{props.item.energy < 0 ? "Energy required:" : "Production:"}</span>
+                <span className="element_upgrade_prop_value">{formatAmount(Math.abs(props.item.energy))}</span>
               </div>
             }
-            <span className="element_upgrade_prop_key">{"Required for level " + (props.level + 1) + ":"}</span>
+            <span className="element_upgrade_prop_key">{"Required for level " + (props.item.level + 1) + ":"}</span>
             <div className="element_upgrade_resources">
-              {props.resources.map(r => generateResourceContainer(r.icon, r.name, r.amount, r.enough))}
+              {props.item.resources.map(r => generateResourceContainer(r.icon, r.name, r.amount, r.enough))}
             </div>
             <div className="element_upgrade_buttons">
               <button className={ub}>Build</button>
