@@ -69,6 +69,15 @@ class Universe {
 
 }
 
+const NullUniverse = {
+  id: "",
+  name: "",
+  country: "",
+  online: "TODO",
+  kind: BALANCED_UNIVERSE,
+  age: "",
+};
+
 export {
   BALANCED_UNIVERSE,
   MILITARY_UNIVERSE,
@@ -76,3 +85,4 @@ export {
 };
 
 export default Universe;
+export { NullUniverse };

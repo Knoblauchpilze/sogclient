@@ -19,11 +19,13 @@ class Resources extends React.Component {
     const resources = [];
 
     const p = new Planet(
-      this.props.planet,
-      this.props.player.technologies,
-      this.props.resources,
-      this.props.buildings,
-      this.props.technologies,
+      props.planet,
+      props.player.technologies,
+      props.planets,
+      props.universe,
+      props.resources,
+      props.buildings,
+      props.technologies,
     );
 
     for (let id = 0 ; id < buildings_list.length ; id++) {

@@ -8,8 +8,14 @@ import Lobby from './lobby/Lobby.jsx';
 import Game from './session/Game.jsx';
 import Footer from './Footer.jsx';
 
+import Server from './game/server.js';
+
+import UniversesModule from './game/universes.js';
+import { UNIVERSES_FETCH_SUCCEEDED } from './game/universes.js';
+
 import { NullAccount } from './game/server.js';
 import { NullSession } from './game/session.js';
+import { NullUniverse } from './game/universe.js';
 
 import { ACCOUNT_SELECTION } from './lobby/Lobby.jsx';
 import { SESSION_SELECTION } from './lobby/Lobby.jsx';
@@ -18,6 +24,11 @@ import { SESSION_SELECTION } from './lobby/Lobby.jsx';
 // the account. This is required before launching the
 // game with the selected session.
 const LOGIN = "login";
+
+// Defines the step corresponding to fetching data
+// from the server to prepare for the session that
+// has been selected.
+const SESSION_FETCH = "fetch";
 
 // Defines the step corresponding to the main game view
 // where the user is modifying its session in a given
@@ -60,6 +71,11 @@ class App extends React.Component {
       // of populating and validating it with the server's
       // data.
       session: NullSession,
+
+      // The universe data representing the universe that
+      // is associated with the account and session the
+      // user is logged into.
+      universe: NullUniverse,
     };
   }
 
@@ -88,8 +104,55 @@ class App extends React.Component {
     this.setState({
       account: account,
       session: session,
+      gameState: SESSION_FETCH,
+    });
+
+    // Request the server to fetch the needed data to
+    // connect the user to their session.
+    const server = new Server();
+    const universes = new UniversesModule(server);
+
+    const app = this;
+
+    universes.fetchUniverses()
+      .then(function (res) {
+        if (res.status !== UNIVERSES_FETCH_SUCCEEDED) {
+          app.fetchDataFailed(res.status);
+        }
+        else {
+          app.fetchUniversesSucceeded(res.universes);
+        }
+      })
+      .catch(err => app.fetchDataFailed(err));
+  }
+
+  fetchDataFailed(err) {
+    alert(err);
+
+    // Reset the state to the account selection as we
+    // couldn't log in on this one.
+    this.logout();
+  }
+
+  fetchUniversesSucceeded(universes) {
+    // Update internal state: we need to update the
+    // universe to keep only the one we wanted to
+    // get in the first place and also update the
+    // state to the actual game.
+    const u = universes.find(u => u.id === this.state.session.universe);
+    if (!u) {
+      // Can't find the universe linked to the user's
+      // account, this is an issue.
+      this.fetchDataFailed("Failed to fetch universe \"" + this.state.session.universe + "\"");
+      return;
+    }
+
+    this.setState({
+      universe: u,
       gameState: GAME,
-    })
+    });
+
+    console.info("Fetched data for universe \"" + u.name + "\"");
   }
 
   logout() {
@@ -111,6 +174,7 @@ class App extends React.Component {
           this.state.gameState === GAME ?
           <Game account={this.state.account}
                 session={this.state.session}
+                universe={this.state.universe}
                 />
           :
           <Lobby loginStep={this.state.loginStep}
