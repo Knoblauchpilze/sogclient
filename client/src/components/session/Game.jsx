@@ -21,6 +21,10 @@ import PlanetsModule from '../game/planets.js';
 import { PLANETS_FETCH_SUCCEEDED } from '../game/planets.js';
 import ResourcesModule from '../game/resources.js';
 import { RESOURCES_FETCH_SUCCEEDED } from '../game/resources.js';
+import BuildingsModule from '../game/buildings.js';
+import { BUILDINGS_FETCH_SUCCEEDED } from '../game/buildings.js';
+import TechnologiesModule from '../game/technologies.js';
+import { TECHNOLOGIES_FETCH_SUCCEEDED } from '../game/technologies.js';
 
 import { TAB_OVERVIEW } from './NavigationMenu.jsx';
 import { TAB_RESOURCES } from './NavigationMenu.jsx';
@@ -47,6 +51,18 @@ class Game extends React.Component {
       // the resources used in game.
       resources: [],
 
+      // Defines the list of buildings available for this
+      // game: it corresponds to constant data fetched
+      // from the server and describing the properties of
+      // the buildings available in the game.
+      buildings: [],
+
+      // Defines the list of technologies available for this
+      // game: it corresponds to constant data fetched
+      // from the server and describing the properties of
+      // the technologies available in the game.
+      technologies: [],
+
       // Defines the index of the selected planet among
       // the available list.
       selectedPlanet: -1,
@@ -64,6 +80,8 @@ class Game extends React.Component {
     const server = new Server();
     const planets = new PlanetsModule(server);
     const resources = new ResourcesModule(server);
+    const buildings = new BuildingsModule(server);
+    const technologies = new TechnologiesModule(server);
 
     const game = this;
 
@@ -91,6 +109,30 @@ class Game extends React.Component {
         }
       })
       .catch(err => game.fetchDataFailed(err));
+
+    // Fetch the buildings from the server.
+    buildings.fetchBuildings()
+      .then(function (res) {
+        if (res.status !== BUILDINGS_FETCH_SUCCEEDED) {
+          game.fetchDataFailed(res.status);
+        }
+        else {
+          game.fetchBuildingsSucceeded(res.buildings);
+        }
+      })
+      .catch(err => game.fetchDataFailed(err));
+
+    // Fetch the technologies from the server.
+    technologies.fetchTechnologies()
+    .then(function (res) {
+      if (res.status !== TECHNOLOGIES_FETCH_SUCCEEDED) {
+        game.fetchDataFailed(res.status);
+      }
+      else {
+        game.fetchTechnologiesSucceeded(res.technologies);
+      }
+    })
+    .catch(err => game.fetchDataFailed(err));
   }
 
   fetchDataFailed(err) {
@@ -112,6 +154,20 @@ class Game extends React.Component {
     // Update internal state.
     this.setState({
       resources: resources,
+    });
+  }
+
+  fetchBuildingsSucceeded(buildings) {
+    // Update internal state.
+    this.setState({
+      buildings: buildings,
+    });
+  }
+
+  fetchTechnologiesSucceeded(technologies) {
+    // Update internal state.
+    this.setState({
+      technologies: technologies,
     });
   }
 
@@ -147,18 +203,24 @@ class Game extends React.Component {
         tab = <Resources planet={this.state.planets[this.state.selectedPlanet]}
                          player={this.props.session}
                          resources={this.state.resources}
+                         buildings={this.state.buildings}
+                         technologies={this.state.technologies}
                          />;
           break;
       case TAB_FACILITIES:
         tab = <Facilities planet={this.state.planets[this.state.selectedPlanet]}
                           player={this.props.session}
                           resources={this.state.resources}
+                          buildings={this.state.buildings}
+                          technologies={this.state.technologies}
                           />;
           break;
       case TAB_RESEARCH_LAB:
         tab = <ResearchLab planet={this.state.planets[this.state.selectedPlanet]}
                            player={this.props.session}
                            resources={this.state.resources}
+                           buildings={this.state.buildings}
+                           technologies={this.state.technologies}
                            />;
           break;
       case TAB_SHIPYARD:

@@ -5,10 +5,6 @@ import React from 'react';
 import ElementContainer from './ElementContainer.jsx';
 import ElementUpgrade from './ElementUpgrade.jsx';
 
-import Server from '../game/server.js';
-
-import TechnologiesModule from '../game/technologies.js';
-import { TECHNOLOGIES_FETCH_SUCCEEDED } from '../game/technologies.js';
 import Planet from '../game/planet.js';
 
 import {technologies_list} from '../../datas/technologies.js';
@@ -18,77 +14,22 @@ class ResearchLab extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      // Defines the info about fundamental research
-      // as available for this player.
-      fundamental_techs: [],
-
-      // Defines the info about propulsion technologies
-      // that have been researched by the player.
-      propulsion_techs: [],
-
-      // Defines the info about advanced technologies
-      // that are researched by the player.
-      advanced_techs: [],
-
-      // Defines the info about combat technologies that
-      // are researched by the player.
-      combat_techs: [],
-
-      // Defines the selected element so far. This is
-      // assigned when the user clicks on a child item.
-      id: "",
-
-      // Defines the kind of technology to which the `id`
-      // is referring to.
-      kind: "",
-    };
-
-    console.log("p: " + JSON.stringify(this.props.player));
-  }
-
-  componentDidMount() {
-    // Fetch the list of buildings from the server.
-    const server = new Server();
-    const technologies = new TechnologiesModule(server);
-
-    const game = this;
-
-    // Fetch the technologies from the server.
-    technologies.fetchTechnologies()
-      .then(function (res) {
-        if (res.status !== TECHNOLOGIES_FETCH_SUCCEEDED) {
-          game.fetchDataFailed(res.status);
-        }
-        else {
-          game.fetchTechnologiesSucceeded(res.technologies);
-        }
-      })
-      .catch(err => game.fetchDataFailed(err));
-  }
-
-  fetchDataFailed(err) {
-    alert(err);
-  }
-
-  fetchTechnologiesSucceeded(technologies) {
-    // Update researches from data received from the server.
+    // Generate properties from the buildings and
+    // the technologies defined in the server.
     const fundResearches = [];
     const propResearches = [];
     const advaResearches = [];
     const combResearches = [];
 
-    // TODO: Fix buildings.
     const p = new Planet(
       this.props.planet,
       this.props.player.technologies,
       this.props.resources,
-      [],
-      technologies
+      this.props.buildings,
+      this.props.technologies,
     );
 
     for (let id = 0 ; id < technologies_list.length ; id++) {
-
       // Fetch the data for this technology.
       const out = p.getTechnologyData(technologies_list[id].name);
 
@@ -117,12 +58,31 @@ class ResearchLab extends React.Component {
       }
     }
 
-    this.setState({
+    this.state = {
+      // Defines the info about fundamental research
+      // as available for this player.
       fundamental_techs: fundResearches,
+
+      // Defines the info about propulsion technologies
+      // that have been researched by the player.
       propulsion_techs: propResearches,
+
+      // Defines the info about advanced technologies
+      // that are researched by the player.
       advanced_techs: advaResearches,
+
+      // Defines the info about combat technologies that
+      // are researched by the player.
       combat_techs: combResearches,
-    });
+
+      // Defines the selected element so far. This is
+      // assigned when the user clicks on a child item.
+      id: "",
+
+      // Defines the kind of technology to which the `id`
+      // is referring to.
+      kind: "",
+    };
   }
 
   selectElement(technology) {
