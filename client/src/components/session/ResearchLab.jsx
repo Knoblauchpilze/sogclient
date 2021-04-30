@@ -9,21 +9,10 @@ import Server from '../game/server.js';
 
 import TechnologiesModule from '../game/technologies.js';
 import { TECHNOLOGIES_FETCH_SUCCEEDED } from '../game/technologies.js';
+import Planet from '../game/planet.js';
 
-import {resources_list} from '../../datas/resources.js';
 import {technologies_list} from '../../datas/technologies.js';
 import { FUNDAMENTAL_TECHNOLOGY, PROPULSION_TECHNOLOGY, ADVANCED_TECHNOLOGY, COMBAT_TECHNOLOGY } from '../../datas/technologies.js';
-
-function fetchTechnologyLevel(technologies, name) {
-  const tech = technologies.find(t => t.name === name);
-
-  if (tech) {
-    return tech.level;
-  }
-
-  // Assume no level is defined.
-  return 0;
-}
 
 class ResearchLab extends React.Component {
   constructor(props) {
@@ -54,6 +43,8 @@ class ResearchLab extends React.Component {
       // is referring to.
       kind: "",
     };
+
+    console.log("p: " + JSON.stringify(this.props.player));
   }
 
   componentDidMount() {
@@ -87,100 +78,42 @@ class ResearchLab extends React.Component {
     const advaResearches = [];
     const combResearches = [];
 
+    // TODO: Fix buildings.
+    const p = new Planet(
+      this.props.planet,
+      this.props.player.technologies,
+      this.props.resources,
+      [],
+      technologies
+    );
+
     for (let id = 0 ; id < technologies_list.length ; id++) {
-      const t = technologies.find(t => t.name === technologies_list[id].name);
 
-      if (t) {
-        // Fetch the level of this technology on the planet.
-        let lvl = fetchTechnologyLevel(this.props.player.technologies, t.name);
+      // Fetch the data for this technology.
+      const out = p.getTechnologyData(technologies_list[id].name);
 
-        // Compute the costs and register the resources.
-        const costs = [];
-        const iCosts = t.cost.init_costs;
-
-        let buildable = true;
-
-        for (let rID = 0 ; rID < resources_list.length ; rID++) {
-          // We need to find the description of the resource
-          // based on the name defined in the data store.
-          const r = this.props.resources.find(res => res.name === resources_list[rID].name);
-
-          if (!r) {
-            console.error("Failed to register find description for \"" + resources_list[rID].name + "\"");
-            continue;
-          }
-
-          // We can now determine whether this research uses
-          // this resource based on the identifier.
-          const rData = iCosts.find(res => res.resource === r.id);
-
-          if (!rData) {
-            continue;
-          }
-
-          // Compute the total amount based on the progression
-          // rule defined for this building.
-          const amount = Math.floor(rData.amount * Math.pow(t.cost.progression, lvl));
-
-          // Find whether or not the planet holds enough resources
-          // to build this level.
-          let enough = false;
-
-          const available = this.props.planet.resources.find(res => res.resource === r.id);
-          if (!available) {
-            console.error("Failed to find amount of resource \"" + resources_list[rID].name + "\" on planet");
-          }
-          else {
-            enough = (available.amount >= amount);
-          }
-
-          if (!enough) {
-            buildable = false;
-          }
-
-          // We can now register the resource.
-          costs.push({
-            icon: resources_list[rID].mini,
-            name: resources_list[rID].name,
-            amount: amount,
-            enough: enough,
-          });
-        }
-
-        const tech = {
-          id: t.id,
-          name: t.name,
-          level: lvl,
-          icon: technologies_list[id].icon,
-          resources: costs,
-          // Technologies don't produce energy.
-          energy: 0,
-          buildable: buildable,
-          // Technologies can't be 'demolished'.
-          demolishable: false,
-        };
-
+      if (!out.found) {
+        console.error("Failed to find technology \"" + technologies_list[id].name + "\" from server's data");
+      }
+      else {
         switch (technologies_list[id].type) {
           case FUNDAMENTAL_TECHNOLOGY:
-            fundResearches.push(tech);
+            fundResearches.push(out.technology);
             break;
           case PROPULSION_TECHNOLOGY:
-            propResearches.push(tech);
+            propResearches.push(out.technology);
             break;
           case ADVANCED_TECHNOLOGY:
-            advaResearches.push(tech);
+            advaResearches.push(out.technology);
             break;
           case COMBAT_TECHNOLOGY:
-            combResearches.push(tech);
+            combResearches.push(out.technology);
             break;
           default:
             // Unknown research type.
             console.error("Unknown research type \"" + technologies_list[id].type + "\"");
             break;
         }
-      }
-      else {
-        console.error("Failed to find technology \"" + technologies_list[id].name + "\" from server's data");
       }
     }
 
@@ -276,20 +209,7 @@ class ResearchLab extends React.Component {
           <h3 className="cover_title">{title}</h3>
           {
             technology &&
-            <ElementUpgrade title={technology.name}
-                            level={technology.level}
-                            icon={technology.icon}
-                            duration={"6j 1h 26m"}
-                            energy={technology.energy}
-
-                            buildable={technology.buildable}
-                            demolishable={technology.demolishable}
-
-                            resources={technology.resources}
-                            description={"This is a description"}
-
-                            selectElement={(id) => this.selectElement(id)}
-                            />
+            <ElementUpgrade item={technology} selectElement={(id) => this.selectElement(id)} />
           }
         </div>
         <div className="research_lab_researches_layout">
