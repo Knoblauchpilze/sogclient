@@ -10,6 +10,13 @@ class Planet {
   // The `techs` corresponds to the level of technologies
   // researched by the player owning the planet.
   //
+  // The `planets` defines the list of planets available
+  // for the player owning this one.
+  //
+  // The `universe` defines the universe in which the planet
+  // is located. This helps with the computation of the
+  // duration of the construction of buildings and techs.
+  //
   // The `resources` defines the list of resources fetched
   // from the server and represents the base description
   // for all supported resources in the game.
@@ -20,11 +27,14 @@ class Planet {
   //
   // The `technoloiges` defines the list fetched from the
   // server and registering all technologies.
-  constructor(planet, techs, resources, buildings, technologies) {
+  constructor(planet, techs, planets, universe, resources, buildings, technologies) {
     this.data = {
       planet: planet,
       technologies: techs,
     }
+
+    this.universe = universe;
+    this.planets = planets;
 
     this.resources = resources;
     this.buildings = buildings;
@@ -92,6 +102,13 @@ class Planet {
     return out;
   }
 
+  generateDuration(costs, level) {
+    // TODO: Costs is the array of costs
+    console.log("c: " + JSON.stringify(costs));
+
+    return "26m";
+  }
+
   getBuildingData(name) {
     let out = {
       building: {},
@@ -150,7 +167,7 @@ class Planet {
       icon: buildings_list[id].icon,
       resources: costs.costs,
       energy: energy,
-      duration: "6j 1h 25m",
+      duration: this.generateDuration(costs.costs, lvl),
       buildable: costs.buildable,
       demolishable: costs.demolishable,
       description: "This is maybe a description",
@@ -205,7 +222,7 @@ class Planet {
       resources: costs.costs,
       // Technologies don't produce energy.
       energy: 0,
-      duration: "41m",
+      duration: this.generateDuration(costs.costs, lvl),
       buildable: costs.buildable,
       // Technologies can't be 'demolished'.
       demolishable: false,

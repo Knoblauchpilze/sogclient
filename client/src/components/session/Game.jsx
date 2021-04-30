@@ -205,6 +205,8 @@ class Game extends React.Component {
                          resources={this.state.resources}
                          buildings={this.state.buildings}
                          technologies={this.state.technologies}
+                         universe={this.props.universe}
+                         planets={this.state.planets}
                          />;
           break;
       case TAB_FACILITIES:
@@ -213,6 +215,8 @@ class Game extends React.Component {
                           resources={this.state.resources}
                           buildings={this.state.buildings}
                           technologies={this.state.technologies}
+                          universe={this.props.universe}
+                          planets={this.state.planets}
                           />;
           break;
       case TAB_RESEARCH_LAB:
@@ -221,6 +225,8 @@ class Game extends React.Component {
                            resources={this.state.resources}
                            buildings={this.state.buildings}
                            technologies={this.state.technologies}
+                           universe={this.props.universe}
+                           planets={this.state.planets}
                            />;
           break;
       case TAB_SHIPYARD:
