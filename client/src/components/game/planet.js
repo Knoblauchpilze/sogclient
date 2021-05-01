@@ -195,18 +195,94 @@ class Planet {
       nfLvl = nf.level;
     }
 
+    // From there the duration can be computed using
+    // the economic speed of the universe as a boost.
     let hours = (mAmount + cAmount) / (2500.0 * (1.0 + rfLvl) * Math.pow(2.0, nfLvl));
 
-    // Update the duration based on the universe's economic
-    // speed: it might reduce the construction time.
     const ratio = 1.0 / this.universe.economic_speed;
     hours *= ratio;
+
+    // TODO: Handle level.
 
     return formatDuration(hours);
   }
 
   computeTechnologyDuration(costs, level) {
-    return "24m";
+    // Similarly as for buildings the duration is computed
+    // from the cost in metal and crystal. The duration is
+    // reduced based on the number of research lab that are
+    // participating in the research (controlled by the
+    // level of the intergalactic research network).
+
+    // TODO: Handle level.
+
+    // Fetch relevant costs.
+    const m = costs.find(cost => cost.name === "metal");
+    const c = costs.find(cost => cost.name === "crystal");
+
+    let mAmount = 0;
+    if (m) {
+      mAmount = m.amount;
+    }
+    let cAmount = 0;
+    if (c) {
+      cAmount = c.amount;
+    }
+
+    // Fetch levels of intergalactic research network.
+    const igrn = this.data.technologies.find(b => b.name === "intergalactic research network");
+
+    // Keep planets with highest research network.
+    const labs = [];
+    for (let id = 0 ; id < this.planets.length ; id++) {
+      const lab = this.planets[id].buildings.find(b => b.name === "research lab");
+      if (!lab) {
+        continue;
+      }
+
+      labs.push({
+        planet: this.planets[id].id,
+        level: lab.level,
+      });
+    }
+
+    labs.sort((a, b) => a.level < b.level);
+
+    // Keep only the amount possible based on the research
+    // network level.
+    let count = 0;
+    if (igrn) {
+      count = igrn.level;
+    }
+
+    // Keep the `count` highest research lab, excluding the
+    // one built on this planet.
+    let rPower = 0;
+    let processed = 0;
+
+    for (let id = 0 ; processed < count && id < labs.length ; id++) {
+      // If this research lab is not build on the current
+      // planet, we can add it to the list.
+      if (labs[id].planet !== this.data.planet.id) {
+        rPower += labs[id].level;
+        processed++;
+      }
+    }
+
+    // Add the research power brought by the lab on this planet.
+    const lab = this.data.planet.buildings.find(b => b.name === "research lab");
+    if (lab) {
+      rPower += lab.level;
+    }
+
+    // From there the duration can be computed using
+    // the economic speed of the universe as a boost.
+    let hours = (mAmount + cAmount) / (1000.0 * (1.0 + rPower));
+
+    const ratio = 1.0 / this.universe.research_speed;
+    hours *= ratio;
+
+    return formatDuration(hours);
   }
 
   getBuildingData(name) {
