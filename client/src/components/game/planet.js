@@ -323,6 +323,8 @@ class Planet {
 
     // Handle the energy requirement of the building.
     let energy = 0;
+    let nextEnergy = 0;
+
     if (b.production) {
       const e = this.resources.find(res => res.name === "energy");
       const eData = b.production.find(r => r.resource === e.id);
@@ -330,7 +332,9 @@ class Planet {
       if (eData) {
         const avgTemp = (this.data.planet.min_temperature + this.data.planet.max_temperature) / 2.0;
         const tempDep = eData.temp_offset + avgTemp * eData.temp_coeff;
-        energy = Math.floor(eData.init_production * tempDep * Math.pow(eData.progression, lvl));
+
+        energy = Math.floor(eData.init_production * lvl * tempDep * Math.pow(eData.progression, lvl));
+        nextEnergy = Math.floor(eData.init_production * (lvl + 1) * tempDep * Math.pow(eData.progression, lvl + 1));
       }
     }
 
@@ -343,6 +347,7 @@ class Planet {
       icon: buildings_list[id].icon,
       resources: costs.costs,
       energy: energy,
+      next_energy: nextEnergy,
       duration: this.computeBuildingDuration(costs.costs, lvl),
       buildable: costs.buildable,
       demolishable: costs.demolishable,
@@ -398,6 +403,7 @@ class Planet {
       resources: costs.costs,
       // Technologies don't produce energy.
       energy: 0,
+      next_energy: 0,
       duration: this.computeTechnologyDuration(costs.costs, lvl),
       buildable: costs.buildable,
       // Technologies can't be 'demolished'.
