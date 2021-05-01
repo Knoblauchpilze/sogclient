@@ -46,7 +46,7 @@ function formatAmount(amount) {
   }
 
   const lead = Math.floor(amount / shortNotationThreshold);
-  const trailing = (amount - lead * shortNotationThreshold)/ dotSeparatorThreshold;
+  const trailing = Math.floor((amount - lead * shortNotationThreshold) / dotSeparatorThreshold);
 
   if (trailing === 0) {
     return "" + lead + "M";
@@ -101,10 +101,10 @@ function ElementUpgrade (props) {
               <span className="element_upgrade_prop_value">{props.item.duration}</span>
             </div>
             {
-              props.item.energy !== 0 &&
+              props.item.next_energy !== 0 &&
               <div className="element_upgrade_prop">
-                <span className="element_upgrade_prop_key">{props.item.energy < 0 ? "Energy required:" : "Production:"}</span>
-                <span className="element_upgrade_prop_value">{formatAmount(Math.abs(props.item.energy))}</span>
+                <span className="element_upgrade_prop_key">{props.item.next_energy < 0 ? "Energy required:" : "Production:"}</span>
+                <span className="element_upgrade_prop_value">{formatAmount(Math.abs(props.item.next_energy))}</span>
               </div>
             }
             <span className="element_upgrade_prop_key">{"Required for level " + (props.item.level + 1) + ":"}</span>
