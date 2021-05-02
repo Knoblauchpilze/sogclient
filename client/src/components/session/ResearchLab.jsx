@@ -6,6 +6,7 @@ import ElementContainer from './ElementContainer.jsx';
 import ElementUpgrade from './ElementUpgrade.jsx';
 
 import Planet from '../game/planet.js';
+import { UPGRADE_ACTION_POST_SUCCEEDED } from '../game/planet.js';
 
 import {technologies_list} from '../../datas/technologies.js';
 import { FUNDAMENTAL_TECHNOLOGY, PROPULSION_TECHNOLOGY, ADVANCED_TECHNOLOGY, COMBAT_TECHNOLOGY } from '../../datas/technologies.js';
@@ -137,9 +138,39 @@ class ResearchLab extends React.Component {
     });
   }
 
-  buildElement(technology) {
+  uprgadeActionFailed(err) {
+    alert(err);
+  }
+
+  uprgadeActionSucceeded(action) {
     // TODO: Handle this.
-    console.log("b: " + technology);
+  }
+
+  buildElement(technology) {
+    // Create an object to handle the creation of an action
+    // to upgrade the input element.
+    const p = new Planet(
+      this.props.planet,
+      this.props.player.technologies,
+      this.props.planets,
+      this.props.universe,
+      this.props.resources,
+      this.props.buildings,
+      this.props.technologies,
+    );
+
+    const tab = this;
+
+    p.upgradeTechnology(technology)
+      .then(function (res) {
+        if (res.status !== UPGRADE_ACTION_POST_SUCCEEDED) {
+          tab.uprgadeActionFailed(res.status);
+        }
+        else {
+          tab.uprgadeActionSucceeded(res.action);
+        }
+      })
+      .catch(err => tab.uprgadeActionFailed(err));
   }
 
   render() {
