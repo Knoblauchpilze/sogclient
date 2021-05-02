@@ -137,6 +137,11 @@ class ResearchLab extends React.Component {
     });
   }
 
+  buildElement(technology) {
+    // TODO: Handle this.
+    console.log("b: " + technology);
+  }
+
   render() {
     let title = "Research - Unknown planet";
 
@@ -171,7 +176,10 @@ class ResearchLab extends React.Component {
           <h3 className="cover_title">{title}</h3>
           {
             technology &&
-            <ElementUpgrade item={technology} selectElement={(id) => this.selectElement(id)} />
+            <ElementUpgrade item={technology}
+                            selectElement={(id) => this.selectElement(id)}
+                            buildElement={(id) => this.buildElement(id)}
+                            />
           }
         </div>
         <div className="research_lab_researches_layout">

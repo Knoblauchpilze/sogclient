@@ -82,6 +82,18 @@ function ElementUpgrade (props) {
     db += " element_upgrade_inactive";
   }
 
+  // Generate expressions to handle clicks on buttons.
+  const be = (id) => {
+    if (props.item.buildable) {
+      props.buildElement(id);
+    }
+  }
+
+  const de = (id) => {
+    if (props.item.demolishable) {
+      props.demolishElement(id);
+    }
+  }
 
   return (
     <div className="cover_upgrade_layout">
@@ -112,8 +124,8 @@ function ElementUpgrade (props) {
               {props.item.resources.map(r => generateResourceContainer(r.icon, r.name, r.amount, r.enough))}
             </div>
             <div className="element_upgrade_buttons">
-              <button className={ub}>Build</button>
-              <button className={db}>Demolish</button>
+              <button className={ub} onClick={() => be(props.item.id)}>Build</button>
+              <button className={db} onClick={() => de(props.item.id)}>Demolish</button>
             </div>
           </div>
         </div>
