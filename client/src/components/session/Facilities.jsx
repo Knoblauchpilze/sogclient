@@ -88,6 +88,16 @@ class Facilities extends React.Component {
     });
   }
 
+  buildElement(building) {
+    // TODO: Handle this.
+    console.log("b: " + building);
+  }
+
+  demolishElement(building) {
+    // TODO: Handle this.
+    console.log("d: " + building);
+  }
+
   render() {
     let title = "Facilities - Unknown planet";
 
@@ -106,7 +116,11 @@ class Facilities extends React.Component {
           <h3 className="cover_title">{title}</h3>
           {
             building &&
-            <ElementUpgrade item={building} selectElement={(id) => this.selectElement(id)} />
+            <ElementUpgrade item={building}
+                            selectElement={(id) => this.selectElement(id)}
+                            buildElement={(id) => this.buildElement(id)}
+                            demolishElement={(id) => this.demolishElement(id)}
+                            />
           }
         </div>
         <div className="facilities_buildings_section">
