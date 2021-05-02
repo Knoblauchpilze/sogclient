@@ -1,7 +1,17 @@
 
-import {resources_list} from '../../datas/resources.js';
-import {buildings_list} from '../../datas/buildings.js';
-import {technologies_list} from '../../datas/technologies.js';
+import { resources_list } from '../../datas/resources.js';
+import { buildings_list } from '../../datas/buildings.js';
+import { technologies_list } from '../../datas/technologies.js';
+
+import Server from '../game/server.js';
+
+// Defines a constant indicating that creating an upgrade
+// action succeeded.
+const UPGRADE_ACTION_POST_SUCCEEDED = "Upgrade action successfully created";
+
+// Defines a constant indicating that creating an upgrade
+// action failed.
+const UPGRADE_ACTION_POST_FAILED = "Failed to create upgrade action";
 
 function formatDuration(duration) {
   // We will divide at most until we reach a duration
@@ -413,6 +423,111 @@ class Planet {
 
     return out;
   }
+
+  async postUpgradeAction(id, level, desired, route) {
+    const out = {
+      status: UPGRADE_ACTION_POST_FAILED,
+      action: "",
+    };
+
+    // Create the action object to post.
+    const action = {
+      element: id,
+      planet: this.data.planet.id,
+
+      current_level: level,
+      desired_level: desired,
+    }
+
+    // Generate the post request to create the action.
+    const server = new Server();
+
+    const formData  = new FormData();
+    formData.append(server.upgradeActionDataKey(), JSON.stringify(action));
+
+    let opts = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+      },
+      body: formData,
+    };
+
+    // Execute the request.
+    let reqStatus = "";
+
+    const res = await fetch(route, opts)
+      .catch(err => reqStatus = err);
+
+    if (reqStatus !== "") {
+      out.status = reqStatus;
+      return out;
+    }
+
+    if (!res.ok) {
+      out.status = await res.text();
+      return out;
+    }
+
+    // Fetch the identifier returned by the server.
+    // It is returned through a format that is not
+    // exactly pure so we clean it through a server
+    // dedicated method.
+    const actionID = await res.text();
+    out.action = server.actionIDFromResponse(actionID);
+    out.status = UPGRADE_ACTION_POST_SUCCEEDED;
+
+    return out;
+  }
+
+  async upgradeBuilding(building) {
+    // Attempt to get details on the current level of the building
+    // on the planet and its general descritpion.
+    const built = this.data.planet.buildings.find(b => b.id === building);
+    const server = new Server();
+
+    // Post the action to the server.
+    return this.postUpgradeAction(
+      building,
+      built.level,
+      built.level + 1,
+      server.buildingUpgradeAction(this.data.planet.id)
+    );
+  }
+
+  async demolishBuilding(building) {
+    // Attempt to get details on the current level of the building
+    // on the planet and its general descritpion.
+    const built = this.data.planet.buildings.find(b => b.id === building);
+    const server = new Server();
+
+    // Post the action to the server.
+    return this.postUpgradeAction(
+      building,
+      built.level,
+      built.level - 1,
+      server.buildingUpgradeAction(this.data.planet.id)
+    );
+  }
+
+  async upgradeTechnology(technology) {
+    // Attempt to get details on the current level of the building
+    // on the planet and its general descritpion.
+    const built = this.data.technologies.find(t => t.id === technology);
+    const server = new Server();
+
+    // Post the action to the server.
+    return this.postUpgradeAction(
+      technology,
+      built.level,
+      built.level - 1,
+      server.technologyUpgradeAction(this.data.planet.id)
+    );
+  }
 }
+
+export {
+  UPGRADE_ACTION_POST_SUCCEEDED,
+};
 
 export default Planet;

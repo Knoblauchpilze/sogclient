@@ -74,6 +74,29 @@ class Server {
   technologiesURL() {
     return this.serverURL() + "/technologies";
   }
+
+  upgradeActionDataKey() {
+    return "action-data";
+  }
+
+  actionIDFromResponse(response) {
+    // The response is expected to look like so:
+    // '"[/accounts/id]"'. So first trim until
+    // the beginning of the identifier.
+    const parts = response.split('/');
+    const idAndExtra = parts[parts.length - 1];
+
+    // And then clean the end of the string.
+    return idAndExtra.slice(0, idAndExtra.length - 2);
+  }
+
+  buildingUpgradeAction(planet) {
+    return this.serverURL() + "/planets/" + planet + "/actions/buildings";
+  }
+
+  technologyUpgradeAction(planet) {
+    return this.serverURL() + "/planets/" + planet + "/actions/technologies";
+  }
 }
 
 const NullAccount = {

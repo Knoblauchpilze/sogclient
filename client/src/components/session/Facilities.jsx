@@ -6,6 +6,7 @@ import ElementContainer from './ElementContainer.jsx';
 import ElementUpgrade from './ElementUpgrade.jsx';
 
 import Planet from '../game/planet.js';
+import { UPGRADE_ACTION_POST_SUCCEEDED } from '../game/planet.js';
 
 import {buildings_list} from '../../datas/buildings.js';
 import { FACILITY } from '../../datas/buildings.js';
@@ -88,14 +89,66 @@ class Facilities extends React.Component {
     });
   }
 
-  buildElement(building) {
+  uprgadeActionFailed(err) {
+    alert(err);
+  }
+
+  uprgadeActionSucceeded(action) {
     // TODO: Handle this.
-    console.log("b: " + building);
+  }
+
+  buildElement(building) {
+    // Create an object to handle the creation of an action
+    // to upgrade the input element.
+    const p = new Planet(
+      this.props.planet,
+      this.props.player.technologies,
+      this.props.planets,
+      this.props.universe,
+      this.props.resources,
+      this.props.buildings,
+      this.props.technologies,
+    );
+
+    const tab = this;
+
+    p.upgradeBuilding(building)
+      .then(function (res) {
+        if (res.status !== UPGRADE_ACTION_POST_SUCCEEDED) {
+          tab.uprgadeActionFailed(res.status);
+        }
+        else {
+          tab.uprgadeActionSucceeded(res.action);
+        }
+      })
+      .catch(err => tab.uprgadeActionFailed(err));
   }
 
   demolishElement(building) {
-    // TODO: Handle this.
-    console.log("d: " + building);
+    // Create an object to handle the creation of an action
+    // to upgrade the input element.
+    const p = new Planet(
+      this.props.planet,
+      this.props.player.technologies,
+      this.props.planets,
+      this.props.universe,
+      this.props.resources,
+      this.props.buildings,
+      this.props.technologies,
+    );
+
+    const tab = this;
+
+    p.demolishBuilding(building)
+      .then(function (res) {
+        if (res.status !== UPGRADE_ACTION_POST_SUCCEEDED) {
+          tab.uprgadeActionFailed(res.status);
+        }
+        else {
+          tab.uprgadeActionSucceeded(res.action);
+        }
+      })
+      .catch(err => tab.uprgadeActionFailed(err));
   }
 
   render() {
