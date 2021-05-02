@@ -520,7 +520,7 @@ class Planet {
     return this.postUpgradeAction(
       technology,
       built.level,
-      built.level - 1,
+      built.level + 1,
       server.technologyUpgradeAction(this.data.planet.id)
     );
   }
