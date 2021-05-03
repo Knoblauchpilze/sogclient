@@ -94,7 +94,10 @@ class Facilities extends React.Component {
   }
 
   uprgadeActionSucceeded(action) {
-    // TODO: Handle this.
+    console.info("Registered action " + action);
+
+    // Request a data reload.
+    this.props.actionPerformed();
   }
 
   buildElement(building) {
