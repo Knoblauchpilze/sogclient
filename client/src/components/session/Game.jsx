@@ -76,7 +76,8 @@ class Game extends React.Component {
   }
 
   componentDidMount() {
-    // Fetch the list of universes from the server.
+    // Fetch the data corresponding to this player's session
+    // from the server.
     const server = new Server();
     const planets = new PlanetsModule(server);
     const resources = new ResourcesModule(server);
@@ -187,7 +188,29 @@ class Game extends React.Component {
     });
   }
 
+  actionPerformed() {
+    // We should reload the planets available for this player.
+    const server = new Server();
+    const planets = new PlanetsModule(server);
+
+    const game = this;
+
+    planets.fetchPlanets(this.props.session.id)
+      .then(function (res) {
+        if (res.status !== PLANETS_FETCH_SUCCEEDED) {
+          game.fetchDataFailed(res.status);
+        }
+        else {
+          game.fetchPlanetsSucceeded(res.planets);
+        }
+      })
+      .catch(err => game.fetchDataFailed(err));
+  }
+
   updateGameTab(tab) {
+    // Handle reload of data.
+    this.actionPerformed();
+
     // Update the tab displayed on the central view
     // of the game.
     this.setState({
@@ -207,6 +230,7 @@ class Game extends React.Component {
                          technologies={this.state.technologies}
                          universe={this.props.universe}
                          planets={this.state.planets}
+                         actionPerformed={() => this.actionPerformed()}
                          />;
           break;
       case TAB_FACILITIES:
@@ -217,6 +241,7 @@ class Game extends React.Component {
                           technologies={this.state.technologies}
                           universe={this.props.universe}
                           planets={this.state.planets}
+                          actionPerformed={() => this.actionPerformed()}
                           />;
           break;
       case TAB_RESEARCH_LAB:
@@ -227,16 +252,23 @@ class Game extends React.Component {
                            technologies={this.state.technologies}
                            universe={this.props.universe}
                            planets={this.state.planets}
+                           actionPerformed={() => this.actionPerformed()}
                            />;
           break;
       case TAB_SHIPYARD:
-        tab = <Shipyard planet={this.state.planets[this.state.selectedPlanet]} />;
+        tab = <Shipyard planet={this.state.planets[this.state.selectedPlanet]}
+                        actionPerformed={() => this.actionPerformed()}
+                        />;
           break;
       case TAB_DEFENSES:
-        tab = <Defenses planet={this.state.planets[this.state.selectedPlanet]} />;
+        tab = <Defenses planet={this.state.planets[this.state.selectedPlanet]}
+                        actionPerformed={() => this.actionPerformed()}
+                        />;
           break;
       case TAB_FLEETS:
-          tab = <Fleets planet={this.state.planets[this.state.selectedPlanet]} />;
+          tab = <Fleets planet={this.state.planets[this.state.selectedPlanet]}
+                        actionPerformed={() => this.actionPerformed()}
+                        />;
           break;
       case TAB_GALAXY:
           tab = <Galaxy planet={this.state.planets[this.state.selectedPlanet]} />;
