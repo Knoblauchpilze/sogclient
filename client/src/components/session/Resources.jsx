@@ -125,8 +125,30 @@ class Resources extends React.Component {
   }
 
   demolishElement(building) {
-    // TODO: Handle this.
-    console.log("d: " + building);
+    // Create an object to handle the deletion of an action
+    // to upgrade the input element.
+    const p = new Planet(
+      this.props.planet,
+      this.props.player.technologies,
+      this.props.planets,
+      this.props.universe,
+      this.props.resources,
+      this.props.buildings,
+      this.props.technologies,
+    );
+
+    const tab = this;
+
+    p.demolishBuilding(building)
+      .then(function (res) {
+        if (res.status !== UPGRADE_ACTION_POST_SUCCEEDED) {
+          tab.uprgadeActionFailed(res.status);
+        }
+        else {
+          tab.uprgadeActionSucceeded(res.action);
+        }
+      })
+      .catch(err => tab.uprgadeActionFailed(err));
   }
 
   render() {
