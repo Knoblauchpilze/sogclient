@@ -15,7 +15,18 @@ function ConstructionAction (props) {
         <div>{props.title}</div>
       </div>
       <div className="construction_action_value">
-        <div>{item}</div>
+        {
+          props.actions.length === 0 &&
+          <div>{"No construction at the moment"}</div>
+        }
+        {
+          props.actions.length !== 0 &&
+          <div>
+            {props.actions.map(a => (
+              <div>{JSON.stringify(a)}</div>
+            ))}
+          </div>
+        }
       </div>
     </div>
   );

@@ -293,7 +293,8 @@ class Game extends React.Component {
             <NavigationMenu updateGameTab={(tab) => this.updateGameTab(tab)}/>
             <div className="game_center_layout">
               {this.generateCurrentTab()}
-              <ConstructionList />
+              <ConstructionList planet={this.state.planets[this.state.selectedPlanet]}
+                                />
             </div>
             <PlanetsList planets={this.state.planets}
                         selected={this.state.selectedPlanet}
