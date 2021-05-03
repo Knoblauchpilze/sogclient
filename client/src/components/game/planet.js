@@ -116,8 +116,7 @@ class Planet {
     let out = {
       costs: [],
       buildable: true,
-      // TODO: Handle demolishable.
-      demolishable: false,
+      demolishable: (level > 0),
     };
 
     // Make sure to traverse the resources as defined
@@ -143,7 +142,7 @@ class Planet {
 
       // Compute the total amount based on the progression
       // rule defined for this building.
-      const amount = Math.floor(rData.amount * Math.pow(costs.progression, level));
+      let amount = Math.floor(rData.amount * Math.pow(costs.progression, level));
 
       // Find whether or not the planet holds enough resources
       // to build this level.
@@ -161,6 +160,17 @@ class Planet {
         out.buildable = false;
       }
 
+      // While we're at it, determine if there's enough resources
+      // to demolish the building: this is true if there are some
+      // resources to 'build' the previous level. Of course we
+      // only handle the computation in case the demolishable is
+      // set to `true` still (which will indicate that the level
+      // is actually at least `1`).
+      if (out.demolishable) {
+        const demolish = Math.floor(rData.amount * Math.pow(costs.progression, level - 1));
+        out.demolishable = (available.amount >= demolish);
+      }
+
       // We can now register the resource.
       out.costs.push({
         icon: resources_list[rID].mini,
@@ -173,7 +183,7 @@ class Planet {
     return out;
   }
 
-  computeBuildingDuration(costs, level) {
+  computeBuildingDuration(costs) {
     // The duration is computed from the amount of metal
     // and crystal required to build the level and is
     // reduced by each level of robotics and nanite factory
@@ -212,19 +222,15 @@ class Planet {
     const ratio = 1.0 / this.universe.economic_speed;
     hours *= ratio;
 
-    // TODO: Handle level.
-
     return formatDuration(hours);
   }
 
-  computeTechnologyDuration(costs, level) {
+  computeTechnologyDuration(costs) {
     // Similarly as for buildings the duration is computed
     // from the cost in metal and crystal. The duration is
     // reduced based on the number of research lab that are
     // participating in the research (controlled by the
     // level of the intergalactic research network).
-
-    // TODO: Handle level.
 
     // Fetch relevant costs.
     const m = costs.find(cost => cost.name === "metal");
@@ -358,7 +364,7 @@ class Planet {
       resources: costs.costs,
       energy: energy,
       next_energy: nextEnergy,
-      duration: this.computeBuildingDuration(costs.costs, lvl),
+      duration: this.computeBuildingDuration(costs.costs),
       buildable: costs.buildable,
       demolishable: costs.demolishable,
       description: "This is maybe a description",
@@ -414,7 +420,7 @@ class Planet {
       // Technologies don't produce energy.
       energy: 0,
       next_energy: 0,
-      duration: this.computeTechnologyDuration(costs.costs, lvl),
+      duration: this.computeTechnologyDuration(costs.costs),
       buildable: costs.buildable,
       // Technologies can't be 'demolished'.
       demolishable: false,
