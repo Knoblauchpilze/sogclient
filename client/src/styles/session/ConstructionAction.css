@@ -36,8 +36,40 @@
   border: 1px #171d23 solid;
 }
 
-.construction_action_value div {
-  text-align: center;
+.construction_action_list_layout {
+  display: flex;
+  flex-direction: row;
+}
 
+.construction_action_data_layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.construction_action_data_title {
+  font-size: normal;
+}
+
+.construction_action_data_internal_layout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.construction_action_data_icon {
+  width: 100px;
+  height: 100px;
+}
+
+.construction_action_data_prop {
   font-size: smaller;
+  white-space: nowrap;
+}
+
+.construction_action_data_key {
+  color: #5B9FC1;
+}
+
+.construction_action_data_level {
+  color: #f80;
 }
