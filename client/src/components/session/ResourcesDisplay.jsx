@@ -21,35 +21,35 @@ function ResourcesDisplay (props) {
     if (mid) {
       const mAmount = props.planet.resources.find(r => r.resource === mid.id);
       if (mAmount) {
-        ma = mAmount.amount;
+        ma = Math.floor(mAmount.amount);
       }
     }
     const cid = props.resources.find(r => r.name === "crystal");
     if (cid) {
       const cAmount = props.planet.resources.find(r => r.resource === cid.id);
       if (cAmount) {
-        ca = cAmount.amount;
+        ca = Math.floor(cAmount.amount);
       }
     }
     const did = props.resources.find(r => r.name === "deuterium");
     if (did) {
       const dAmount = props.planet.resources.find(r => r.resource === did.id);
       if (dAmount) {
-        da = dAmount.amount;
+        da = Math.floor(dAmount.amount);
       }
     }
     const aid = props.resources.find(r => r.name === "antimatter");
     if (aid) {
       const aAmount = props.planet.resources.find(r => r.resource === aid.id);
       if (aAmount) {
-        aa = aAmount.amount;
+        aa = Math.floor(aAmount.amount);
       }
     }
     const eid = props.resources.find(r => r.name === "energy");
     if (eid) {
       const eAmount = props.planet.resources.find(r => r.resource === eid.id);
       if (eAmount) {
-        ea = eAmount.amount;
+        ea = Math.floor(eAmount.amount);
       }
     }
   }

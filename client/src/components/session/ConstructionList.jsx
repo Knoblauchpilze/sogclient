@@ -13,9 +13,15 @@ function generateActionDesc(action, descs, data) {
   const eDesc = descs.find(e => e.id === action.element);
   const eData = data.find(e => e.name === eDesc.name);
 
-  const completion = Date.parse(action.completion_time)
-  const now = Date.now();
-  const eta = completion - now;
+  let eta;
+  if (action.eta) {
+    eta = action.eta;
+  }
+  else {
+    const completion = Date.parse(action.completion_time)
+    const now = Date.now();
+    eta = completion - now;
+  }
 
   return {
     id: action.id,
@@ -31,7 +37,7 @@ function ConstructionList (props) {
   let technologies = [];
   let shipsAndDefenses = [];
 
-  if (props.planet) {
+  if (props.planet && props.buildings.length > 0 && props.technologies.length > 0) {
     // Build the list of actions regarding buildings.
     buildings = props.planet.buildings_upgrade.map(
       a => generateActionDesc(a, props.buildings, buildings_list)

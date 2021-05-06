@@ -72,7 +72,14 @@ class Game extends React.Component {
       // currently selected and allows to build various
       // elements of the game.
       selectedTab: TAB_OVERVIEW,
+
+      // The duration between each update interval of the
+      // remaining time. Expressed in milliseconds.
+      interval: 1000,
     };
+
+    this.timer = 0;
+    this.countDown = this.countDown.bind(this);
   }
 
   componentDidMount() {
@@ -134,6 +141,39 @@ class Game extends React.Component {
       }
     })
     .catch(err => game.fetchDataFailed(err));
+
+    this.timer = setInterval(this.countDown, this.state.interval);
+  }
+
+  countDown() {
+    // The idea behind the countdown was taken from this link:
+    // https://stackoverflow.com/questions/40885923/countdown-timer-in-react
+    const planets = this.state.planets.slice();
+
+    const now = Date.now();
+
+    for (let id = 0 ; id < planets.length ; ++id) {
+      // Update buildings upgrade.
+      for (let ua = 0 ; ua < planets[id].buildings_upgrade.length ; ++ua) {
+        const completion = Date.parse(planets[id].buildings_upgrade[ua].completion_time);
+        const eta = completion - now;
+
+        planets[id].buildings_upgrade[ua].eta = eta;
+
+      }
+
+      // Update technologies upgrade.
+      for (let ua = 0 ; ua < planets[id].technologies_upgrade.length ; ++ua) {
+        const completion = Date.parse(planets[id].technologies_upgrade[ua].completion_time);
+        const eta = completion - now;
+
+        planets[id].technologies_upgrade[ua].eta = eta;
+      }
+    }
+
+    this.setState({
+      planets: planets,
+    });
   }
 
   fetchDataFailed(err) {
@@ -287,7 +327,7 @@ class Game extends React.Component {
       <div className="game_layout">
         <div className="game_page_layout">
           <ResourcesDisplay planet={this.state.planets[this.state.selectedPlanet]}
-                            />
+                            resources={this.state.resources}/>
           <div className="game_internal_layout">
             <NavigationMenu updateGameTab={(tab) => this.updateGameTab(tab)}/>
             <div className="game_center_layout">
