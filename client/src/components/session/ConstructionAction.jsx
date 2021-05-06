@@ -39,7 +39,7 @@ function formatInterval(interval) {
   return out;
 }
 
-function ConstructionAction (props) {
+function ConstructionAction(props) {
   return (
     <div className="construction_action_layout">
       <div className="construction_action_title">
