@@ -27,7 +27,7 @@ function formatInterval(interval) {
     out += m;
     out += "m";
   }
-  if (s > 0) {
+  if (s > 0 || out === "") {
     out += s;
     out += "s";
   }
