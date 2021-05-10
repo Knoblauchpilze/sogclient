@@ -69,13 +69,14 @@ function ElementUpgrade (props) {
   let ub = "element_upgrade_button";
   let db = "element_upgrade_button";
 
-  if (props.item.buildable) {
+  const preRequisites = props.item.buildable.buildings && props.item.buildable.technologies;
+  if (props.item.buildable.resources && preRequisites) {
     ub += " element_upgrade_build";
   }
   else {
     ub += " element_upgrade_inactive";
   }
-  if (props.item.demolishable) {
+  if (props.item.demolishable && preRequisites) {
     db += " element_upgrade_demolish";
   }
   else {
@@ -84,13 +85,13 @@ function ElementUpgrade (props) {
 
   // Generate expressions to handle clicks on buttons.
   const be = (id) => {
-    if (props.item.buildable) {
+    if (props.item.buildable && preRequisites) {
       props.buildElement(id);
     }
   }
 
   const de = (id) => {
-    if (props.item.demolishable) {
+    if (props.item.demolishable && preRequisites) {
       props.demolishElement(id);
     }
   }

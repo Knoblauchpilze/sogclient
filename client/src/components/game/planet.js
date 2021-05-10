@@ -183,6 +183,35 @@ class Planet {
     return out;
   }
 
+  generateDependencies(element) {
+    let out = {
+      buildingsPrerequisitesOk: true,
+      technologiesPrerequisitesOk: true,
+    };
+
+    for (let id = 0 ; id < element.buildings_dependencies.length && out.buildingsPrerequisitesOk ; ++id) {
+      // Check the level of the dependency on the planet.
+      const dep = element.buildings_dependencies[id];
+
+      const bDep = this.data.planet.buildings.find(e => e.id === dep.id);
+      if (!bDep || bDep.level < dep.level) {
+        out.buildingsPrerequisitesOk = false;
+      }
+    }
+
+    for (let id = 0 ; id < element.technologies_dependencies.length && out.technologiesPrerequisitesOk ; ++id) {
+      // Check the level of the dependency on the planet.
+      const dep = element.technologies_dependencies[id];
+
+      const tDep = this.data.technologies.find(e => e.id === dep.id);
+      if (!tDep || tDep.level < dep.level) {
+        out.technologiesPrerequisitesOk = false;
+      }
+    }
+
+    return out;
+  }
+
   computeBuildingDuration(costs) {
     // The duration is computed from the amount of metal
     // and crystal required to build the level and is
@@ -354,6 +383,10 @@ class Planet {
       }
     }
 
+    // Update buildable and demolishable based on whether
+    // the dependencies for this building are researched.
+    const deps = this.generateDependencies(b);
+
     // Package the output.
     out.found = true;
     out.building = {
@@ -365,7 +398,11 @@ class Planet {
       energy: energy,
       next_energy: nextEnergy,
       duration: this.computeBuildingDuration(costs.costs),
-      buildable: costs.buildable,
+      buildable: {
+        resources: costs.buildable,
+        buildings: deps.buildingsPrerequisitesOk,
+        technologies: deps.technologiesPrerequisitesOk,
+      },
       demolishable: costs.demolishable,
       description: "This is maybe a description",
     };
@@ -409,6 +446,10 @@ class Planet {
     // Generate resources needed for this technology.
     const costs = this.generateCosts(t.cost, lvl);
 
+    // Update buildable and demolishable based on whether
+    // the dependencies for this technology are researched.
+    const deps = this.generateDependencies(t);
+
     // Package the output.
     out.found = true;
     out.technology = {
@@ -421,7 +462,11 @@ class Planet {
       energy: 0,
       next_energy: 0,
       duration: this.computeTechnologyDuration(costs.costs),
-      buildable: costs.buildable,
+      buildable: {
+        resources: costs.buildable,
+        buildings: deps.buildingsPrerequisitesOk,
+        technologies: deps.technologiesPrerequisitesOk,
+      },
       // Technologies can't be 'demolished'.
       demolishable: false,
       description: "This is not a description",
