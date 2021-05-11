@@ -221,7 +221,7 @@ class ResearchLab extends React.Component {
             <p className="cover_header">Basic research</p>
             <div className="research_lab_section_layout">
               {
-                this.state.fundamental_techs.map(t =>
+                this.state.fundamental_techs.map((t, id) =>
                   <ElementContainer key={t.id}
                                     id={t.id}
                                     icon={t.icon}
@@ -229,6 +229,7 @@ class ResearchLab extends React.Component {
                                     title={t.name}
                                     level={t.level}
                                     selectElement={(id) => this.selectElement(id)}
+                                    selected={id === this.state.id && this.state.kind === FUNDAMENTAL_TECHNOLOGY}
                                     />
                 )
               }
@@ -238,7 +239,7 @@ class ResearchLab extends React.Component {
             <p className="cover_header">Propulsion research</p>
             <div className="research_lab_section_layout">
               {
-                this.state.propulsion_techs.map(t =>
+                this.state.propulsion_techs.map((t, id) =>
                   <ElementContainer key={t.id}
                                     id={t.id}
                                     icon={t.icon}
@@ -246,6 +247,7 @@ class ResearchLab extends React.Component {
                                     title={t.name}
                                     level={t.level}
                                     selectElement={(id) => this.selectElement(id)}
+                                    selected={id === this.state.id && this.state.kind === PROPULSION_TECHNOLOGY}
                                     />
                 )
               }
@@ -255,7 +257,7 @@ class ResearchLab extends React.Component {
             <p className="cover_header">Advanced research</p>
             <div className="research_lab_section_layout">
               {
-                this.state.advanced_techs.map(t =>
+                this.state.advanced_techs.map((t, id) =>
                   <ElementContainer key={t.id}
                                     id={t.id}
                                     icon={t.icon}
@@ -263,6 +265,7 @@ class ResearchLab extends React.Component {
                                     title={t.name}
                                     level={t.level}
                                     selectElement={(id) => this.selectElement(id)}
+                                    selected={id === this.state.id && this.state.kind === ADVANCED_TECHNOLOGY}
                                     />
                 )
               }
@@ -272,7 +275,7 @@ class ResearchLab extends React.Component {
             <p className="cover_header">Combat research</p>
             <div className="research_lab_section_layout">
               {
-                this.state.combat_techs.map(t =>
+                this.state.combat_techs.map((t, id) =>
                   <ElementContainer key={t.id}
                                     id={t.id}
                                     icon={t.icon}
@@ -280,6 +283,7 @@ class ResearchLab extends React.Component {
                                     title={t.name}
                                     level={t.level}
                                     selectElement={(id) => this.selectElement(id)}
+                                    selected={id === this.state.id && this.state.kind === COMBAT_TECHNOLOGY}
                                     />
                 )
               }
