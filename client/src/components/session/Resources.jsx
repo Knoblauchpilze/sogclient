@@ -183,7 +183,7 @@ class Resources extends React.Component {
           <p className="cover_header">Energy and resources</p>
           <div className="resources_buildings_layout">
             {
-              this.state.buildings.map(b =>
+              this.state.buildings.map((b, id) =>
                 <ElementContainer key={b.id}
                                   id={b.id}
                                   icon={b.icon}
@@ -191,6 +191,7 @@ class Resources extends React.Component {
                                   title={b.name}
                                   level={b.level}
                                   selectElement={(id) => this.selectElement(id)}
+                                  selected={id === this.state.id}
                                   />
               )
             }
