@@ -5,6 +5,8 @@ import ConstructionAction from './ConstructionAction.jsx';
 
 import {buildings_list} from '../../datas/buildings.js';
 import {technologies_list} from '../../datas/technologies.js';
+import {ships_list} from '../../datas/ships.js';
+import {defenses_list} from '../../datas/defenses.js';
 
 function generateActionDesc(action, descs, data) {
   // We will assume that everything is working as expected
@@ -13,14 +15,22 @@ function generateActionDesc(action, descs, data) {
   const eDesc = descs.find(e => e.id === action.element);
   const eData = data.find(e => e.name === eDesc.name);
 
+  // Depending on whether the action is a progress update
+  // or a fixed cost action the syntax is a bit different.
   let eta;
-  if (action.eta) {
-    eta = action.eta;
+
+  if (action.desired_level) {
+    if (action.eta) {
+      eta = action.eta;
+    }
+    else {
+      const completion = Date.parse(action.completion_time)
+      const now = Date.now();
+      eta = completion - now;
+    }
   }
   else {
-    const completion = Date.parse(action.completion_time)
-    const now = Date.now();
-    eta = completion - now;
+    // TODO: Handle this.
   }
 
   return {
@@ -47,8 +57,13 @@ function ConstructionList (props) {
       a => generateActionDesc(a, props.technologies, technologies_list)
     );
 
-    // TODO: Handle this.
-    // shipsAndDefenses = props.planet.ships_construction.concat(props.planet.defenses_construction).map();
+    const ships = props.planet.ships_construction.map(
+      a => generateActionDesc(a, props.ships, ships_list)
+    );
+    const defenses = props.planet.defenses_construction.map(
+      a => generateActionDesc(a, props.defenses, defenses_list)
+    );
+    shipsAndDefenses = ships.concat(defenses);
   }
 
   return (

@@ -211,6 +211,12 @@ class Game extends React.Component {
 
         planets[id].technologies_upgrade[ua].eta = eta;
       }
+
+      // Update ships upgrade.
+      // TODO: Handle this.
+
+      // Update defenses upgrade.
+      // TODO: Handle this.
     }
 
     this.setState({
