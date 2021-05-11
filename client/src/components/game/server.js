@@ -75,6 +75,14 @@ class Server {
     return this.serverURL() + "/technologies";
   }
 
+  shipsURL() {
+    return this.serverURL() + "/ships";
+  }
+
+  defensesURL() {
+    return this.serverURL() + "/defenses";
+  }
+
   upgradeActionDataKey() {
     return "action-data";
   }
@@ -96,6 +104,14 @@ class Server {
 
   technologyUpgradeAction(planet) {
     return this.serverURL() + "/planets/" + planet + "/actions/technologies";
+  }
+
+  shipUpgradeAction(planet) {
+    return this.serverURL() + "/planets/" + planet + "/actions/ships";
+  }
+
+  defenseUpgradeAction(planet) {
+    return this.serverURL() + "/planets/" + planet + "/actions/defenses";
   }
 }
 

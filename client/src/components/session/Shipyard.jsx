@@ -2,208 +2,236 @@
 import '../../styles/session/Shipyard.css';
 import '../../styles/session/Game.css';
 import React from 'react';
-import UnitContainer from './UnitContainer.jsx';
+import ElementContainer from './ElementContainer.jsx';
+import ElementUpgrade from './ElementUpgrade.jsx';
 
-import light_fighter from '../../assets/light_fighter.jpeg';
-import heavy_fighter from '../../assets/heavy_fighter.jpeg';
-import cruiser from '../../assets/cruiser.jpeg';
-import battleship from '../../assets/battleship.jpeg';
-import battlecruiser from '../../assets/battlecruiser.jpeg';
-import bomber from '../../assets/bomber.jpeg';
-import destroyer from '../../assets/destroyer.jpeg';
-import deathstar from '../../assets/deathstar.jpeg';
+import Planet from '../game/planet.js';
+import { UPGRADE_ACTION_POST_SUCCEEDED } from '../game/planet.js';
 
-import small_cargo from '../../assets/small_cargo_ship.jpeg';
-import large_cargo from '../../assets/large_cargo_ship.jpeg';
-import colony_ship from '../../assets/colony_ship.jpeg';
-import recycler from '../../assets/recycler.jpeg';
-import espionage_probe from '../../assets/espionage_probe.jpeg';
-import solar_satellite from '../../assets/solar_satellite.jpeg';
+import {ships_list} from '../../datas/ships.js';
+import { CIVIL_SHIP, COMBAT_SHIP } from '../../datas/ships.js';
 
-function Shipyard (props) {
-  let title = "Shipyard - Unknown planet";
-  let lfCount = 0;
-  let hfCount = 0;
-  let crCount = 0;
-  let bsCount = 0;
-  let bcCount = 0;
-  let boCount = 0;
-  let deCount = 0;
-  let dsCount = 0;
+class Shipyard extends React.Component {
+  constructor(props) {
+    super(props);
 
-  let scCount = 0;
-  let lcCount = 0;
-  let csCount = 0;
-  let reCount = 0;
-  let epCount = 0;
-  let ssCount = 0;
+    // Generate properties from the data fetched from the server.
+    const civils = [];
+    const combats = [];
 
-  if (props.planet) {
-    title = "Shipyard - " + props.planet.name;
+    const p = new Planet(
+      props.planet,
+      props.player.technologies,
+      props.planets,
+      props.universe,
+      props.resources,
+      props.buildings,
+      props.technologies,
+      props.ships,
+      props.defenses,
+    );
 
-    const lf = props.planet.ships.find(s => s.name === "light fighter");
-    if (lf) {
-      lfCount = lf.amount;
-    }
-    const hf = props.planet.ships.find(s => s.name === "heavy fighter");
-    if (hf) {
-      hfCount = hf.amount;
-    }
-    const cr = props.planet.ships.find(s => s.name === "cruiser");
-    if (cr) {
-      crCount = cr.amount;
-    }
-    const bs = props.planet.ships.find(s => s.name === "battleship");
-    if (bs) {
-      bsCount = bs.amount;
-    }
-    const bc = props.planet.ships.find(s => s.name === "battlecruiser");
-    if (bc) {
-      bcCount = bc.amount;
-    }
-    const bo = props.planet.ships.find(s => s.name === "bomber");
-    if (bo) {
-      boCount = bo.amount;
-    }
-    const de = props.planet.ships.find(s => s.name === "destroyer");
-    if (de) {
-      deCount = de.amount;
-    }
-    const ds = props.planet.ships.find(s => s.name === "deathstar");
-    if (ds) {
-      dsCount = ds.amount;
+    for (let id = 0 ; id < ships_list.length ; id++) {
+      // Fetch the data for this ship.
+      const out = p.getShipData(ships_list[id].name);
+
+      if (!out.found) {
+        console.error("Failed to find ship \"" + ships_list[id].name + "\" from server's data");
+      }
+      else {
+        switch (ships_list[id].kind) {
+          case CIVIL_SHIP:
+            civils.push(out.ship);
+            break;
+          case COMBAT_SHIP:
+            combats.push(out.ship);
+            break;
+          default:
+            // Unknown research type.
+            console.error("Unknown ship type \"" + ships_list[id].kind + "\"");
+            break;
+        }
+      }
     }
 
-    const sc = props.planet.ships.find(s => s.name === "small cargo ship");
-    if (sc) {
-      scCount = sc.amount;
-    }
-    const lc = props.planet.ships.find(s => s.name === "large cargo ship");
-    if (lc) {
-      lcCount = lc.amount;
-    }
-    const cs = props.planet.ships.find(s => s.name === "colony ship");
-    if (cs) {
-      csCount = cs.amount;
-    }
-    const re = props.planet.ships.find(s => s.name === "recycler");
-    if (re) {
-      reCount = re.amount;
-    }
-    const ep = props.planet.ships.find(s => s.name === "espionage probe");
-    if (ep) {
-      epCount = ep.amount;
-    }
-    const ss = props.planet.ships.find(s => s.name === "solar satellite");
-    if (ss) {
-      ssCount = ss.amount;
-    }
+    this.state = {
+      // Defines the information about the ships that
+      // are registered for this component.
+      civil_ships: civils,
+
+      // Defines the information about the ships that
+      // are registered for this component.
+      combat_ships: combats,
+
+      // Defines the selected element so far. This is
+      // assigned when the user clicks on a child item.
+      id: -1,
+
+      // Defines the kind of ship to which the `id` is
+      // referring to.
+      kind: "",
+    };
   }
 
-  return (
-    <div className="shipyard_layout">
-      <div className="cover_layout">
-        <h3 className="cover_title">{title}</h3>
-      </div>
-      <div className="shipyard_ships_layout">
-        <div className="shipyard_section">
-          <p class="cover_header">Combat ships</p>
-          <div className="shipyard_section_layout">
-            <UnitContainer icon={light_fighter}
-                          alt={"Light fighter"}
-                          title={"Light fighter"}
-                          count={lfCount}
-                          min={0}
-                          max={1222}/>
-            <UnitContainer icon={heavy_fighter}
-                          alt={"Heavy fighter"}
-                          title={"Heavy fighter"}
-                          count={hfCount}
-                          min={0}
-                          max={1222}/>
-            <UnitContainer icon={cruiser}
-                          alt={"Cruiser"}
-                          title={"Cruiser"}
-                          count={crCount}
-                          min={0}
-                          max={1222}/>
-            <UnitContainer icon={battleship}
-                          alt={"Battleship"}
-                          title={"Battleship"}
-                          count={bsCount}
-                          min={0}
-                          max={1222}/>
-            <UnitContainer icon={battlecruiser}
-                          alt={"Battlecruiser"}
-                          title={"Battlecruiser"}
-                          count={bcCount}
-                          min={0}
-                          max={1222}/>
-            <UnitContainer icon={bomber}
-                          alt={"Bomber"}
-                          title={"Bomber"}
-                          count={boCount}
-                          min={0}
-                          max={1222}/>
-            <UnitContainer icon={destroyer}
-                          alt={"Destroyer"}
-                          title={"Destroyer"}
-                          count={deCount}
-                          min={0}
-                          max={1222}/>
-            <UnitContainer icon={deathstar}
-                          alt={"Deathstar"}
-                          title={"Deathstar"}
-                          count={dsCount}
-                          min={0}
-                          max={1222}/>
-          </div>
-        </div>
+  selectElement(ship) {
+    // Update selected ship: we need to find the index
+    // of the ship corresponding to the input element
+    // if possible.
+    if (ship === "") {
+      this.setState({
+        id: -1,
+        kind: "",
+      });
+    }
 
-        <div className="shipyard_section">
-          <p class="cover_header">Civil ships</p>
-          <div className="shipyard_section_layout">
-            <UnitContainer icon={small_cargo}
-                          alt={"Small cargo"}
-                          title={"Small cargo"}
-                          count={scCount}
-                          min={0}
-                          max={1222}/>
-            <UnitContainer icon={large_cargo}
-                          alt={"Large cargo"}
-                          title={"Large cargo"}
-                          count={lcCount}
-                          min={0}
-                          max={1222}/>
-            <UnitContainer icon={colony_ship}
-                          alt={"Colony ship"}
-                          title={"Colony ship"}
-                          count={csCount}
-                          min={0}
-                          max={1222}/>
-            <UnitContainer icon={recycler}
-                          alt={"Recycler"}
-                          title={"Recycler"}
-                          count={reCount}
-                          min={0}
-                          max={1222}/>
-            <UnitContainer icon={espionage_probe}
-                          alt={"Espionage probe"}
-                          title={"Espionage probe"}
-                          count={epCount}
-                          min={0}
-                          max={1222}/>
-            <UnitContainer icon={solar_satellite}
-                          alt={"Solar satellite"}
-                          title={"Solar satellite"}
-                          count={ssCount}
-                          min={0}
-                          max={1222}/>
+    // Search technologies in order.
+    let id = this.state.civil_ships.findIndex(s => s.id === ship);
+    let kind = CIVIL_SHIP;
+
+    if (id === -1) {
+      id = this.state.combat_ships.findIndex(s => s.id === ship);
+      kind = COMBAT_SHIP;
+    }
+
+    if (id === -1) {
+      console.error("Failed to select ship \"" + ship + "\"");
+    }
+
+    // In case the ship is the same as the one
+    // already selected we will deactivate the
+    // upgrade panel.
+    if (this.state.id === id && this.state.kind === kind) {
+      this.setState({
+        id: -1,
+        kind: "",
+      });
+
+      return;
+    }
+
+    this.setState({
+      id: id,
+      kind: kind,
+    });
+  }
+
+  uprgadeActionFailed(err) {
+    alert(err);
+  }
+
+  uprgadeActionSucceeded(action) {
+    console.info("Registered action " + action);
+
+    // Request a data reload.
+    this.props.actionPerformed();
+  }
+
+  buildElement(ship) {
+    // Create an object to handle the creation of an action
+    // to upgrade the input element.
+    const p = new Planet(
+      this.props.planet,
+      this.props.player.technologies,
+      this.props.planets,
+      this.props.universe,
+      this.props.resources,
+      this.props.buildings,
+      this.props.technologies,
+      this.props.ships,
+      this.props.defenses,
+    );
+
+    const tab = this;
+
+    // TODO: Allow more than one ship to be built.
+    p.upgradeShip(ship, 1)
+      .then(function (res) {
+        if (res.status !== UPGRADE_ACTION_POST_SUCCEEDED) {
+          tab.uprgadeActionFailed(res.status);
+        }
+        else {
+          tab.uprgadeActionSucceeded(res.action);
+        }
+      })
+      .catch(err => tab.uprgadeActionFailed(err));
+  }
+
+  render() {
+    let title = "Shipyard - Unknown planet";
+
+    if (this.props.planet) {
+      title = "Shipyard - " + this.props.planet.name;
+    }
+
+    let ship;
+    if (this.state.id !== -1) {
+      switch (this.state.kind) {
+        case CIVIL_SHIP:
+          ship = this.state.civil_ships[this.state.id];
+          break;
+        case COMBAT_SHIP:
+          ship = this.state.combat_ships[this.state.id];
+          break;
+        default:
+            // Unhandled.
+            break;
+      }
+    }
+
+    return (
+      <div className="shipyard_layout">
+        <div className="cover_layout">
+          <h3 className="cover_title">{title}</h3>
+          {
+            ship &&
+            <ElementUpgrade item={ship}
+                            selectElement={(id) => this.selectElement(id)}
+                            buildElement={(id) => this.buildElement(id)}
+                            />
+          }
+        </div>
+        <div className="shipyard_ships_layout">
+          <div className="shipyard_section">
+            <p class="cover_header">Combat ships</p>
+            <div className="shipyard_section_layout">
+              {
+                this.state.civil_ships.map((s, id) =>
+                  <ElementContainer key={s.id}
+                                    id={s.id}
+                                    icon={s.icon}
+                                    alt={s.name}
+                                    title={s.name}
+                                    level={s.count}
+                                    selectElement={(id) => this.selectElement(id)}
+                                    selected={id === this.state.id && this.state.kind === CIVIL_SHIP}
+                                    />
+                )
+              }
+            </div>
+          </div>
+
+          <div className="shipyard_section">
+            <p class="cover_header">Civil ships</p>
+            <div className="shipyard_section_layout">
+              {
+                this.state.combat_ships.map((s, id) =>
+                  <ElementContainer key={s.id}
+                                    id={s.id}
+                                    icon={s.icon}
+                                    alt={s.name}
+                                    title={s.name}
+                                    level={s.count}
+                                    selectElement={(id) => this.selectElement(id)}
+                                    selected={id === this.state.id && this.state.kind === COMBAT_SHIP}
+                                    />
+                )
+              }
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default Shipyard;
