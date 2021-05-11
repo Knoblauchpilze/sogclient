@@ -2,6 +2,8 @@
 import { resources_list } from '../../datas/resources.js';
 import { buildings_list } from '../../datas/buildings.js';
 import { technologies_list } from '../../datas/technologies.js';
+import { ships_list } from '../../datas/ships.js';
+import { defenses_list } from '../../datas/defenses.js';
 
 import Server from '../game/server.js';
 
@@ -98,7 +100,13 @@ class Planet {
   //
   // The `technoloiges` defines the list fetched from the
   // server and registering all technologies.
-  constructor(planet, techs, planets, universe, resources, buildings, technologies) {
+  //
+  // The `ships` defines the list fetched from the sserver
+  // and registering all ships.
+  //
+  // The `defenses` defines the list fetched from the server
+  // and registering all defenses.
+  constructor(planet, techs, planets, universe, resources, buildings, technologies, ships, defenses) {
     this.data = {
       planet: planet,
       technologies: techs,
@@ -110,6 +118,8 @@ class Planet {
     this.resources = resources;
     this.buildings = buildings;
     this.technologies = technologies;
+    this.ships = ships;
+    this.defenses = defenses;
   }
 
   generateCosts(costs, level) {
@@ -141,8 +151,12 @@ class Planet {
       }
 
       // Compute the total amount based on the progression
-      // rule defined for this building.
-      let amount = Math.floor(rData.amount * Math.pow(costs.progression, level));
+      // rule defined for this item: in case there's no
+      // rule defined, we will just use the base amount.
+      let amount = rData.amount;
+      if (costs.progression) {
+        amount = Math.floor(rData.amount * Math.pow(costs.progression, level));
+      }
 
       // Find whether or not the planet holds enough resources
       // to build this level.
@@ -330,6 +344,48 @@ class Planet {
     return formatDuration(hours);
   }
 
+  computeCombatItemDuration(costs) {
+    // The duration is computed from the amount of metal
+    // and crystal required to build the level and is
+    // reduced by each level of robotics and nanite factory
+    // on the planet.
+
+    // Fetch relevant costs.
+    const m = costs.find(cost => cost.name === "metal");
+    const c = costs.find(cost => cost.name === "crystal");
+
+    let mAmount = 0;
+    if (m) {
+      mAmount = m.amount;
+    }
+    let cAmount = 0;
+    if (c) {
+      cAmount = c.amount;
+    }
+
+    // Fetch levels of robotics and nanite factories.
+    const rf = this.data.planet.buildings.find(b => b.name === "robotics factory");
+    const nf = this.data.planet.buildings.find(b => b.name === "nanite factory");
+
+    let rfLvl = 0;
+    if (rf) {
+      rfLvl = rf.level;
+    }
+    let nfLvl = 0;
+    if (nf) {
+      nfLvl = nf.level;
+    }
+
+    // From there the duration can be computed using
+    // the economic speed of the universe as a boost.
+    let hours = (mAmount + cAmount) / (2500.0 * (1.0 + rfLvl) * Math.pow(2.0, nfLvl));
+
+    const ratio = 1.0 / this.universe.economic_speed;
+    hours *= ratio;
+
+    return formatDuration(hours);
+  }
+
   getBuildingData(name) {
     let out = {
       building: {},
@@ -475,6 +531,136 @@ class Planet {
     return out;
   }
 
+  getShipData(name) {
+    let out = {
+      ship: {},
+      found: false,
+    };
+
+    // Find the ship in the list of elements registered
+    // in the imported data. This will consitute the first
+    // basis for the ship data.
+    const id = ships_list.findIndex(s => s.name === name);
+    
+    // In case the ship was not found, return a default
+    // value.
+    if (id === -1) {
+      return out;
+    }
+
+    // Search the base characteristics of the ship from
+    // the list fetched from the server.
+    const s = this.ships.find(s => s.name === ships_list[id].name);
+
+    // If it can't be found, then return a default value.
+    if (!s) {
+      return out;
+    }
+
+    // Fetch the amount of this ship on the planet.
+    let amount = 0;
+    const pShip = this.data.planet.ships.find(ship => ship.name === s.name);
+    if (pShip) {
+      amount = pShip.amount;
+    }
+
+    // Generate resources needed for this ship.
+    const costs = this.generateCosts(s.cost, 0);
+
+    // Update buildable and demolishable based on whether
+    // the dependencies for this ship are researched.
+    const deps = this.generateDependencies(s);
+
+    // Package the output.
+    out.found = true;
+    out.ship = {
+      id: s.id,
+      name: s.name,
+      count: amount,
+      icon: ships_list[id].icon,
+      resources: costs.costs,
+      // Ships don't produce energy.
+      energy: 0,
+      next_energy: 0,
+      duration: this.computeCombatItemDuration(costs.costs),
+      buildable: {
+        resources: costs.buildable,
+        buildings: deps.buildingsPrerequisitesOk,
+        technologies: deps.technologiesPrerequisitesOk,
+      },
+      // Ships can't be 'demolished'.
+      demolishable: false,
+      description: "This is maybe a description",
+    };
+
+    return out;
+  }
+
+  getDefenseData(name) {
+    let out = {
+      defense: {},
+      found: false,
+    };
+
+    // Find the defense in the list of elements registered
+    // in the imported data. This will consitute the first
+    // basis for the defense data.
+    const id = defenses_list.findIndex(d => d.name === name);
+    
+    // In case the defense was not found, return a default
+    // value.
+    if (id === -1) {
+      return out;
+    }
+
+    // Search the base characteristics of the defense from
+    // the list fetched from the server.
+    const d = this.defenses.find(d => d.name === defenses_list[id].name);
+
+    // If it can't be found, then return a default value.
+    if (!d) {
+      return out;
+    }
+
+    // Fetch the amount of this defense on the planet.
+    let amount = 0;
+    const pDefense = this.data.planet.defenses.find(defense => defense.name === d.name);
+    if (pDefense) {
+      amount = pDefense.amount;
+    }
+
+    // Generate resources needed for this defense.
+    const costs = this.generateCosts(d.cost, 0);
+
+    // Update buildable and demolishable based on whether
+    // the dependencies for this defense are researched.
+    const deps = this.generateDependencies(d);
+
+    // Package the output.
+    out.found = true;
+    out.defense = {
+      id: d.id,
+      name: d.name,
+      count: amount,
+      icon: defenses_list[id].icon,
+      resources: costs.costs,
+      // Defenses don't produce energy.
+      energy: 0,
+      next_energy: 0,
+      duration: this.computeCombatItemDuration(costs.costs),
+      buildable: {
+        resources: costs.buildable,
+        buildings: deps.buildingsPrerequisitesOk,
+        technologies: deps.technologiesPrerequisitesOk,
+      },
+      // Defenses can't be 'demolished'.
+      demolishable: false,
+      description: "This is maybe a description",
+    };
+
+    return out;
+  }
+
   async postUpgradeAction(id, level, desired, route) {
     const out = {
       status: UPGRADE_ACTION_POST_FAILED,
@@ -488,6 +674,61 @@ class Planet {
 
       current_level: level,
       desired_level: desired,
+    }
+
+    // Generate the post request to create the action.
+    const server = new Server();
+
+    const formData  = new FormData();
+    formData.append(server.upgradeActionDataKey(), JSON.stringify(action));
+
+    let opts = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+      },
+      body: formData,
+    };
+
+    // Execute the request.
+    let reqStatus = "";
+
+    const res = await fetch(route, opts)
+      .catch(err => reqStatus = err);
+
+    if (reqStatus !== "") {
+      out.status = reqStatus;
+      return out;
+    }
+
+    if (!res.ok) {
+      out.status = await res.text();
+      return out;
+    }
+
+    // Fetch the identifier returned by the server.
+    // It is returned through a format that is not
+    // exactly pure so we clean it through a server
+    // dedicated method.
+    const actionID = await res.text();
+    out.action = server.actionIDFromResponse(actionID);
+    out.status = UPGRADE_ACTION_POST_SUCCEEDED;
+
+    return out;
+  }
+
+  async postBuildAction(id, amount, route) {
+    const out = {
+      status: UPGRADE_ACTION_POST_FAILED,
+      action: "",
+    };
+
+    // Create the action object to post.
+    const action = {
+      element: id,
+      planet: this.data.planet.id,
+
+      amount: amount,
     }
 
     // Generate the post request to create the action.
@@ -573,6 +814,28 @@ class Planet {
       built.level,
       built.level + 1,
       server.technologyUpgradeAction(this.data.planet.id)
+    );
+  }
+
+  async upgradeShip(ship, count) {
+    const server = new Server();
+
+    // Post the action to the server.
+    return this.postBuildAction(
+      ship,
+      count,
+      server.shipUpgradeAction(this.data.planet.id)
+    );
+  }
+
+  async upgradeDefense(defense, count) {
+    const server = new Server();
+
+    // Post the action to the server.
+    return this.postBuildAction(
+      defense,
+      count,
+      server.defenseUpgradeAction(this.data.planet.id)
     );
   }
 }

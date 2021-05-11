@@ -2,155 +2,174 @@
 import '../../styles/session/Defenses.css';
 import '../../styles/session/Game.css';
 import React from 'react';
-import UnitContainer from './UnitContainer.jsx';
+import ElementContainer from './ElementContainer.jsx';
+import ElementUpgrade from './ElementUpgrade.jsx';
 
-import rocket_launcher from '../../assets/rocket_launcher.jpeg';
-import light_laser from '../../assets/light_laser.jpeg';
-import heavy_laser from '../../assets/heavy_laser.jpeg';
-import gauss_cannon from '../../assets/gauss_cannon.jpeg';
-import ion_cannon from '../../assets/ion_cannon.jpeg';
-import plasma_turret from '../../assets/plasma_turret.jpeg';
+import Planet from '../game/planet.js';
+import { UPGRADE_ACTION_POST_SUCCEEDED } from '../game/planet.js';
 
-import small_shield_dome from '../../assets/small_shield_dome.jpeg';
-import large_shield_dome from '../../assets/large_shield_dome.jpeg';
+import {defenses_list} from '../../datas/defenses.js';
 
-import antiballistic_missile from '../../assets/antiballistic_missile.jpeg';
-import interplanetary_missile from '../../assets/interplanetary_missile.jpeg';
+class Defenses extends React.Component {
+  constructor(props) {
+    super(props);
 
-function Defenses (props) {
-  let title = "Defenses - Unknown planet";
-  let rlCount = 0;
-  let llCount = 0;
-  let hlCount = 0;
-  let gcCount = 0;
-  let icCount = 0;
-  let ptCount = 0;
+    // Generate properties from the data fetched from the server.
+    const defenses = [];
 
-  let ssCount = 0;
-  let lsCount = 0;
+    const p = new Planet(
+      props.planet,
+      props.player.technologies,
+      props.planets,
+      props.universe,
+      props.resources,
+      props.buildings,
+      props.technologies,
+      props.ships,
+      props.defenses,
+    );
 
-  let amCount = 0;
-  let imCount = 0;
+    for (let id = 0 ; id < defenses_list.length ; id++) {
+      // Fetch the data for this defense.
+      const out = p.getDefenseData(defenses_list[id].name);
 
-  if (props.planet) {
-    title = "Defenses - " + props.planet.name;
-
-    const rl = props.planet.defenses.find(d => d.name === "rocket launcher");
-    if (rl) {
-      rlCount = rl.amount;
-    }
-    const ll = props.planet.defenses.find(d => d.name === "light laser");
-    if (ll) {
-      llCount = ll.amount;
-    }
-    const hl = props.planet.defenses.find(d => d.name === "heavy laser");
-    if (hl) {
-      hlCount = hl.amount;
-    }
-    const gc = props.planet.defenses.find(d => d.name === "gauss cannon");
-    if (gc) {
-      gcCount = gc.amount;
-    }
-    const ic = props.planet.defenses.find(d => d.name === "ion cannon");
-    if (ic) {
-      icCount = ic.amount;
-    }
-    const pt = props.planet.defenses.find(d => d.name === "plasma turret");
-    if (pt) {
-      ptCount = pt.amount;
+      if (!out.found) {
+        console.error("Failed to find defense \"" + defenses_list[id].name + "\" from server's data");
+      }
+      else {
+        defenses.push(out.defense);
+      }
     }
 
-    const ss = props.planet.defenses.find(d => d.name === "small shield dome");
-    if (ss) {
-      ssCount = ss.amount;
-    }
-    const ls = props.planet.defenses.find(d => d.name === "large shield dome");
-    if (ls) {
-      lsCount = ls.amount;
-    }
+    this.state = {
+      // Defines the information about the defenses that
+      // are registered for this component.
+      defenses: defenses,
 
-    const am = props.planet.defenses.find(d => d.name === "anti-ballistic missile");
-    if (am) {
-      amCount = am.amount;
-    }
-    const im = props.planet.defenses.find(d => d.name === "interplanetary missile");
-    if (im) {
-      imCount = im.amount;
-    }
+      // Defines the selected element so far. This is
+      // assigned when the user clicks on a child item.
+      id: -1,
+    };
   }
 
-  return (
-    <div className="defenses_layout">
-      <div className="cover_layout">
-        <h3 className="cover_title">{title}</h3>
-      </div>
-      <div className="defenses_systems_section">
-        <p className="cover_header">Defense systems</p>
-        <div className="defenses_systems_layout">
-          <UnitContainer icon={rocket_launcher}
-                         alt={"Rocket launcher"}
-                         title={"Rocket launcher"}
-                         count={rlCount}
-                         min={0}
-                         max={1222}/>
-          <UnitContainer icon={light_laser}
-                         alt={"Light laser"}
-                         title={"Light laser"}
-                         count={llCount}
-                         min={0}
-                         max={359}/>
-          <UnitContainer icon={heavy_laser}
-                         alt={"Heavy laser"}
-                         title={"Heavy laser"}
-                         count={hlCount}
-                         min={0}
-                         max={446}/>
-          <UnitContainer icon={gauss_cannon}
-                         alt={"Gauss cannon"}
-                         title={"Gauss cannon"}
-                         count={gcCount}
-                         min={0}
-                         max={7879}/>
-          <UnitContainer icon={ion_cannon}
-                         alt={"Ion cannon"}
-                         title={"Ion cannon"}
-                         count={icCount}
-                         min={0}
-                         max={0}/>
-          <UnitContainer icon={plasma_turret}
-                         alt={"Plasma turret"}
-                         title={"Plasma turret"}
-                         count={ptCount}
-                         min={0}
-                         max={1}/>
-          <UnitContainer icon={small_shield_dome}
-                         alt={"Small shield dome"}
-                         title={"Small shield dome"}
-                         count={ssCount}
-                         min={0}
-                         max={12}/>
-          <UnitContainer icon={large_shield_dome}
-                         alt={"Large shield dome"}
-                         title={"Large shield dome"}
-                         count={lsCount}
-                         min={0}
-                         max={45}/>
-          <UnitContainer icon={antiballistic_missile}
-                         alt={"Anti-ballistic missile"}
-                         title={"Anti-ballistic missile"}
-                         count={amCount}
-                         min={0}
-                         max={9871}/>
-          <UnitContainer icon={interplanetary_missile}
-                         alt={"Interplanetary missile"}
-                         title={"Interplanetary missile"}
-                         count={imCount}
-                         min={0}
-                         max={127}/>
+  selectElement(defense) {
+    // Update selected defense: we need to find the index
+    // of the ship corresponding to the input element
+    // if possible.
+    if (defense === "") {
+      this.setState({
+        id: -1,
+      });
+    }
+
+    // Search technologies in order.
+    let id = this.state.defenses.findIndex(d => d.id === defense);
+
+    if (id === -1) {
+      console.error("Failed to select defense \"" + defense + "\"");
+    }
+
+    // In case the defense is the same as the one already
+    // selected we will deactivate the upgrade panel.
+    if (this.state.id === id) {
+      this.setState({
+        id: -1
+      });
+
+      return;
+    }
+
+    this.setState({
+      id: id,
+    });
+  }
+
+  uprgadeActionFailed(err) {
+    alert(err);
+  }
+
+  uprgadeActionSucceeded(action) {
+    console.info("Registered action " + action);
+
+    // Request a data reload.
+    this.props.actionPerformed();
+  }
+
+  buildElement(defense) {
+    // Create an object to handle the creation of an action
+    // to upgrade the input element.
+    const p = new Planet(
+      this.props.planet,
+      this.props.player.technologies,
+      this.props.planets,
+      this.props.universe,
+      this.props.resources,
+      this.props.buildings,
+      this.props.technologies,
+      this.props.ships,
+      this.props.defenses,
+    );
+
+    const tab = this;
+
+    // TODO: Allow more than one ship to be built.
+    p.upgradeDefense(defense, 1)
+      .then(function (res) {
+        if (res.status !== UPGRADE_ACTION_POST_SUCCEEDED) {
+          tab.uprgadeActionFailed(res.status);
+        }
+        else {
+          tab.uprgadeActionSucceeded(res.action);
+        }
+      })
+      .catch(err => tab.uprgadeActionFailed(err));
+  }
+
+  render() {
+    let title = "Defenses - Unknown planet";
+
+    if (this.props.planet) {
+      title = "Defenses - " + this.props.planet.name;
+    }
+
+    let defense;
+    if (this.state.id !== -1) {
+      defense = this.state.defenses[this.state.id];
+    }
+
+    return (
+      <div className="defenses_layout">
+        <div className="cover_layout">
+          <h3 className="cover_title">{title}</h3>
+          {
+            defense &&
+            <ElementUpgrade item={defense}
+                            selectElement={(id) => this.selectElement(id)}
+                            buildElement={(id) => this.buildElement(id)}
+                            />
+          }
+        </div>
+        <div className="defenses_systems_section">
+          <p className="cover_header">Defense systems</p>
+          <div className="defenses_systems_layout">
+            {
+              this.state.defenses.map((d, id) =>
+                <ElementContainer key={d.id}
+                                  id={d.id}
+                                  icon={d.icon}
+                                  alt={d.name}
+                                  title={d.name}
+                                  level={d.count}
+                                  selectElement={(id) => this.selectElement(id)}
+                                  selected={id === this.state.id}
+                                  />
+              )
+            }
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default Defenses;

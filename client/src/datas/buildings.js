@@ -19,11 +19,11 @@ import nanite_factory from '../assets/nanite_factory.jpeg';
 import terraformer from '../assets/terraformer.jpeg';
 import space_dock from '../assets/space_dock.jpeg';
 
-// Defines a buildings that is either producing resources
+// Defines a building that is either producing resources
 // or used in the storage of it.
 const RESOURCE_BUILDING = 0;
 
-// Defines a buildings that is linked to the infrastructure
+// Defines a building that is linked to the infrastructure
 // built on a planet.
 const FACILITY = 1;
 
@@ -72,7 +72,7 @@ export const buildings_list = [
     kind: RESOURCE_BUILDING,
   },
 
-  // Facilities
+  // Facilities.
   {
     name: "robotics factory",
     icon: robotics_factory,

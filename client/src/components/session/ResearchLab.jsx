@@ -15,8 +15,7 @@ class ResearchLab extends React.Component {
   constructor(props) {
     super(props);
 
-    // Generate properties from the buildings and
-    // the technologies defined in the server.
+    // Generate properties from the data fetched from the server.
     const fundResearches = [];
     const propResearches = [];
     const advaResearches = [];
@@ -30,6 +29,8 @@ class ResearchLab extends React.Component {
       props.resources,
       props.buildings,
       props.technologies,
+      props.ships,
+      props.defenses,
     );
 
     for (let id = 0 ; id < technologies_list.length ; id++) {
@@ -160,6 +161,8 @@ class ResearchLab extends React.Component {
       this.props.resources,
       this.props.buildings,
       this.props.technologies,
+      this.props.ships,
+      this.props.defenses,
     );
 
     const tab = this;

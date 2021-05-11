@@ -25,6 +25,10 @@ import BuildingsModule from '../game/buildings.js';
 import { BUILDINGS_FETCH_SUCCEEDED } from '../game/buildings.js';
 import TechnologiesModule from '../game/technologies.js';
 import { TECHNOLOGIES_FETCH_SUCCEEDED } from '../game/technologies.js';
+import ShipsModule from '../game/ships.js';
+import { SHIPS_FETCH_SUCCEEDED } from '../game/ships.js';
+import DefensesModule from '../game/defenses.js';
+import { DEFENSES_FETCH_SUCCEEDED } from '../game/defenses.js';
 
 import { TAB_OVERVIEW } from './NavigationMenu.jsx';
 import { TAB_RESOURCES } from './NavigationMenu.jsx';
@@ -63,6 +67,18 @@ class Game extends React.Component {
       // the technologies available in the game.
       technologies: [],
 
+      // Defines the list of ships available for this game:
+      // it corresponds to constant data fetched from the
+      // server and describing the properties of the ships
+      // available in the game.
+      ships: [],
+
+      // Defines the list of defenses available for this game:
+      // it corresponds to constant data fetched from the
+      // server and describing the properties of the defenses
+      // available in the game.
+      defenses: [],
+
       // Defines the index of the selected planet among
       // the available list.
       selectedPlanet: -1,
@@ -90,6 +106,8 @@ class Game extends React.Component {
     const resources = new ResourcesModule(server);
     const buildings = new BuildingsModule(server);
     const technologies = new TechnologiesModule(server);
+    const ships = new ShipsModule(server);
+    const defenses = new DefensesModule(server);
 
     const game = this;
 
@@ -138,6 +156,30 @@ class Game extends React.Component {
       }
       else {
         game.fetchTechnologiesSucceeded(res.technologies);
+      }
+    })
+    .catch(err => game.fetchDataFailed(err));
+
+    // Fetch the ships from the server.
+    ships.fetchShips()
+    .then(function (res) {
+      if (res.status !== SHIPS_FETCH_SUCCEEDED) {
+        game.fetchDataFailed(res.status);
+      }
+      else {
+        game.fetchShipsSucceeded(res.ships);
+      }
+    })
+    .catch(err => game.fetchDataFailed(err));
+
+    // Fetch the defenses from the server.
+    defenses.fetchDefenses()
+    .then(function (res) {
+      if (res.status !== DEFENSES_FETCH_SUCCEEDED) {
+        game.fetchDataFailed(res.status);
+      }
+      else {
+        game.fetchDefensesSucceeded(res.defenses);
       }
     })
     .catch(err => game.fetchDataFailed(err));
@@ -212,6 +254,20 @@ class Game extends React.Component {
     });
   }
 
+  fetchShipsSucceeded(ships) {
+    // Update internal state.
+    this.setState({
+      ships: ships,
+    });
+  }
+
+  fetchDefensesSucceeded(defenses) {
+    // Update internal state.
+    this.setState({
+      defenses: defenses,
+    });
+  }
+
   updateSelectedPlanet(id) {
     // Update the selected planet index if it is
     // valid compared to the list of available
@@ -268,6 +324,8 @@ class Game extends React.Component {
                          resources={this.state.resources}
                          buildings={this.state.buildings}
                          technologies={this.state.technologies}
+                         ships={this.state.ships}
+                         defenses={this.state.defenses}
                          universe={this.props.universe}
                          planets={this.state.planets}
                          actionPerformed={() => this.actionPerformed()}
@@ -279,6 +337,8 @@ class Game extends React.Component {
                           resources={this.state.resources}
                           buildings={this.state.buildings}
                           technologies={this.state.technologies}
+                          ships={this.state.ships}
+                          defenses={this.state.defenses}
                           universe={this.props.universe}
                           planets={this.state.planets}
                           actionPerformed={() => this.actionPerformed()}
@@ -290,6 +350,8 @@ class Game extends React.Component {
                            resources={this.state.resources}
                            buildings={this.state.buildings}
                            technologies={this.state.technologies}
+                           ships={this.state.ships}
+                           defenses={this.state.defenses}
                            universe={this.props.universe}
                            planets={this.state.planets}
                            actionPerformed={() => this.actionPerformed()}
@@ -297,11 +359,27 @@ class Game extends React.Component {
           break;
       case TAB_SHIPYARD:
         tab = <Shipyard planet={this.state.planets[this.state.selectedPlanet]}
+                        player={this.props.session}
+                        resources={this.state.resources}
+                        buildings={this.state.buildings}
+                        technologies={this.state.technologies}
+                        ships={this.state.ships}
+                        defenses={this.state.defenses}
+                        universe={this.props.universe}
+                        planets={this.state.planets}
                         actionPerformed={() => this.actionPerformed()}
                         />;
           break;
       case TAB_DEFENSES:
         tab = <Defenses planet={this.state.planets[this.state.selectedPlanet]}
+                        player={this.props.session}
+                        resources={this.state.resources}
+                        buildings={this.state.buildings}
+                        technologies={this.state.technologies}
+                        ships={this.state.ships}
+                        defenses={this.state.defenses}
+                        universe={this.props.universe}
+                        planets={this.state.planets}
                         actionPerformed={() => this.actionPerformed()}
                         />;
           break;
@@ -336,6 +414,8 @@ class Game extends React.Component {
                                 resources={this.state.resources}
                                 buildings={this.state.buildings}
                                 technologies={this.state.technologies}
+                                ships={this.state.ships}
+                                defenses={this.state.defenses}
                                 />
             </div>
             <PlanetsList planets={this.state.planets}
