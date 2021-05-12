@@ -112,8 +112,8 @@ class Defenses extends React.Component {
 
     const tab = this;
 
-    // TODO: Allow more than one ship to be built.
-    p.upgradeDefense(defense, 1)
+    // TODO: Allow more than one defense to be built.
+    p.upgradeDefense(defense, 2)
       .then(function (res) {
         if (res.status !== UPGRADE_ACTION_POST_SUCCEEDED) {
           tab.uprgadeActionFailed(res.status);

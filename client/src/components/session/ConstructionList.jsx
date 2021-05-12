@@ -8,6 +8,8 @@ import {technologies_list} from '../../datas/technologies.js';
 import {ships_list} from '../../datas/ships.js';
 import {defenses_list} from '../../datas/defenses.js';
 
+import { computeActionCompletionTime } from '../game/actions.js';
+
 function generateActionDesc(action, descs, data) {
   // We will assume that everything is working as expected
   // and that we can't get an upgrade of a building that
@@ -24,13 +26,18 @@ function generateActionDesc(action, descs, data) {
       eta = action.eta;
     }
     else {
-      const completion = Date.parse(action.completion_time)
+      const completion = Date.parse(action.completion_time);
       const now = Date.now();
       eta = completion - now;
     }
   }
   else {
-    // TODO: Handle this.
+    if (action.eta) {
+      eta = action.eta;
+    }
+    else {
+      eta = computeActionCompletionTime(action);
+    }
   }
 
   return {
@@ -47,7 +54,12 @@ function ConstructionList (props) {
   let technologies = [];
   let shipsAndDefenses = [];
 
-  if (props.planet && props.buildings.length > 0 && props.technologies.length > 0) {
+  if (props.planet &&
+      props.buildings.length > 0 &&
+      props.technologies.length > 0 &&
+      props.ships.length > 0 &&
+      props.defenses.length > 0)
+  {
     // Build the list of actions regarding buildings.
     buildings = props.planet.buildings_upgrade.map(
       a => generateActionDesc(a, props.buildings, buildings_list)
