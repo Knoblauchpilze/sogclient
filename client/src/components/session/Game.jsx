@@ -30,6 +30,8 @@ import { SHIPS_FETCH_SUCCEEDED } from '../game/ships.js';
 import DefensesModule from '../game/defenses.js';
 import { DEFENSES_FETCH_SUCCEEDED } from '../game/defenses.js';
 
+import { computeActionCompletionTime } from '../game/actions.js';
+
 import { TAB_OVERVIEW } from './NavigationMenu.jsx';
 import { TAB_RESOURCES } from './NavigationMenu.jsx';
 import { TAB_FACILITIES } from './NavigationMenu.jsx';
@@ -213,10 +215,14 @@ class Game extends React.Component {
       }
 
       // Update ships upgrade.
-      // TODO: Handle this.
+      for (let ua = 0 ; ua < planets[id].ships_construction.length ; ++ua) {
+        planets[id].ships_construction[ua].eta = computeActionCompletionTime(planets[id].ships_construction[ua]);
+      }
 
       // Update defenses upgrade.
-      // TODO: Handle this.
+      for (let ua = 0 ; ua < planets[id].defenses_construction.length ; ++ua) {
+        planets[id].defenses_construction[ua].eta = computeActionCompletionTime(planets[id].defenses_construction[ua]);
+      }
     }
 
     this.setState({

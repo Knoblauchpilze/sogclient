@@ -120,7 +120,23 @@ function ElementUpgrade (props) {
                 <span className="element_upgrade_prop_value">{formatAmount(Math.abs(props.item.next_energy))}</span>
               </div>
             }
-            <span className="element_upgrade_prop_key">{"Required for level " + (props.item.level + 1) + ":"}</span>
+            {
+              !props.item.bulk_buildable &&
+              <span className="element_upgrade_prop_key">{"Required for level " + (props.item.level + 1) + ":"}</span>
+            }
+            {
+              props.item.bulk_buildable &&
+              <form className="fleet_ship_count_form">
+                <input className="fleet_ship_selector"
+                      method="post"
+                      type="number"
+                      name="ship_count"
+                      id="ship_count"
+                      value={props.min}
+                      min={props.min}
+                      max={props.max}/>
+              </form>
+            }
             <div className="element_upgrade_resources">
               {props.item.resources.map(r => generateResourceContainer(r.icon, r.name, r.amount, r.enough))}
             </div>

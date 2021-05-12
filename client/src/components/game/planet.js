@@ -460,6 +460,7 @@ class Planet {
         technologies: deps.technologiesPrerequisitesOk,
       },
       demolishable: costs.demolishable,
+      bulk_buildable: false,
       description: "This is maybe a description",
     };
 
@@ -525,6 +526,7 @@ class Planet {
       },
       // Technologies can't be 'demolished'.
       demolishable: false,
+      bulk_buildable: false,
       description: "This is not a description",
     };
 
@@ -590,6 +592,7 @@ class Planet {
       },
       // Ships can't be 'demolished'.
       demolishable: false,
+      bulk_buildable: true,
       description: "This is maybe a description",
     };
 
@@ -655,6 +658,7 @@ class Planet {
       },
       // Defenses can't be 'demolished'.
       demolishable: false,
+      bulk_buildable: true,
       description: "This is maybe a description",
     };
 
