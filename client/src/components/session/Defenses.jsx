@@ -95,7 +95,7 @@ class Defenses extends React.Component {
     this.props.actionPerformed();
   }
 
-  buildElement(defense) {
+  buildElement(defense, amount) {
     // Create an object to handle the creation of an action
     // to upgrade the input element.
     const p = new Planet(
@@ -112,8 +112,7 @@ class Defenses extends React.Component {
 
     const tab = this;
 
-    // TODO: Allow more than one defense to be built.
-    p.upgradeDefense(defense, 2)
+    p.upgradeDefense(defense, amount)
       .then(function (res) {
         if (res.status !== UPGRADE_ACTION_POST_SUCCEEDED) {
           tab.uprgadeActionFailed(res.status);
@@ -145,7 +144,7 @@ class Defenses extends React.Component {
             defense &&
             <ElementUpgrade item={defense}
                             selectElement={(id) => this.selectElement(id)}
-                            buildElement={(id) => this.buildElement(id)}
+                            buildElement={(id, amount) => this.buildElement(id, amount)}
                             />
           }
         </div>
