@@ -40,13 +40,21 @@ function generateActionDesc(action, descs, data) {
     }
   }
 
-  return {
+  let out = {
     id: action.id,
     name: eDesc.name,
     icon: eData.icon,
-    level: action.desired_level,
     remaining: eta,
   };
+
+  if (action.desired_level) {
+    out.level = action.desired_level;
+  }
+  if (action.remaining) {
+    out.amount = action.remaining;
+  }
+
+  return out;
 }
 
 function ConstructionList (props) {
