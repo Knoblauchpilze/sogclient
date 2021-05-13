@@ -73,3 +73,25 @@
 .construction_action_data_level {
   color: #f80;
 }
+
+.construction_action_queue_layout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.construction_action_queue_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.construction_action_queue_icon {
+  width: 50px;
+  height: 50px;
+}
+
+.construction_action_queue_text {
+  font-size: smaller;
+  white-space: nowrap;
+}

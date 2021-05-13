@@ -53,20 +53,32 @@ function ConstructionAction(props) {
         {
           props.actions.length !== 0 &&
           <div className="construction_action_list_layout">
-            {props.actions.map(a => (
-              <div key={a.id} className="construction_action_data_layout">
-                <div className="construction_action_data_title">{a.name}</div>
-                <div className="construction_action_data_internal_layout">
-                  <img className="construction_action_data_icon" src={a.icon} alt={a.name} title={a.name} />
-                  <div>
-                    <p className="construction_action_data_prop construction_action_data_key">Currently building</p>
-                    <p className="construction_action_data_prop construction_action_data_level">{"Level " + a.level}</p>
-                    <p className="construction_action_data_prop construction_action_data_key">Remaining:</p>
-                    <p className="construction_action_data_prop construction_action_data_time">{formatInterval(a.remaining)}</p>
-                  </div>
+            <div key={props.actions[0].id} className="construction_action_data_layout">
+              <div className="construction_action_data_title">{props.actions[0].name}</div>
+              <div className="construction_action_data_internal_layout">
+                <img className="construction_action_data_icon" src={props.actions[0].icon} alt={props.actions[0].name} title={props.actions[0].name} />
+                <div>
+                  <p className="construction_action_data_prop construction_action_data_key">Currently building</p>
+                  <p className="construction_action_data_prop construction_action_data_level">{"Level " + props.actions[0].level}</p>
+                  <p className="construction_action_data_prop construction_action_data_key">Remaining:</p>
+                  <p className="construction_action_data_prop construction_action_data_time">{formatInterval(props.actions[0].remaining)}</p>
                 </div>
               </div>
-            ))}
+            </div>
+          </div>
+        }
+        {
+          props.actions.length > 1 &&
+
+          <div className="construction_action_queue_layout">
+            {
+              props.actions.slice(1).map(a =>
+                <div className="construction_action_queue_item">
+                  <img className="construction_action_queue_icon" src={a.icon} alt={a.name} title={a.name} />
+                  <span className="construction_action_queue_text">{a.level ? a.level : a.amount}</span>
+                </div>
+              )
+            }
           </div>
         }
       </div>
