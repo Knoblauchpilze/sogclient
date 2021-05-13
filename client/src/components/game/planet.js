@@ -593,6 +593,9 @@ class Planet {
       // Ships can't be 'demolished'.
       demolishable: false,
       bulk_buildable: true,
+      // TODO: Compute bounds.
+      min: 0,
+      max: 6,
       description: "This is maybe a description",
     };
 
@@ -659,6 +662,9 @@ class Planet {
       // Defenses can't be 'demolished'.
       demolishable: false,
       bulk_buildable: true,
+      // TODO: Compute bounds.
+      min: 0,
+      max: 12,
       description: "This is maybe a description",
     };
 

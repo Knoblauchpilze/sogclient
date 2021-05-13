@@ -65,93 +65,120 @@ function generateResourceContainer(icon, alt, amount, allowed) {
   );
 }
 
-function ElementUpgrade (props) {
-  let ub = "element_upgrade_button";
-  let db = "element_upgrade_button";
+class ElementUpgrade extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const preRequisites = props.item.buildable.buildings && props.item.buildable.technologies;
-  if (props.item.buildable.resources && preRequisites) {
-    ub += " element_upgrade_build";
-  }
-  else {
-    ub += " element_upgrade_inactive";
-  }
-  if (props.item.demolishable && preRequisites) {
-    db += " element_upgrade_demolish";
-  }
-  else {
-    db += " element_upgrade_inactive";
+    this.state = {
+      // Defines the amount of items selected to be built when the
+      // build button is pressed.
+      bulk: 0,
+    };
+
+    this.requestBulkBuild = this.requestBulkBuild.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // Generate expressions to handle clicks on buttons.
-  const be = (id) => {
-    if (props.item.buildable && preRequisites) {
-      props.buildElement(id);
+  handleSubmit(event) {
+    // Prevent anything from being sent.
+    event.preventDefault();
+  }
+
+  requestBulkBuild(event) {
+    // Make sure that the value is within valid bounds.
+    this.setState({
+      bulk: Math.max(Math.min(event.target.value, this.props.item.max), this.props.item.min),
+    });
+  }
+
+  render() {
+    let ub = "element_upgrade_button";
+    let db = "element_upgrade_button";
+
+    const preRequisites = this.props.item.buildable.buildings && this.props.item.buildable.technologies;
+    if (this.props.item.buildable.resources && preRequisites) {
+      ub += " element_upgrade_build";
     }
-  }
-
-  const de = (id) => {
-    if (props.item.demolishable && preRequisites) {
-      props.demolishElement(id);
+    else {
+      ub += " element_upgrade_inactive";
     }
-  }
+    if (this.props.item.demolishable && preRequisites) {
+      db += " element_upgrade_demolish";
+    }
+    else {
+      db += " element_upgrade_inactive";
+    }
 
-  return (
-    <div className="cover_upgrade_layout">
-      <div className="element_upgrade_general_layout">
-        <div className="element_upgrade_item_layout">
-          <img className="element_upgrade_icon" src={props.item.icon} alt={props.item.name} title={props.item.name} />
-          <div className="element_upgrade_props_layout">
-            <div className="element_upgrade_header">
-              <div className="element_upgrade_desc">
-                <span className="element_upgrade_title">{props.item.name}</span>
-                <span className="element_upgrade_level">{"Level: " + props.item.level}</span>
+    // Generate expressions to handle clicks on buttons.
+    const be = (id) => {
+      if (this.props.item.buildable && preRequisites && this.state.bulk > 0) {
+        this.props.buildElement(id, this.state.bulk);
+      }
+    }
+
+    const de = (id) => {
+      if (this.props.item.demolishable && preRequisites) {
+        this.props.demolishElement(id);
+      }
+    }
+
+    return (
+      <div className="cover_upgrade_layout">
+        <div className="element_upgrade_general_layout">
+          <div className="element_upgrade_item_layout">
+            <img className="element_upgrade_icon" src={this.props.item.icon} alt={this.props.item.name} title={this.props.item.name} />
+            <div className="element_upgrade_props_layout">
+              <div className="element_upgrade_header">
+                <div className="element_upgrade_desc">
+                  <span className="element_upgrade_title">{this.props.item.name}</span>
+                  <span className="element_upgrade_level">{"Level: " + this.props.item.level}</span>
+                </div>
+                <button className="element_upgrade_close" onClick={() => this.props.selectElement("")}><span>X</span></button>
               </div>
-              <button className="element_upgrade_close" onClick={() => props.selectElement("")}><span>X</span></button>
-            </div>
-            <div className="element_upgrade_prop">
-              <span className="element_upgrade_prop_key">Construction time:</span>
-              <span className="element_upgrade_prop_value">{props.item.duration}</span>
-            </div>
-            {
-              props.item.next_energy !== 0 &&
               <div className="element_upgrade_prop">
-                <span className="element_upgrade_prop_key">{props.item.next_energy < 0 ? "Energy required:" : "Production:"}</span>
-                <span className="element_upgrade_prop_value">{formatAmount(Math.abs(props.item.next_energy))}</span>
+                <span className="element_upgrade_prop_key">Construction time:</span>
+                <span className="element_upgrade_prop_value">{this.props.item.duration}</span>
               </div>
-            }
-            {
-              !props.item.bulk_buildable &&
-              <span className="element_upgrade_prop_key">{"Required for level " + (props.item.level + 1) + ":"}</span>
-            }
-            {
-              props.item.bulk_buildable &&
-              <form className="fleet_ship_count_form">
-                <input className="fleet_ship_selector"
-                      method="post"
-                      type="number"
-                      name="ship_count"
-                      id="ship_count"
-                      value={props.min}
-                      min={props.min}
-                      max={props.max}/>
-              </form>
-            }
-            <div className="element_upgrade_resources">
-              {props.item.resources.map(r => generateResourceContainer(r.icon, r.name, r.amount, r.enough))}
-            </div>
-            <div className="element_upgrade_buttons">
-              <button className={ub} onClick={() => be(props.item.id)}>Build</button>
-              <button className={db} onClick={() => de(props.item.id)}>Demolish</button>
+              {
+                this.props.item.next_energy !== 0 &&
+                <div className="element_upgrade_prop">
+                  <span className="element_upgrade_prop_key">{this.props.item.next_energy < 0 ? "Energy required:" : "Production:"}</span>
+                  <span className="element_upgrade_prop_value">{formatAmount(Math.abs(this.props.item.next_energy))}</span>
+                </div>
+              }
+              {
+                !this.props.item.bulk_buildable &&
+                <span className="element_upgrade_prop_key">{"Required for level " + (this.props.item.level + 1) + ":"}</span>
+              }
+              {
+                this.props.item.bulk_buildable &&
+                <form className="element_upgrade_bulk_form" onSubmit={this.handleSubmit} >
+                  <input className="element_upgrade_bulk_input"
+                        method="post"
+                        type="number"
+                        name="bulk_count"
+                        id="bulk_count"
+                        value={this.state.bulk}
+                        onChange={this.requestBulkBuild}
+                        />
+                </form>
+              }
+              <div className="element_upgrade_resources">
+                {this.props.item.resources.map(r => generateResourceContainer(r.icon, r.name, r.amount, r.enough))}
+              </div>
+              <div className="element_upgrade_buttons">
+                <button className={ub} onClick={() => be(this.props.item.id)}>Build</button>
+                <button className={db} onClick={() => de(this.props.item.id)}>Demolish</button>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="element_upgrade_description">
-          {props.description}
+          <div className="element_upgrade_description">
+            {this.props.description}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default ElementUpgrade;

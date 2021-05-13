@@ -126,7 +126,7 @@ class Shipyard extends React.Component {
     this.props.actionPerformed();
   }
 
-  buildElement(ship) {
+  buildElement(ship, amount) {
     // Create an object to handle the creation of an action
     // to upgrade the input element.
     const p = new Planet(
@@ -143,8 +143,7 @@ class Shipyard extends React.Component {
 
     const tab = this;
 
-    // TODO: Allow more than one ship to be built.
-    p.upgradeShip(ship, 1)
+    p.upgradeShip(ship, amount)
       .then(function (res) {
         if (res.status !== UPGRADE_ACTION_POST_SUCCEEDED) {
           tab.uprgadeActionFailed(res.status);
@@ -186,13 +185,13 @@ class Shipyard extends React.Component {
             ship &&
             <ElementUpgrade item={ship}
                             selectElement={(id) => this.selectElement(id)}
-                            buildElement={(id) => this.buildElement(id)}
+                            buildElement={(id, amount) => this.buildElement(id, amount)}
                             />
           }
         </div>
         <div className="shipyard_ships_layout">
           <div className="shipyard_section">
-            <p class="cover_header">Combat ships</p>
+            <p className="cover_header">Combat ships</p>
             <div className="shipyard_section_layout">
               {
                 this.state.civil_ships.map((s, id) =>
@@ -211,7 +210,7 @@ class Shipyard extends React.Component {
           </div>
 
           <div className="shipyard_section">
-            <p class="cover_header">Civil ships</p>
+            <p className="cover_header">Civil ships</p>
             <div className="shipyard_section_layout">
               {
                 this.state.combat_ships.map((s, id) =>

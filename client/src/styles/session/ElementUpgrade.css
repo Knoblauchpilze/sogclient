@@ -102,6 +102,24 @@
   flex-direction: row;
 }
 
+.element_upgrade_bulk_form {
+  min-width: 0;
+  padding: 0px;
+  margin: 0px;
+}
+
+.element_upgrade_bulk_input {
+  height: 30px;
+
+  padding: 0px;
+  margin: 0px;
+
+  border: none;
+  -moz-appearance:textfield;
+
+  text-align: right;
+}
+
 .element_upgrade_resource {
   display: flex;
   flex-direction: column;
