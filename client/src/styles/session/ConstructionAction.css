@@ -31,6 +31,10 @@
   color: #fff;
   background-color: #12161c;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   margin: 2px;
 
   border: 1px #171d23 solid;

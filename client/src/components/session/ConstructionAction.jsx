@@ -69,7 +69,6 @@ function ConstructionAction(props) {
         }
         {
           props.actions.length > 1 &&
-
           <div className="construction_action_queue_layout">
             {
               props.actions.slice(1).map(a =>
