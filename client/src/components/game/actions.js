@@ -1,5 +1,5 @@
 
-function millisecondsFromDuration(duration) {
+export function millisecondsFromDuration(duration) {
   // This topic helped a bit:
   // https://stackoverflow.com/questions/11909457/how-to-parse-a-duration-string-into-seconds-with-javascript
   // And then the regexp was modified to be both more

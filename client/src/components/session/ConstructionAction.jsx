@@ -57,12 +57,26 @@ function ConstructionAction(props) {
               <div className="construction_action_data_title">{props.actions[0].name}</div>
               <div className="construction_action_data_internal_layout">
                 <img className="construction_action_data_icon" src={props.actions[0].icon} alt={props.actions[0].name} title={props.actions[0].name} />
-                <div>
-                  <p className="construction_action_data_prop construction_action_data_key">Currently building</p>
-                  <p className="construction_action_data_prop construction_action_data_level">{"Level " + props.actions[0].level}</p>
-                  <p className="construction_action_data_prop construction_action_data_key">Remaining:</p>
-                  <p className="construction_action_data_prop construction_action_data_time">{formatInterval(props.actions[0].remaining)}</p>
-                </div>
+                {
+                  props.actions[0].level &&
+                  <div>
+                    <p className="construction_action_data_prop construction_action_data_key">Currently building:</p>
+                    <p className="construction_action_data_prop construction_action_data_level">{"Level " + props.actions[0].level}</p>
+                    <p className="construction_action_data_prop construction_action_data_key">Remaining:</p>
+                    <p className="construction_action_data_prop">{formatInterval(props.actions[0].remaining)}</p>
+                  </div>
+                }
+                {
+                  props.actions[0].amount &&
+                  <div>
+                    <p className="construction_action_data_prop construction_action_data_key">Building time:</p>
+                    <p className="construction_action_data_prop construction_action_data_level">{formatInterval(props.actions[0].completion_time)}</p>
+                    <p className="construction_action_data_prop construction_action_data_key">Remaining for next:</p>
+                    <p className="construction_action_data_prop">{formatInterval(props.actions[0].remaining)}</p>
+                    <p className="construction_action_data_prop construction_action_data_key">Item:</p>
+                    <p className="construction_action_data_prop">{(props.actions[0].total - props.actions[0].amount + 1) + "/" + props.actions[0].total}</p>
+                  </div>
+                }
               </div>
             </div>
           </div>
@@ -72,7 +86,7 @@ function ConstructionAction(props) {
           <div className="construction_action_queue_layout">
             {
               props.actions.slice(1).map(a =>
-                <div className="construction_action_queue_item">
+                <div key={a.id} className="construction_action_queue_item">
                   <img className="construction_action_queue_icon" src={a.icon} alt={a.name} title={a.name} />
                   <span className="construction_action_queue_text">{a.level ? a.level : a.amount}</span>
                 </div>

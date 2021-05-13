@@ -8,7 +8,7 @@ import {technologies_list} from '../../datas/technologies.js';
 import {ships_list} from '../../datas/ships.js';
 import {defenses_list} from '../../datas/defenses.js';
 
-import { computeActionCompletionTime } from '../game/actions.js';
+import { computeActionCompletionTime, millisecondsFromDuration } from '../game/actions.js';
 
 function generateActionDesc(action, descs, data) {
   // We will assume that everything is working as expected
@@ -52,6 +52,8 @@ function generateActionDesc(action, descs, data) {
   }
   if (action.remaining) {
     out.amount = action.remaining;
+    out.total = action.amount;
+    out.completion_time = millisecondsFromDuration(action.completion_time);
   }
 
   return out;
