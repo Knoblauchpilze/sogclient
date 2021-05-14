@@ -111,7 +111,8 @@ class ElementUpgrade extends React.Component {
 
     // Generate expressions to handle clicks on buttons.
     const be = (id) => {
-      if (this.props.item.buildable && preRequisites && this.state.bulk > 0) {
+      const validBulk = !this.props.item.bulk_buildable || this.state.bulk > 0;
+      if (this.props.item.buildable && preRequisites && validBulk) {
         this.props.buildElement(id, this.state.bulk);
       }
     }
