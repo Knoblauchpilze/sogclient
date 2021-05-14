@@ -2,16 +2,7 @@
 import '../../styles/session/ResourceInfo.css';
 import React from 'react';
 
-function formatAmount(amount) {
-  let out = "";
-
-  if (amount > 0) {
-    out += "+";
-  }
-  out += Math.floor(amount);
-
-  return out;
-}
+import { shortenAmount, formatAmount } from '../game/amounts.js';
 
 function ResourceInfo (props) {
   let classAmount = "resource_info_amount"
@@ -28,6 +19,10 @@ function ResourceInfo (props) {
       <img src={props.data.icon} alt={props.data.title} title={props.data.title} />
       <span className={classAmount}>{props.data.amount}</span>
       <span className={classProduction}>{"(" + formatAmount(props.data.production) + ")"}</span>
+      {
+        props.data.storable &&
+        <span className={classProduction}>{"(" + shortenAmount(props.data.storage) + ")"}</span>
+      }
     </div>
   );
 }

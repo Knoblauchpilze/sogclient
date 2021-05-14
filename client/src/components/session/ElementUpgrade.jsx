@@ -2,65 +2,14 @@
 import '../../styles/session/ElementUpgrade.css';
 import React from 'react';
 
-// The threshold above which resources are grouped
-// by a dot. This helps readability.
-const dotSeparatorThreshold = 1000;
-
-// The threshold above which resources do not use
-// the full display anymore.
-const shortNotationThreshold = 1000000;
-
-function toFixedDigits(val, digits) {
-  // Error case somehow.
-  if (digits < 2) {
-    return val;
-  }
-
-  let dCount = 1;
-  if (val > 0) {
-    dCount = Math.ceil(Math.log10(val));
-  }
-
-  let out = "";
-  for (let i = 0 ; i < digits - dCount ; i++) {
-    out += "0";
-  }
-
-  out += val;
-
-  return out;
-}
-
-function formatAmount(amount) {
-  if (amount < dotSeparatorThreshold) {
-    return "" + amount;
-  }
-
-  if (amount < shortNotationThreshold) {
-    // Insert dot separator in the amount to make
-    // it more readable.
-    const lead = Math.floor(amount / dotSeparatorThreshold);
-    const trailing = amount - lead * dotSeparatorThreshold;
-
-    return lead + "." + toFixedDigits(trailing, 3);
-  }
-
-  const lead = Math.floor(amount / shortNotationThreshold);
-  const trailing = Math.floor((amount - lead * shortNotationThreshold) / dotSeparatorThreshold);
-
-  if (trailing === 0) {
-    return "" + lead + "M";
-  }
-
-  return lead + "," + toFixedDigits(trailing, 3) + "M";
-}
+import { shortenAmount } from '../game/amounts.js';
 
 function generateResourceContainer(icon, alt, amount, allowed) {
   const color = allowed ? "element_upgrade_resource_amount" : "element_upgrade_resource_amount_invalid";
   return (
     <div key={alt} className="element_upgrade_resource">
       <img className="element_upgrade_resource_icon" src={icon} alt={alt} title={alt} />
-      <span className={color}>{formatAmount(amount)}</span>
+      <span className={color}>{shortenAmount(amount)}</span>
     </div>
   );
 }
@@ -144,7 +93,7 @@ class ElementUpgrade extends React.Component {
                 this.props.item.next_energy !== 0 &&
                 <div className="element_upgrade_prop">
                   <span className="element_upgrade_prop_key">{this.props.item.next_energy < 0 ? "Energy required:" : "Production:"}</span>
-                  <span className="element_upgrade_prop_value">{formatAmount(Math.abs(this.props.item.next_energy))}</span>
+                  <span className="element_upgrade_prop_value">{shortenAmount(Math.abs(this.props.item.next_energy))}</span>
                 </div>
               }
               {
