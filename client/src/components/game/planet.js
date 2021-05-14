@@ -127,6 +127,7 @@ class Planet {
       costs: [],
       buildable: true,
       demolishable: (level > 0),
+      max: -1,
     };
 
     // Make sure to traverse the resources as defined
@@ -174,6 +175,15 @@ class Planet {
         out.buildable = false;
       }
 
+      // Compute min and max bound.
+      const max = Math.floor(!available ? 0 : available.amount / amount);
+      if (out.max < 0) {
+        out.max = max;
+      }
+      else if (out.max > max) {
+        out.max = max;
+      }
+
       // While we're at it, determine if there's enough resources
       // to demolish the building: this is true if there are some
       // resources to 'build' the previous level. Of course we
@@ -192,6 +202,12 @@ class Planet {
         amount: amount,
         enough: enough,
       });
+    }
+
+    // Normalize the min and max amount of elements that can be
+    // built for this element.
+    if (out.max < 0) {
+      out.max = 0;
     }
 
     return out;
@@ -593,9 +609,7 @@ class Planet {
       // Ships can't be 'demolished'.
       demolishable: false,
       bulk_buildable: true,
-      // TODO: Compute bounds.
-      min: 0,
-      max: 6,
+      max: costs.max,
       description: "This is maybe a description",
     };
 
@@ -662,9 +676,7 @@ class Planet {
       // Defenses can't be 'demolished'.
       demolishable: false,
       bulk_buildable: true,
-      // TODO: Compute bounds.
-      min: 0,
-      max: 12,
+      max: costs.max,
       description: "This is maybe a description",
     };
 

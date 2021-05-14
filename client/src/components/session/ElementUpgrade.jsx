@@ -87,7 +87,7 @@ class ElementUpgrade extends React.Component {
   requestBulkBuild(event) {
     // Make sure that the value is within valid bounds.
     this.setState({
-      bulk: Math.max(Math.min(event.target.value, this.props.item.max), this.props.item.min),
+      bulk: Math.max(Math.min(event.target.value, this.props.item.max), 0),
     });
   }
 
