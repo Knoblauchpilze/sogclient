@@ -4,17 +4,40 @@ import React from 'react';
 import ResourceInfo from './ResourceInfo.jsx';
 
 import { resources_list } from '../../datas/resources.js';
+import { computeProduction } from '../game/rules.js';
 
-function generateResourceDesc(res, fromPlanet, data) {
+function generateResourceDesc(res, rFromPlanet, data, bFromPlanet, buildings, temp) {
   // Find the resource data.
   const rDesc = data.find(r => r.name === res.name);
-  const rData = fromPlanet.find(r => r.resource === rDesc.id);
+  const rData = rFromPlanet.find(r => r.resource === rDesc.id);
+
+  // Compute the production for this resource. We will
+  // handle the cases where the resources can't be stored
+  // because in this case the `amount` is set to `0` and
+  // we still want to get an idea of how much is `produced`.
+  let amount = rData.amount;
+  if (!rDesc.storable) {
+    for (let id = 0 ; id < buildings.length ; ++id) {
+      const bDesc = buildings[id];
+
+      const rProd = bDesc.production.find(r => r.resource === rDesc.id);
+      if (rProd) {
+        const bData = bFromPlanet.find(b => b.id === bDesc.id);
+
+        const prod = computeProduction(rProd, bData.level, temp);
+
+        if (prod > 0) {
+          amount += prod;
+        }
+      }
+    }
+  }
 
   return {
     title: res.name,
     icon: res.mini,
 
-    amount: Math.floor(rData.amount),
+    amount: Math.floor(amount),
     production: rData.production,
     storage: rData.storage,
     storable: rDesc.storable,
@@ -22,15 +45,21 @@ function generateResourceDesc(res, fromPlanet, data) {
 }
 
 function ResourcesDisplay (props) {
-  if (props.planet && props.resources) {
+  let temp = 0;
+  if (props.planet) {
+    temp = (props.planet.min_temperature + props.planet.max_temperature) / 2;
   }
 
   return (
     <div className="resources_display_layout">
       {
-        props.planet && props.resources &&
+        props.planet &&
+        props.planet.resources.length > 0 &&
+        props.resources.length > 0 &&
+        props.planet.buildings.length > 0 &&
+        props.buildings.length > 0 &&
         resources_list.map(r =>
-          <ResourceInfo key={r.name} data={generateResourceDesc(r, props.planet.resources, props.resources)} />
+          <ResourceInfo key={r.name} data={generateResourceDesc(r, props.planet.resources, props.resources, props.planet.buildings, props.buildings, temp)} />
         )
       }
     </div>

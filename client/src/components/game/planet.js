@@ -559,7 +559,7 @@ class Planet {
     // in the imported data. This will consitute the first
     // basis for the ship data.
     const id = ships_list.findIndex(s => s.name === name);
-    
+
     // In case the ship was not found, return a default
     // value.
     if (id === -1) {
@@ -626,7 +626,7 @@ class Planet {
     // in the imported data. This will consitute the first
     // basis for the defense data.
     const id = defenses_list.findIndex(d => d.name === name);
-    
+
     // In case the defense was not found, return a default
     // value.
     if (id === -1) {
