@@ -471,6 +471,9 @@ class Planet {
       next_energy: nextEnergy,
       duration: this.computeBuildingDuration(costs.costs),
       buildable: {
+        // A building can be added only in case there is no
+        // active research.
+        queue: (this.data.planet.buildings_upgrade.length === 0),
         resources: costs.buildable,
         buildings: deps.buildingsPrerequisitesOk,
         technologies: deps.technologiesPrerequisitesOk,
@@ -536,6 +539,9 @@ class Planet {
       next_energy: 0,
       duration: this.computeTechnologyDuration(costs.costs),
       buildable: {
+        // A technology can be added only in case there is no
+        // active research.
+        queue: (this.data.planet.technologies_upgrade.length === 0),
         resources: costs.buildable,
         buildings: deps.buildingsPrerequisitesOk,
         technologies: deps.technologiesPrerequisitesOk,
@@ -602,6 +608,8 @@ class Planet {
       next_energy: 0,
       duration: this.computeCombatItemDuration(costs.costs),
       buildable: {
+        // A ship can always be added to the queue.
+        queue: true,
         resources: costs.buildable,
         buildings: deps.buildingsPrerequisitesOk,
         technologies: deps.technologiesPrerequisitesOk,
@@ -669,6 +677,8 @@ class Planet {
       next_energy: 0,
       duration: this.computeCombatItemDuration(costs.costs),
       buildable: {
+        // A ship can always be added to the queue.
+        queue: true,
         resources: costs.buildable,
         buildings: deps.buildingsPrerequisitesOk,
         technologies: deps.technologiesPrerequisitesOk,
