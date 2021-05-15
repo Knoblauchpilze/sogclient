@@ -45,13 +45,13 @@ class ElementUpgrade extends React.Component {
     let db = "element_upgrade_button";
 
     const preRequisites = this.props.item.buildable.buildings && this.props.item.buildable.technologies;
-    if (this.props.item.buildable.resources && preRequisites) {
+    if (this.props.item.buildable.resources && this.props.item.buildable.queue && preRequisites) {
       ub += " element_upgrade_build";
     }
     else {
       ub += " element_upgrade_inactive";
     }
-    if (this.props.item.demolishable && preRequisites) {
+    if (this.props.item.demolishable && this.props.item.buildable.queue && preRequisites) {
       db += " element_upgrade_demolish";
     }
     else {
@@ -61,7 +61,7 @@ class ElementUpgrade extends React.Component {
     // Generate expressions to handle clicks on buttons.
     const be = (id) => {
       const validBulk = !this.props.item.bulk_buildable || this.state.bulk > 0;
-      if (this.props.item.buildable && preRequisites && validBulk) {
+      if (this.props.item.buildable && this.props.item.buildable.queue && preRequisites && validBulk) {
         this.props.buildElement(id, this.state.bulk);
       }
     }
