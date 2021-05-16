@@ -10,9 +10,9 @@ function NavigationMenuItem (props) {
       </div>
       {
         props.data_link &&
-        <a className="navigation_menu_item_data" href={props.data_link}>
+        <span className="navigation_menu_item_data" onClick={props.data_link}>
           <img className="navigation_menu_item_icon" src={props.icon} alt={props.icon_alt} />
-        </a>
+        </span>
       }
       {
         !props.data_link &&
