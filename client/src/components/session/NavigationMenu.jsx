@@ -23,6 +23,11 @@ const TAB_FACILITIES = "facilities";
 // on the research already done by the player's empire.
 const TAB_RESEARCH_LAB = "research_lab";
 
+// Defines the technology tree view, displaying information
+// on the research needed to unlock additional buildings and
+// technologies.
+const TAB_TECH_TREE = "tech_tree";
+
 // Defines the shipyard menu, displaying information on
 // ships that can be produced on the planet.
 const TAB_SHIPYARD = "shipyard";
@@ -46,7 +51,7 @@ function NavigationMenu (props) {
                           onClick={() => props.updateGameTab(TAB_OVERVIEW)}
                           />
       <NavigationMenuItem name={"Resources"}
-                          data_link={"../resources/production_settings.html"}
+                          data_link={() => console.log("TODO: Handle production settings")}
                           icon={prod_control}
                           icon_alt={"Prod control"}
                           onClick={() => props.updateGameTab(TAB_RESOURCES)}
@@ -55,7 +60,7 @@ function NavigationMenu (props) {
                           onClick={() => props.updateGameTab(TAB_FACILITIES)}
                           />
       <NavigationMenuItem name={"Research lab"}
-                          data_link={"../research_lab/technologies_list.html"}
+                          data_link={() => props.updateGameTab(TAB_TECH_TREE)}
                           icon={tech_tree}
                           icon_alt={"Technology tree"}
                           onClick={() => props.updateGameTab(TAB_RESEARCH_LAB)}
@@ -67,7 +72,7 @@ function NavigationMenu (props) {
                           onClick={() => props.updateGameTab(TAB_DEFENSES)}
                           />
       <NavigationMenuItem name={"Fleets"}
-                          data_link={"../fleets/fleets_movements.html"}
+                          data_link={() => console.log("TODO: Handle fleet movements")}
                           icon={fleets_movements}
                           icon_alt={"Fleets"}
                           onClick={() => props.updateGameTab(TAB_FLEETS)}
@@ -84,6 +89,7 @@ export {
   TAB_RESOURCES,
   TAB_FACILITIES,
   TAB_RESEARCH_LAB,
+  TAB_TECH_TREE,
   TAB_SHIPYARD,
   TAB_DEFENSES,
   TAB_FLEETS,
