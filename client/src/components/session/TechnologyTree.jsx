@@ -7,6 +7,7 @@ import {buildings_list} from '../../datas/buildings.js';
 import {technologies_list} from '../../datas/technologies.js';
 import {ships_list} from '../../datas/ships.js';
 import {defenses_list} from '../../datas/defenses.js';
+import { GROUND_SYSTEM, MISSILE } from '../../datas/defenses.js';
 
 import expand from '../../assets/expanded.png';
 import collapse from '../../assets/collapsed.png';
@@ -129,12 +130,46 @@ class TechnologyTree extends React.Component {
     let technologies_deps = [];
     let ships_deps = [];
     let defenses_deps = [];
+    let missiles_deps = [];
 
     if (props.buildings.length > 0 && props.technologies.length > 0 && props.planet.buildings.length > 0 && props.player.technologies.length > 0) {
       buildings_deps = generateDependencies(props.buildings, props.buildings, props.technologies, props.planet.buildings, props.player.technologies);
       technologies_deps = generateDependencies(props.technologies, props.buildings, props.technologies, props.planet.buildings, props.player.technologies);
       ships_deps = generateDependencies(props.ships, props.buildings, props.technologies, props.planet.buildings, props.player.technologies);
-      defenses_deps = generateDependencies(props.defenses, props.buildings, props.technologies, props.planet.buildings, props.player.technologies);
+
+      const groundSystems = props.defenses.filter(function(e) {
+        const bData = defenses_list.find(it => it.name === e.name);
+        if (!bData) {
+          return true;
+        }
+
+        return bData.kind === GROUND_SYSTEM;
+      });
+
+      defenses_deps = generateDependencies(
+        groundSystems,
+        props.buildings,
+        props.technologies,
+        props.planet.buildings,
+        props.player.technologies
+      );
+
+      const missileSystems = props.defenses.filter(function(e) {
+        const bData = defenses_list.find(it => it.name === e.name);
+        if (!bData) {
+          return true;
+        }
+
+        return bData.kind === MISSILE;
+      });
+
+      missiles_deps = generateDependencies(
+        missileSystems,
+        props.buildings,
+        props.technologies,
+        props.planet.buildings,
+        props.player.technologies
+      );
     }
 
     this.state = {
@@ -168,6 +203,10 @@ class TechnologyTree extends React.Component {
       // The processed list of defenses, containing the names
       // of the dependencies.
       defenses: defenses_deps,
+
+      // The processed list of missiles, containing the names
+      // of the dependencies.
+      missiles: missiles_deps,
     };
   }
 
@@ -255,6 +294,9 @@ class TechnologyTree extends React.Component {
           <img className="tech_tree_icon" src={cnMissilesIcon} alt={ipMissilesStatus} title={ipMissilesStatus} onClick={() => this.toggleSection(SECTION_MISSILES)}></img>
           <span className="tech_tree_title">Missiles</span>
         </div>
+        {
+          this.state.missiles_visible && generateSectionTechTree(this.state.missiles)
+        }
       </div>
     );
   }

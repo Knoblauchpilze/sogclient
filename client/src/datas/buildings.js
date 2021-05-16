@@ -23,7 +23,6 @@ import moon_base from '../assets/moon_base.jpeg';
 import jump_gate from '../assets/jump_gate.jpeg';
 import sensor_phalanx from '../assets/sensor_phalanx.jpeg';
 
-
 // Defines a building that is either producing resources
 // or used in the storage of it.
 const RESOURCE_BUILDING = 0;
