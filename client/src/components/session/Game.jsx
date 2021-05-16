@@ -10,7 +10,7 @@ import Overview from './Overview.jsx';
 import Resources from './Resources.jsx';
 import Facilities from './Facilities.jsx';
 import ResearchLab from './ResearchLab.jsx';
-import TechTree from './TechnologyTree.jsx';
+import TechnologyTree from './TechnologyTree.jsx';
 import Shipyard from './Shipyard.jsx';
 import Defenses from './Defenses.jsx';
 import Fleets from './Fleets.jsx';
@@ -372,16 +372,16 @@ class Game extends React.Component {
                            />;
           break;
       case TAB_TECH_TREE:
-        tab = <TechTree planet={this.state.planets[this.state.selectedPlanet]}
-                        player={this.props.session}
-                        resources={this.state.resources}
-                        buildings={this.state.buildings}
-                        technologies={this.state.technologies}
-                        ships={this.state.ships}
-                        defenses={this.state.defenses}
-                        universe={this.props.universe}
-                        planets={this.state.planets}
-                        />;
+        tab = <TechnologyTree planet={this.state.planets[this.state.selectedPlanet]}
+                              player={this.props.session}
+                              resources={this.state.resources}
+                              buildings={this.state.buildings}
+                              technologies={this.state.technologies}
+                              ships={this.state.ships}
+                              defenses={this.state.defenses}
+                              universe={this.props.universe}
+                              planets={this.state.planets}
+                              />;
         break;
       case TAB_SHIPYARD:
         tab = <Shipyard planet={this.state.planets[this.state.selectedPlanet]}

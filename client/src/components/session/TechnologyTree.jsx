@@ -3,13 +3,13 @@ import '../../styles/session/TechnologyTree.css';
 import React from 'react';
 import TechnologyTreeItem from './TechnologyTreeItem.jsx';
 
-import expand from '../../assets/expanded.png';
-import collapse from '../../assets/collapsed.png';
-
 import {buildings_list} from '../../datas/buildings.js';
 import {technologies_list} from '../../datas/technologies.js';
 import {ships_list} from '../../datas/ships.js';
 import {defenses_list} from '../../datas/defenses.js';
+
+import expand from '../../assets/expanded.png';
+import collapse from '../../assets/collapsed.png';
 
 // Defines the buildings section of the technology tree.
 const SECTION_BUILDINGS = "overview";
@@ -27,20 +27,115 @@ const SECTION_DEFENSES = "defenses";
 const SECTION_MISSILES = "missiles";
 
 function generateItemTechTree(item) {
-  return <TechnologyTreeItem name={item.name} />;
+  return <TechnologyTreeItem key={item.id} item={item} />;
 }
 
 function generateSectionTechTree(items) {
   return (
     <div className="tech_tree_items">
-      {items.map(e => <div>{generateItemTechTree(e)}</div>)}
+      {items.map(e => generateItemTechTree(e))}
     </div>
   );
+}
+
+function generateDependencies(items, buildings, technologies, buildingsData, technologiesData) {
+  const out = [];
+
+  for (let id = 0 ; id < items.length ; ++id) {
+    const e = items[id];
+
+    let eOut = {
+      id: e.id,
+      name: e.name,
+      buildings_dependencies: [],
+      technologies_dependencies: [],
+    };
+
+    // Search for the icon in every possible type of element.
+    let iData = buildings_list.find(d => d.name === e.name);
+    if (!iData) {
+      iData = technologies_list.find(d => d.name === e.name);
+    }
+    if (!iData) {
+      iData = ships_list.find(d => d.name === e.name);
+    }
+    if (!iData) {
+      iData = defenses_list.find(d => d.name === e.name);
+    }
+    if (!iData) {
+      console.error("Failed to get icon for item \"" + e.name + "\"");
+      continue;
+    }
+
+    eOut.icon = iData.icon;
+
+    for (let dID = 0 ; dID < e.buildings_dependencies.length ; ++dID) {
+      const eDep = e.buildings_dependencies[dID];
+
+      const eDesc = buildings.find(it => it.id === eDep.id);
+      if (!eDesc) {
+        console.error("Failed to resolve building dependency for \"" + e.name + "\" on \"" + eDep.id + "\"");
+        continue;
+      }
+
+      const eData = buildingsData.find(it => it.id === eDep.id);
+      let available = 0;
+      if (eData) {
+        available = eData.level;
+      }
+
+      eOut.buildings_dependencies.push({
+        name: eDesc.name,
+        level: eDep.level,
+        available: available,
+        unlocked: eDep.level <= available,
+      });
+    }
+
+    for (let dID = 0 ; dID < e.technologies_dependencies.length ; ++dID) {
+      const eDep = e.technologies_dependencies[dID];
+
+      const eDesc = technologies.find(it => it.id === eDep.id);
+      if (!eDesc) {
+        console.error("Failed to resolve technology dependency for \"" + e.name + "\" on \"" + eDep.id + "\"");
+        continue;
+      }
+
+      const eData = technologiesData.find(it => it.id === eDep.id);
+      let available = 0;
+      if (eData) {
+        available = eData.level;
+      }
+
+      eOut.technologies_dependencies.push({
+        name: eDesc.name,
+        level: eDep.level,
+        available: available,
+        unlocked: eDep.level <= available,
+      });
+    }
+
+    out.push(eOut);
+  }
+
+  return out;
 }
 
 class TechnologyTree extends React.Component {
   constructor(props) {
     super(props);
+
+    let buildings_deps = [];
+    let technologies_deps = [];
+    let ships_deps = [];
+    let defenses_deps = [];
+
+    if (props.buildings.length > 0 && props.technologies.length > 0 && props.planet.buildings.length > 0 && props.player.technologies.length > 0) {
+      buildings_deps = generateDependencies(props.buildings, props.buildings, props.technologies, props.planet.buildings, props.player.technologies);
+      technologies_deps = generateDependencies(props.technologies, props.buildings, props.technologies, props.planet.buildings, props.player.technologies);
+      ships_deps = generateDependencies(props.ships, props.buildings, props.technologies, props.planet.buildings, props.player.technologies);
+      defenses_deps = generateDependencies(props.defenses, props.buildings, props.technologies, props.planet.buildings, props.player.technologies);
+    }
 
     this.state = {
       // Whether or not the buildings section is collapsed.
@@ -57,6 +152,22 @@ class TechnologyTree extends React.Component {
 
       // Whether or not the missiles section is collapsed.
       missiles_visible: false,
+
+      // The processed list of buildings, containing the names
+      // of the dependencies.
+      buildings: buildings_deps,
+
+      // The processed list of technologies, containing the names
+      // of the dependencies.
+      technologies: technologies_deps,
+
+      // The processed list of ships, containing the names
+      // of the dependencies.
+      ships: ships_deps,
+
+      // The processed list of defenses, containing the names
+      // of the dependencies.
+      defenses: defenses_deps,
     };
   }
 
@@ -117,28 +228,28 @@ class TechnologyTree extends React.Component {
           <span className="tech_tree_title">Buildings</span>
         </div>
         {
-          this.state.buildings_visible && generateSectionTechTree(buildings_list)
+          this.state.buildings_visible && generateSectionTechTree(this.state.buildings)
         }
         <div className="tech_tree_section">
           <img className="tech_tree_icon" src={cnTechnologiesIcon} alt={ipTechnologiesStatus} title={ipTechnologiesStatus} onClick={() => this.toggleSection(SECTION_TECHNOLOGIES)}></img>
           <span className="tech_tree_title">Technologies</span>
         </div>
         {
-          this.state.technologies_visible && generateSectionTechTree(technologies_list)
+          this.state.technologies_visible && generateSectionTechTree(this.state.technologies)
         }
         <div className="tech_tree_section">
           <img className="tech_tree_icon" src={cnShipsIcon} alt={ipShipsStatus} title={ipShipsStatus} onClick={() => this.toggleSection(SECTION_SHIPS)}></img>
           <span className="tech_tree_title">Ships</span>
         </div>
         {
-          this.state.ships_visible && generateSectionTechTree(ships_list)
+          this.state.ships_visible && generateSectionTechTree(this.state.ships)
         }
         <div className="tech_tree_section">
           <img className="tech_tree_icon" src={cnDefensesIcon} alt={ipDefensesStatus} title={ipDefensesStatus} onClick={() => this.toggleSection(SECTION_DEFENSES)}></img>
           <span className="tech_tree_title">Defenses</span>
         </div>
         {
-          this.state.defenses_visible && generateSectionTechTree(defenses_list)
+          this.state.defenses_visible && generateSectionTechTree(this.state.defenses)
         }
         <div className="tech_tree_section">
           <img className="tech_tree_icon" src={cnMissilesIcon} alt={ipMissilesStatus} title={ipMissilesStatus} onClick={() => this.toggleSection(SECTION_MISSILES)}></img>

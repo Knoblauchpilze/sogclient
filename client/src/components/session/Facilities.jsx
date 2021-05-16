@@ -44,7 +44,12 @@ class Facilities extends React.Component {
         console.error("Failed to find building \"" + buildings_list[id].name + "\" from server's data");
       }
       else {
-        facilities.push(out.building);
+        // Also don't consider buildings that can only
+        // be built on moons.
+        // TODO: Make sure that it works when we're on a moon.
+        if (out.building.allowed_on_planet) {
+          facilities.push(out.building);
+        }
       }
     }
 
