@@ -1,6 +1,46 @@
 
 .tech_tree_item_layout {
-  background-color: #f0f;
+  display: flex;
+  flex-direction: row;
 
   flex-grow: 1;
+
+  margin: 4px 0px 4px 0px;
+}
+
+.tech_tree_item_header {
+  color: #fff;
+  background-color: #1b2028;
+
+  width: 50%;
+
+  padding-left: 5px;
+  margin-right: 4px;
+  border-radius: 4px;
+
+  font-size: smaller;
+}
+
+.tech_tree_item_icon {
+  width: 30px;
+  height: 30px;
+}
+
+.tech_tree_item_dependencies {
+  width: 50%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.tech_tree_item_dependency {
+  font-size: smaller;
+}
+
+.tech_tree_item_dependency_locked {
+  color: #be3439;
+}
+
+.tech_tree_item_dependency_unlocked {
+  color: #68a507;
 }

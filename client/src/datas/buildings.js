@@ -19,6 +19,11 @@ import nanite_factory from '../assets/nanite_factory.jpeg';
 import terraformer from '../assets/terraformer.jpeg';
 import space_dock from '../assets/space_dock.jpeg';
 
+import moon_base from '../assets/moon_base.jpeg';
+import jump_gate from '../assets/jump_gate.jpeg';
+import sensor_phalanx from '../assets/sensor_phalanx.jpeg';
+
+
 // Defines a building that is either producing resources
 // or used in the storage of it.
 const RESOURCE_BUILDING = 0;
@@ -111,6 +116,23 @@ export const buildings_list = [
   {
     name: "space dock",
     icon: space_dock,
+    kind: FACILITY,
+  },
+
+  // Moon.
+  {
+    name: "moon base",
+    icon: moon_base,
+    kind: FACILITY,
+  },
+  {
+    name: "jump gate",
+    icon: jump_gate,
+    kind: FACILITY,
+  },
+  {
+    name: "sensor phalanx",
+    icon: sensor_phalanx,
     kind: FACILITY,
   },
 ];

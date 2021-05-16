@@ -464,6 +464,8 @@ class Planet {
     out.building = {
       id: b.id,
       name: b.name,
+      allowed_on_planet: b.allowed_on_planet,
+      allowed_on_moon: b.allowed_on_moon,
       level: lvl,
       icon: buildings_list[id].icon,
       resources: costs.costs,
