@@ -39,6 +39,7 @@ function generateResourceDesc(res, rFromPlanet, data, bFromPlanet, buildings, te
 
     amount: Math.floor(amount),
     production: rData.production,
+    factor: rData.production_factor,
     storage: rData.storage,
     storable: rDesc.storable,
   };
