@@ -8,6 +8,7 @@ import PlanetsList from './PlanetsList.jsx';
 
 import Overview from './Overview.jsx';
 import Resources from './Resources.jsx';
+import ProductionSettings from './ProductionSettings.jsx';
 import Facilities from './Facilities.jsx';
 import ResearchLab from './ResearchLab.jsx';
 import TechnologyTree from './TechnologyTree.jsx';
@@ -35,6 +36,7 @@ import { computeActionCompletionTime } from '../game/actions.js';
 
 import { TAB_OVERVIEW } from './NavigationMenu.jsx';
 import { TAB_RESOURCES } from './NavigationMenu.jsx';
+import { TAB_PRODUCTION_SETTINGS } from './NavigationMenu.jsx';
 import { TAB_FACILITIES } from './NavigationMenu.jsx';
 import { TAB_RESEARCH_LAB } from './NavigationMenu.jsx';
 import { TAB_TECH_TREE } from './NavigationMenu.jsx';
@@ -345,6 +347,18 @@ class Game extends React.Component {
                          actionPerformed={() => this.actionPerformed()}
                          />;
           break;
+      case TAB_PRODUCTION_SETTINGS:
+        tab = <ProductionSettings planet={this.state.planets[this.state.selectedPlanet]}
+                                  player={this.props.session}
+                                  resources={this.state.resources}
+                                  buildings={this.state.buildings}
+                                  technologies={this.state.technologies}
+                                  ships={this.state.ships}
+                                  defenses={this.state.defenses}
+                                  universe={this.props.universe}
+                                  planets={this.state.planets}
+                                  />;
+        break;
       case TAB_FACILITIES:
         tab = <Facilities planet={this.state.planets[this.state.selectedPlanet]}
                           player={this.props.session}

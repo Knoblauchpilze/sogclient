@@ -56,7 +56,7 @@ export function shortenAmount(amount) {
   return lead + "," + toFixedDigits(trailing, 3) + "M";
 };
 
-export function formatAmount(amount) {
+export function formatAmount(amount, forcePlusSign) {
   let out = "";
 
   // Remove fractional part.
@@ -87,7 +87,9 @@ export function formatAmount(amount) {
     out = "-" + out;
   }
   else if (out !== "") {
-    out = "+" + out;
+    if (forcePlusSign) {
+      out = "+" + out;
+    }
   }
   else {
     out = "0";

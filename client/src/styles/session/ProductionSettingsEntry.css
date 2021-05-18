@@ -1,0 +1,45 @@
+
+.prod_settings_entry_layout {
+  width: 100%;
+  height: 100%;
+  min-width: 650px;
+  min-height: 30px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.prod_settings_entry_layout:hover {
+  background-color: #23282d;
+}
+
+.prod_settings_entry_even {
+  background-color: #14171C;
+}
+
+.prod_settings_entry_odd {
+  background-color: #0d1014;
+}
+
+.prod_settings_entry_name {
+  color: #656768;
+  
+  width: 350px;
+}
+
+.prod_settings_entry_resource {
+  color: #fff;
+
+  width: 50px;
+
+  font-size: smaller;
+}
+
+.prod_settings_entry_gain {
+  color: #82ad07;
+}
+
+.prod_settings_entry_loss {
+  color: #b23333;
+}
