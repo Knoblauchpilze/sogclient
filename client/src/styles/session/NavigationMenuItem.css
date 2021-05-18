@@ -30,6 +30,8 @@
 
 .navigation_menu_item_data {
   margin: 2px;
+
+  cursor: pointer;
 }
 
 .navigation_menu_item_icon {

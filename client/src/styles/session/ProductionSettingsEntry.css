@@ -28,6 +28,14 @@
   width: 350px;
 }
 
+.prod_settings_entry_factor {
+  color: #747575;
+  background-color: #25292d;
+
+  border: 2px solid #000;
+  border-radius: 5px;
+}
+
 .prod_settings_entry_resource {
   color: #fff;
 
