@@ -74,17 +74,38 @@ function buildEntries(built, data, order, resources, temp) {
     else if (e.amount || e.amount === 0) {
       name += " (count: " + e.amount + ")";
     }
-    console.log("e: " + JSON.stringify(e));
 
     out.push({
       id: e.id,
       name: name,
-      factor: 100,
+      factor: 1.0,
       production: prod,
     });
   }
 
   return out;
+}
+
+function computeProductionFactor(buildings, ships, technologies) {
+  let count = buildings.length + ships.length + technologies.length;
+
+  if (count === 0) {
+    return 1.0;
+  }
+
+  let factor = 0.0;
+
+  for (let id = 0 ; id < buildings.length ; ++id) {
+    factor += buildings[id].factor;
+  }
+  for (let id = 0 ; id < ships.length ; ++id) {
+    factor += ships[id].factor;
+  }
+  for (let id = 0 ; id < technologies.length ; ++id) {
+    factor += technologies[id].factor;
+  }
+
+  return factor / count;
 }
 
 class ProductionSettings extends React.Component {
@@ -101,7 +122,6 @@ class ProductionSettings extends React.Component {
     let ships = [];
     if (props.ships.length > 0 && props.planet.ships.length > 0 && props.resources.length > 0) {
       const avgTemp = (props.planet.min_temperature + props.planet.max_temperature) / 2.0;
-      console.log("building entries for ships");
       ships = buildEntries(props.planet.ships, props.ships, ships_list, props.resources, avgTemp);
     }
 
@@ -114,7 +134,7 @@ class ProductionSettings extends React.Component {
     let baseRevenue = {
       id: "base_revenue",
       name: "Base revenue",
-      factor: 100,
+      factor: 1.0,
       production: [],
     };
     if (props.resources.length > 0) {
@@ -136,19 +156,19 @@ class ProductionSettings extends React.Component {
       {
         id: "total_revenue_hour",
         name: "Total per hour:",
-        factor: 100,
+        factor: 1.0,
         production: [],
       },
       {
         id: "total_revenue_day",
         name: "Total per day:",
-        factor: 100,
+        factor: 1.0,
         production: [],
       },
       {
         id: "total_revenue_week",
         name: "Total per week:",
-        factor: 100,
+        factor: 1.0,
         production: [],
       }
     ];
@@ -246,7 +266,7 @@ class ProductionSettings extends React.Component {
     let storageCapacity = {
       id: "storage_capacity",
       name: "Storage capacity",
-      factor: 100,
+      factor: 1.0,
       production: [],
     };
     if (props.buildings.length > 0 && props.planet.buildings.length > 0 && props.resources.length > 0) {
@@ -288,6 +308,8 @@ class ProductionSettings extends React.Component {
       }
     }
 
+    const prod_factor = computeProductionFactor(buildings, ships, technologies);
+
     this.state = {
       // The list of buildings that have an impact on the
       // production of any resource.
@@ -309,15 +331,97 @@ class ProductionSettings extends React.Component {
 
       // The total of the resources.
       total_production: totalProduction,
+
+      // The global production factor: aggregate all the values
+      // from the individual items.
+      production_factor: prod_factor,
     };
+
+    this.updateProductionFactor = this.updateProductionFactor.bind(this);
   }
 
   updateProductionFactor(id, factor) {
-    console.log("id: " + id + ", f: " + factor);
+    const nFactor = parseFloat(factor);
+
+    // Try to find the corresponding element in the
+    // various internal lists.
+    let eID = this.state.buildings.findIndex(e => e.id === id);
+    if (eID !== -1) {
+      const bs = this.state.buildings.slice();
+      bs[eID].factor = nFactor;
+
+      this.setState({
+        buildings: bs,
+        production_factor: computeProductionFactor(bs, this.state.ships, this.state.technologies),
+      });
+
+      return;
+    }
+
+    eID = this.state.ships.findIndex(e => e.id === id);
+    if (eID !== -1) {
+      const ss = this.state.ships.slice();
+      ss[eID].factor = nFactor;
+
+      this.setState({
+        ships: ss,
+        production_factor: computeProductionFactor(this.state.buildings, ss, this.state.technologies),
+      });
+
+      return;
+    }
+
+    eID = this.state.technologies.findIndex(e => e.id === id);
+    if (eID !== -1) {
+      const ts = this.state.technologies.slice();
+      ts[eID].factor = nFactor;
+
+      this.setState({
+        technologies: ts,
+        production_factor: computeProductionFactor(this.state.buildings, this.state.ships, ts),
+      });
+
+      return;
+    }
+
+    console.error("Failed to interpret id \"" + id + "\" with factor " + nFactor);
   }
 
   recalculate(kind) {
-    console.log("kind: " + kind);
+    // Handle quick access for min and max prod.
+    let factor = -1;
+    if (kind === PROD_TO_MIN) {
+      factor = 0.0;
+    }
+    if (kind === PROD_TO_MAX) {
+      factor = 1.0;
+    }
+
+    if (factor !== -1) {
+      const b = this.state.buildings.map(function (e) {
+        e.factor = factor;
+        return e;
+      });
+      const s = this.state.ships.map(function (e) {
+        e.factor = factor;
+        return e;
+      });
+      const t = this.state.technologies.map(function (e) {
+        e.factor = factor;
+        return e;
+      });
+
+      this.setState({
+        buildings: b,
+        ships: s,
+        technologies: t,
+        production_factor: computeProductionFactor(b, s, t),
+      });
+
+      return;
+    }
+
+    console.log("Should handle send data to server");
   }
 
   render() {
@@ -328,12 +432,18 @@ class ProductionSettings extends React.Component {
     return (
       <div className="prod_settings_layout">
         <div className="prod_settings_control_layout">
-          <p className="prod_settings_prod_factor">{"Production factor: 100%"}</p>
-          <div className="prod_settings_quick_access_layout">
+          <p className="prod_settings_prod_factor">{"Production factor: " + Math.floor(this.state.production_factor * 100) + "%"}</p>
+          <div>
             <button className="prod_settings_control" onClick={() => this.recalculate(RECALCULATE_PROD)}>Recalculate</button>
             <button className="prod_settings_control" onClick={() => this.recalculate(PROD_TO_MIN)}>0%</button>
             <button className="prod_settings_control" onClick={() => this.recalculate(PROD_TO_MAX)}>100%</button>
           </div>
+        </div>
+        <div className="prod_settings_entry_layout">
+          <div className="prod_settings_entry_name">Resources</div>
+          {
+            resources_list.map(r => <span key={r.name} className="prod_settings_entry_resource">{r.name}</span>)
+          }
         </div>
         <ProductionSettingsEntry key={"base_revenue"}
                                  entry={this.state.base_revenue}

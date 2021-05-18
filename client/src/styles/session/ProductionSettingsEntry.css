@@ -24,8 +24,8 @@
 
 .prod_settings_entry_name {
   color: #656768;
-  
-  width: 350px;
+
+  width: 270px;
 }
 
 .prod_settings_entry_factor {
@@ -39,7 +39,7 @@
 .prod_settings_entry_resource {
   color: #fff;
 
-  width: 50px;
+  width: 80px;
 
   text-align: right;
   font-size: smaller;
