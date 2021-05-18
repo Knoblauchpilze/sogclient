@@ -14,9 +14,9 @@ function generateResourceEntry(r) {
   }
 
   return (
-    <div key={r.id} className={classes}>
+    <span key={r.id} className={classes}>
       {formatAmount(r.production, false)}
-    </div>
+    </span>
   );
 }
 
