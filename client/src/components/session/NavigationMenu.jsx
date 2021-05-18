@@ -15,6 +15,10 @@ const TAB_OVERVIEW = "overview";
 // on the resources production of the selected planet.
 const TAB_RESOURCES = "resources";
 
+// Defines the production settings view, displaying and
+// allowing to control production factor on a planet.
+const TAB_PRODUCTION_SETTINGS = "production";
+
 // Defines the facilities menu, displaying information
 // on the support buildings available on this planet.
 const TAB_FACILITIES = "facilities";
@@ -51,7 +55,7 @@ function NavigationMenu (props) {
                           onClick={() => props.updateGameTab(TAB_OVERVIEW)}
                           />
       <NavigationMenuItem name={"Resources"}
-                          data_link={() => console.log("TODO: Handle production settings")}
+                          data_link={() => props.updateGameTab(TAB_PRODUCTION_SETTINGS)}
                           icon={prod_control}
                           icon_alt={"Prod control"}
                           onClick={() => props.updateGameTab(TAB_RESOURCES)}
@@ -87,6 +91,7 @@ function NavigationMenu (props) {
 export {
   TAB_OVERVIEW,
   TAB_RESOURCES,
+  TAB_PRODUCTION_SETTINGS,
   TAB_FACILITIES,
   TAB_RESEARCH_LAB,
   TAB_TECH_TREE,
