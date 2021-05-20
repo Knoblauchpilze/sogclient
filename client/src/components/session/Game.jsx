@@ -357,6 +357,7 @@ class Game extends React.Component {
                                   defenses={this.state.defenses}
                                   universe={this.props.universe}
                                   planets={this.state.planets}
+                                  actionPerformed={() => this.actionPerformed()}
                                   />;
         break;
       case TAB_FACILITIES:

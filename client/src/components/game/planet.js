@@ -15,6 +15,14 @@ const UPGRADE_ACTION_POST_SUCCEEDED = "Upgrade action successfully created";
 // action failed.
 const UPGRADE_ACTION_POST_FAILED = "Failed to create upgrade action";
 
+// Defines a constant indicating that updating the production
+// of resources on a planet succeeded.
+const PRODUCTION_UPDATE_POST_SUCCEEDED = "Update production successfully executed";
+
+// Defines a constant indicating that updating the production
+// of resources on a planet failed.
+const PRODUCTION_UPDATE_POST_FAILED = "Failed to update production";
+
 function formatDuration(duration) {
   // We will divide at most until we reach a duration
   // of a week. Any longer duration will continue to
@@ -872,10 +880,58 @@ class Planet {
       server.defenseUpgradeAction(this.data.planet.id)
     );
   }
+
+  async updateProduction(production) {
+    const out = {
+      status: PRODUCTION_UPDATE_POST_FAILED,
+      planet: "",
+    };
+
+    // Generate the post request to create the action.
+    const server = new Server();
+
+    const formData  = new FormData();
+    formData.append(server.productionUpdateDataKey(), JSON.stringify(production));
+
+    let opts = {
+      method: 'PATCH',
+      headers: {
+        'Accept': 'application/json',
+      },
+      body: formData,
+    };
+
+    // Execute the request.
+    let reqStatus = "";
+
+    const res = await fetch(server.productionUpdate(this.data.planet.id), opts)
+      .catch(err => reqStatus = err);
+
+    if (reqStatus !== "") {
+      out.status = reqStatus;
+      return out;
+    }
+
+    if (!res.ok) {
+      out.status = await res.text();
+      return out;
+    }
+
+    // Fetch the identifier returned by the server.
+    // It is returned through a format that is not
+    // exactly pure so we clean it through a server
+    // dedicated method.
+    const planetID = await res.text();
+    out.planet = server.planetIDFromResponse(planetID);
+    out.status = PRODUCTION_UPDATE_POST_SUCCEEDED;
+
+    return out;
+  }
 }
 
 export {
   UPGRADE_ACTION_POST_SUCCEEDED,
+  PRODUCTION_UPDATE_POST_SUCCEEDED,
 };
 
 export default Planet;
