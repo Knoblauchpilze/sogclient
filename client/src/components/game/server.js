@@ -89,7 +89,7 @@ class Server {
 
   actionIDFromResponse(response) {
     // The response is expected to look like so:
-    // '"[/accounts/id]"'. So first trim until
+    // '"[/actions/id]"'. So first trim until
     // the beginning of the identifier.
     const parts = response.split('/');
     const idAndExtra = parts[parts.length - 1];
@@ -112,6 +112,25 @@ class Server {
 
   defenseUpgradeAction(planet) {
     return this.serverURL() + "/planets/" + planet + "/actions/defenses";
+  }
+
+  productionUpdateDataKey() {
+    return "planet-data";
+  }
+
+  planetIDFromResponse(response) {
+    // The response is expected to look like so:
+    // '"[/planets/id]"'. So first trim until
+    // the beginning of the identifier.
+    const parts = response.split('/');
+    const idAndExtra = parts[parts.length - 1];
+
+    // And then clean the end of the string.
+    return idAndExtra.slice(0, idAndExtra.length - 2);
+  }
+
+  productionUpdate(planet) {
+    return this.serverURL() + "/planets/" + planet + "/production";
   }
 }
 

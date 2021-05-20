@@ -10,6 +10,9 @@ import {ships_list} from '../../datas/ships.js';
 import {technologies_list} from '../../datas/technologies.js';
 import { computeProduction, computeStorage } from '../game/rules.js';
 
+import Planet from '../game/planet.js';
+import { PRODUCTION_UPDATE_POST_SUCCEEDED } from '../game/planet.js';
+
 // Defines a string literal defining the action to recalculate
 // the production and apply the changed parameters.
 const RECALCULATE_PROD = "recalculate";
@@ -22,7 +25,7 @@ const PROD_TO_MIN = "min_prod";
 // 100%.
 const PROD_TO_MAX = "max_prod";
 
-function buildEntries(built, data, order, resources, temp) {
+function buildEntries(built, data, order, resources, prodInfo, temp) {
   let out = [];
 
   for (let idx = 0 ; idx < order.length ; ++idx) {
@@ -45,6 +48,8 @@ function buildEntries(built, data, order, resources, temp) {
 
     // Compute the production for this resource.
     let prod = [];
+    let factor = 0.0;
+    let count = 0;
 
     for (let rID = 0 ; rID < resources_list.length ; ++rID) {
       // Fetch the resource description from its 'abstract' representation.
@@ -58,6 +63,14 @@ function buildEntries(built, data, order, resources, temp) {
       let p = 0.0;
       if (r) {
         p = computeProduction(r, e.level, temp);
+      }
+
+      const pInfo = prodInfo.find(pi => pi.resource === rDesc.id);
+      if (pInfo && p > 0) {
+        p *= pInfo.factor;
+
+        factor += pInfo.factor;
+        count++;
       }
 
       prod.push({
@@ -78,7 +91,7 @@ function buildEntries(built, data, order, resources, temp) {
     out.push({
       id: e.id,
       name: name,
-      factor: 1.0,
+      factor: (count === 0 ? 1.0 : factor / count),
       production: prod,
     });
   }
@@ -112,23 +125,34 @@ class ProductionSettings extends React.Component {
   constructor(props) {
     super(props);
 
-    // Generate representation for buildings that produce resources.
+    // Extract production factor info.
+    let prod_info = [];
+    if (props.planet && props.planet.resources.length > 0) {
+      prod_info = props.planet.resources.map(function(r) {
+        return {
+          resource: r.resource,
+          factor: r.production_factor,
+        }
+      });
+    }
+
+    // Generate representation for elements that produce resources.
     let buildings = [];
     if (props.buildings.length > 0 && props.planet.buildings.length > 0 && props.resources.length > 0) {
       const avgTemp = (props.planet.min_temperature + props.planet.max_temperature) / 2.0;
-      buildings = buildEntries(props.planet.buildings, props.buildings, buildings_list, props.resources, avgTemp);
+      buildings = buildEntries(props.planet.buildings, props.buildings, buildings_list, props.resources, prod_info, avgTemp);
     }
 
     let ships = [];
     if (props.ships.length > 0 && props.planet.ships.length > 0 && props.resources.length > 0) {
       const avgTemp = (props.planet.min_temperature + props.planet.max_temperature) / 2.0;
-      ships = buildEntries(props.planet.ships, props.ships, ships_list, props.resources, avgTemp);
+      ships = buildEntries(props.planet.ships, props.ships, ships_list, props.resources, prod_info, avgTemp);
     }
 
     let technologies = [];
     if (props.technologies.length > 0 && props.player.technologies.length > 0 && props.resources.length > 0) {
       const avgTemp = (props.planet.min_temperature + props.planet.max_temperature) / 2.0;
-      technologies = buildEntries(props.player.technologies, props.technologies, technologies_list, props.resources, avgTemp);
+      technologies = buildEntries(props.player.technologies, props.technologies, technologies_list, props.resources, prod_info, avgTemp);
     }
 
     let baseRevenue = {
@@ -387,6 +411,17 @@ class ProductionSettings extends React.Component {
     console.error("Failed to interpret id \"" + id + "\" with factor " + nFactor);
   }
 
+  productionUpdateFailed(err) {
+    alert(err);
+  }
+
+  productionUpdateSucceeded(action) {
+    console.info("Registered production update " + action);
+
+    // Request a data reload.
+    this.props.actionPerformed();
+  }
+
   recalculate(kind) {
     // Handle quick access for min and max prod.
     let factor = -1;
@@ -421,13 +456,108 @@ class ProductionSettings extends React.Component {
       return;
     }
 
-    console.log("Should handle send data to server");
+    // We need to gather the production factor by resource
+    // instead of by buildings/ships/technologies before
+    // sending it to the server.
+    let prod_update = [];
+    for (let id = 0 ; id < resources_list.length ; ++id) {
+      const rData = resources_list[id];
+      const rDesc = this.props.resources.find(r => r.name === rData.name);
+
+      if (!rDesc) {
+        console.error("Failed to get data for resource \"" + rData.name + "\"");
+        continue;
+      }
+
+      // Compute a general production factor.
+      let count = 0;
+      let factor = 0.0;
+
+      for (let eID = 0 ; eID < this.state.buildings.length ; ++eID) {
+        const eData = this.state.buildings[eID];
+
+        const rProd = eData.production.find(p => p.id === rDesc.id);
+        if (!rProd || rProd.production === 0) {
+          continue;
+        }
+
+        count++;
+        factor += eData.factor;
+      }
+
+      for (let eID = 0 ; eID < this.state.ships.length ; ++eID) {
+        const eData = this.state.ships[eID];
+
+        const rProd = eData.production.find(p => p.id === rDesc.id);
+        if (!rProd || rProd.production === 0) {
+          continue;
+        }
+
+        count++;
+        factor += eData.factor;
+      }
+
+      for (let eID = 0 ; eID < this.state.technologies.length ; ++eID) {
+        const eData = this.state.technologies[eID];
+
+        const rProd = eData.production.find(p => p.id === rDesc.id);
+        if (!rProd || rProd.production === 0) {
+          continue;
+        }
+
+        count++;
+        factor += eData.factor;
+      }
+
+      if (count === 0) {
+        continue;
+      }
+
+      prod_update.push({
+        resource: rDesc.id,
+        production_factor: factor / count,
+      });
+    }
+
+    // Create an object to handle the creation of the production
+    // update for the resources.
+    if (prod_update.length === 0) {
+      return;
+    }
+
+    const p = new Planet(
+      this.props.planet,
+      this.props.player.technologies,
+      this.props.planets,
+      this.props.universe,
+      this.props.resources,
+      this.props.buildings,
+      this.props.technologies,
+      this.props.ships,
+      this.props.defenses,
+    );
+
+    const tab = this;
+
+    console.log("prod: " + JSON.stringify(prod_update));
+
+    p.updateProduction(prod_update)
+      .then(function (res) {
+        if (res.status !== PRODUCTION_UPDATE_POST_SUCCEEDED) {
+          tab.productionUpdateFailed(res.status);
+        }
+        else {
+          tab.productionUpdateSucceeded(res.planet);
+        }
+      })
+      .catch(err => tab.productionUpdateFailed(err));
   }
 
   render() {
     // According to this link: https://fr.reactjs.org/docs/lists-and-keys.html
     // It is necessary to keep the key for each production settings entry and
     // not on the root element of the component itself.
+    console.log("b: " + JSON.stringify(this.state.buildings));
 
     return (
       <div className="prod_settings_layout">
