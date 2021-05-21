@@ -6,7 +6,7 @@ import ResourceInfo from './ResourceInfo.jsx';
 import { resources_list } from '../../datas/resources.js';
 import { computeProduction } from '../game/rules.js';
 
-function generateResourceDesc(res, rFromPlanet, data, bFromPlanet, buildings, temp) {
+function generateResourceDesc(res, rFromPlanet, data, bFromPlanet, buildings, temp, ratio) {
   // Find the resource data.
   const rDesc = data.find(r => r.name === res.name);
   const rData = rFromPlanet.find(r => r.resource === rDesc.id);
@@ -23,8 +23,7 @@ function generateResourceDesc(res, rFromPlanet, data, bFromPlanet, buildings, te
       const rProd = bDesc.production.find(r => r.resource === rDesc.id);
       if (rProd) {
         const bData = bFromPlanet.find(b => b.id === bDesc.id);
-
-        const prod = computeProduction(rProd, bData.level, temp);
+        const prod = computeProduction(rProd, bData.level, temp, (rDesc.scalable ? ratio : 1));
 
         if (prod > 0) {
           amount += prod;
@@ -39,7 +38,6 @@ function generateResourceDesc(res, rFromPlanet, data, bFromPlanet, buildings, te
 
     amount: Math.floor(amount),
     production: rData.production,
-    factor: rData.production_factor,
     storage: rData.storage,
     storable: rDesc.storable,
   };
@@ -60,7 +58,7 @@ function ResourcesDisplay (props) {
         props.planet.buildings.length > 0 &&
         props.buildings.length > 0 &&
         resources_list.map(r =>
-          <ResourceInfo key={r.name} data={generateResourceDesc(r, props.planet.resources, props.resources, props.planet.buildings, props.buildings, temp)} />
+          <ResourceInfo key={r.name} data={generateResourceDesc(r, props.planet.resources, props.resources, props.planet.buildings, props.buildings, temp, props.universe.economic_speed)} />
         )
       }
     </div>
