@@ -6,7 +6,12 @@ import { shortenAmount, formatAmount } from '../game/amounts.js';
 
 function ResourceInfo (props) {
   let classAmount = "resource_info_amount"
-  if (props.data.amount > props.data.storage && props.data.storable) {
+  // Add a warning in case the amount is greater than the storage
+  // (and in case the resource can be stored) or in any case if
+  // the amount is negative.
+  if ((props.data.amount > props.data.storage && props.data.storable) ||
+      props.data.amount < 0)
+  {
     classAmount += " resource_info_warning";
   }
   let classProduction = "resource_info_production";
@@ -17,7 +22,7 @@ function ResourceInfo (props) {
   return (
     <div className="resource_info_layout">
       <img src={props.data.icon} alt={props.data.title} title={props.data.title} />
-      <span className={classAmount}>{props.data.amount}</span>
+      <span className={classAmount}>{formatAmount(props.data.amount)}</span>
       <span className={classProduction}>{"(" + formatAmount(props.data.production, true) + ")"}</span>
       {
         props.data.storable &&

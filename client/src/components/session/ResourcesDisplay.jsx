@@ -22,10 +22,11 @@ function generateResourceDesc(res, rFromPlanet, data, bFromPlanet, buildings, te
 
       const rProd = bDesc.production.find(r => r.resource === rDesc.id);
       if (rProd) {
-        const bData = bFromPlanet.find(b => b.id === bDesc.id);
-        const prod = computeProduction(rProd, bData.level, temp, (rDesc.scalable ? ratio : 1));
 
-        if (prod > 0) {
+        const bData = bFromPlanet.find(b => b.id === bDesc.id);
+        const prod = bData.production_factor * computeProduction(rProd, bData.level, temp, (rDesc.scalable ? ratio : 1));
+
+        if (prod !== 0) {
           amount += prod;
         }
       }
