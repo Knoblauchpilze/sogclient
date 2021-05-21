@@ -18,7 +18,7 @@ function ResourceInfo (props) {
     <div className="resource_info_layout">
       <img src={props.data.icon} alt={props.data.title} title={props.data.title} />
       <span className={classAmount}>{props.data.amount}</span>
-      <span className={classProduction}>{"(" + formatAmount(props.data.production * props.data.factor, true) + ")"}</span>
+      <span className={classProduction}>{"(" + formatAmount(props.data.production, true) + ")"}</span>
       {
         props.data.storable &&
         <span className={classProduction}>{"(" + shortenAmount(props.data.storage) + ")"}</span>

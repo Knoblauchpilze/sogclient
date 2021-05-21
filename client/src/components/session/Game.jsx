@@ -448,6 +448,7 @@ class Game extends React.Component {
           <ResourcesDisplay planet={this.state.planets[this.state.selectedPlanet]}
                             buildings={this.state.buildings}
                             resources={this.state.resources}
+                            universe={this.props.universe}
                             />
           <div className="game_internal_layout">
             <NavigationMenu updateGameTab={(tab) => this.updateGameTab(tab)}/>
