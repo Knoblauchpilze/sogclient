@@ -9,7 +9,7 @@ function ResourceInfo (props) {
   // Add a warning in case the amount is greater than the storage
   // (and in case the resource can be stored) or in any case if
   // the amount is negative.
-  if ((props.data.amount > props.data.storage && props.data.storable) ||
+  if ((props.data.amount >= props.data.storage && props.data.storable) ||
       props.data.amount < 0)
   {
     classAmount += " resource_info_warning";
