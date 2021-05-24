@@ -62,12 +62,14 @@ function buildEntries(built, data, order, resources, temp, ratio) {
       const r = eDesc.production.find(r => r.resource === rDesc.id);
       let p = 0.0;
       if (r) {
-        p = e.production_factor * computeProduction(r, e.level, temp, (rDesc.scalable ? ratio : 1));
+        p = computeProduction(r, e.level, temp, (rDesc.scalable ? ratio : 1));
       }
 
       prod.push({
         id: rDesc.id,
-        production: p,
+        production: p * e.production_factor * e.energy_factor,
+        total: p,
+        consumption: (p < 0),
       });
     }
 
