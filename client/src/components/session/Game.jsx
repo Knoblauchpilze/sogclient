@@ -434,7 +434,9 @@ class Game extends React.Component {
           break;
       case TAB_OVERVIEW:
       default:
-        tab = <Overview planet={this.state.planets[this.state.selectedPlanet]} />;
+        tab = <Overview planet={this.state.planets[this.state.selectedPlanet]}
+                        player={this.props.session}
+                        />;
         break;
     }
 
