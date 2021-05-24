@@ -31,6 +31,11 @@ function Overview (props) {
     coordsText += "]";
   }
 
+  let points = 0;
+  if (props.player) {
+    points = Math.floor(props.player.score.economy + props.player.score.research + props.player.score.military);
+  }
+
   return (
     <div className="cover_layout">
       <h3 className="cover_title">{title}</h3>
@@ -48,7 +53,7 @@ function Overview (props) {
                             link={"../galaxy/galaxy.html"}
                             />
         <OverviewPlanetProp title={"Points"}
-                            value={"TODO (Rank TODO out of TODO)"}
+                            value={points + " (Rank TODO out of TODO)"}
                             link={"../rankings/rankings.html"}
                             />
         <OverviewPlanetProp title={"Honorific points"}
