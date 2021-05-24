@@ -369,20 +369,10 @@ class ProductionSettings extends React.Component {
         e.factor = factor;
         return e;
       });
-      const s = this.state.ships.map(function (e) {
-        e.factor = factor;
-        return e;
-      });
-      const t = this.state.technologies.map(function (e) {
-        e.factor = factor;
-        return e;
-      });
 
       this.setState({
         buildings: b,
-        ships: s,
-        technologies: t,
-        production_factor: computeProductionFactor(b, s, t),
+        production_factor: computeProductionFactor(b),
       });
 
       return;
