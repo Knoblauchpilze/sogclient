@@ -16,6 +16,8 @@ function generateResourceDesc(res, rFromPlanet, data, bFromPlanet, buildings, te
   // because in this case the `amount` is set to `0` and
   // we still want to get an idea of how much is `produced`.
   let amount = rData.amount;
+  let prod = rData.production;
+
   if (!rDesc.storable) {
     for (let id = 0 ; id < buildings.length ; ++id) {
       const bDesc = buildings[id];
@@ -24,13 +26,16 @@ function generateResourceDesc(res, rFromPlanet, data, bFromPlanet, buildings, te
       if (rProd) {
 
         const bData = bFromPlanet.find(b => b.id === bDesc.id);
-        let prod = computeProduction(rProd, bData.level, temp, (rDesc.scalable ? ratio : 1));
+        let p = computeProduction(rProd, bData.level, temp, (rDesc.scalable ? ratio : 1));
 
         // Apply energy and production factor.
-        prod *= (bData.production_factor * bData.energy_factor);
+        p *= (bData.production_factor * bData.energy_factor);
 
-        if (prod !== 0) {
-          amount += prod;
+        if (p !== 0) {
+          amount += p;
+        }
+        if (p > 0) {
+          prod += p;
         }
       }
     }
@@ -41,7 +46,7 @@ function generateResourceDesc(res, rFromPlanet, data, bFromPlanet, buildings, te
     icon: res.mini,
 
     amount: Math.floor(amount),
-    production: rData.production,
+    production: prod,
     storage: rData.storage,
     storable: rDesc.storable,
   };
