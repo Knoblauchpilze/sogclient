@@ -45,7 +45,7 @@ function generateResourceDesc(res, rFromPlanet, data, bFromPlanet, buildings, te
     title: res.name,
     icon: res.mini,
 
-    amount: Math.floor(amount),
+    amount: Math.round(amount),
     production: prod,
     storage: rData.storage,
     storable: rDesc.storable,
