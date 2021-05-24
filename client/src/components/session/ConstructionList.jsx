@@ -79,13 +79,24 @@ function ConstructionList (props) {
       a => generateActionDesc(a, props.technologies, technologies_list)
     );
 
-    const ships = props.planet.ships_construction.map(
-      a => generateActionDesc(a, props.ships, ships_list)
+    // For ships and defenses the process is a bit
+    // more complex: indeed both systems are produced
+    // by the shipyard and so we need to concatenate
+    // both lists and order them.
+    const systemsActions = props.planet.ships_construction.concat(props.planet.defenses_construction);
+    const systems = props.ships.concat(props.defenses);
+    const systemsDesc = ships_list.concat(defenses_list);
+
+    systemsActions.sort(function (a1, a2) {
+      const eta1 = Date.parse(a1.created_at);
+      const eta2 = Date.parse(a2.created_at);
+
+      return eta1 - eta2;
+    });
+
+    shipsAndDefenses = systemsActions.map(
+      a => generateActionDesc(a, systems, systemsDesc)
     );
-    const defenses = props.planet.defenses_construction.map(
-      a => generateActionDesc(a, props.defenses, defenses_list)
-    );
-    shipsAndDefenses = ships.concat(defenses);
   }
 
   return (
