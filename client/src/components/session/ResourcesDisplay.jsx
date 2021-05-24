@@ -24,7 +24,10 @@ function generateResourceDesc(res, rFromPlanet, data, bFromPlanet, buildings, te
       if (rProd) {
 
         const bData = bFromPlanet.find(b => b.id === bDesc.id);
-        const prod = bData.production_factor * computeProduction(rProd, bData.level, temp, (rDesc.scalable ? ratio : 1));
+        let prod = computeProduction(rProd, bData.level, temp, (rDesc.scalable ? ratio : 1));
+
+        // Apply energy and production factor.
+        prod *= (bData.production_factor * bData.energy_factor);
 
         if (prod !== 0) {
           amount += prod;

@@ -9,13 +9,20 @@ function generateResourceEntry(r) {
   if (r.production > 0) {
     classes += " prod_settings_entry_gain";
   }
-  else if (r.production < 0) {
+  else if (r.production < 0 || r.consumption) {
     classes += " prod_settings_entry_loss";
   }
 
   return (
     <span key={r.id} className={classes}>
-      {formatAmount(r.production, false)}
+      {
+         !r.consumption &&
+         formatAmount(r.production, false)
+      }
+      {
+        r.consumption &&
+        formatAmount(-r.production, false) + "/" + formatAmount(-r.total, false)
+      }
     </span>
   );
 }
