@@ -15,7 +15,9 @@ function toFixedDigits(val, digits) {
 
   let dCount = 1;
   if (val > 0) {
-    dCount = Math.ceil(Math.log10(val));
+    // See here for a justification:
+    // https://brilliant.org/wiki/finding-digits-of-a-number/
+    dCount = Math.floor(Math.log10(val)) + 1;
   }
 
   let out = "";
