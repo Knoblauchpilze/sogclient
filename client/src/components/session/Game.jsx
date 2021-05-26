@@ -98,6 +98,13 @@ class Game extends React.Component {
       // The duration between each update interval of the
       // remaining time. Expressed in milliseconds.
       interval: 1000,
+
+      // The current coordinate of the solar system displayed
+      // in the galaxy view.
+      coordinates: {
+        galaxy: -1,
+        solar_system: -1,
+      },
     };
 
     this.timer = 0;
@@ -119,7 +126,7 @@ class Game extends React.Component {
 
     // Fetch the planets from the server for the
     // player that is currently logged in.
-    planets.fetchPlanets(this.props.session.id)
+    planets.fetchPlanetsForPlayer(this.props.session.id)
       .then(function (res) {
         if (res.status !== PLANETS_FETCH_SUCCEEDED) {
           game.fetchDataFailed(res.status);
@@ -244,6 +251,11 @@ class Game extends React.Component {
     this.setState({
       planets: planets,
       selectedPlanet: 0,
+
+      coordinates: {
+        galaxy: planets[0].coordinate.galaxy,
+        solar_system: planets[0].coordinate.system,
+      },
     });
 
     console.info("Fetched " + planets.length + " planet(s) for " + this.props.session.id);
@@ -300,6 +312,23 @@ class Game extends React.Component {
     });
   }
 
+  updateSelectedSystem(galaxy, system) {
+    // Prevent out of bounds requests.
+    if (galaxy < 0 || id >= this.props.universe.galaxies_count) {
+      return;
+    }
+    if (system < 0 || id >= this.props.universe.galaxy_size) {
+      return;
+    }
+
+    this.setState({
+      coordinates: {
+        galaxy: galaxy,
+        solar_system: system,
+      },
+    });
+  }
+
   actionPerformed() {
     // We should reload the planets available for this player.
     const server = new Server();
@@ -307,7 +336,7 @@ class Game extends React.Component {
 
     const game = this;
 
-    planets.fetchPlanets(this.props.session.id)
+    planets.fetchPlanetsForPlayer(this.props.session.id)
       .then(function (res) {
         if (res.status !== PLANETS_FETCH_SUCCEEDED) {
           game.fetchDataFailed(res.status);
@@ -430,7 +459,9 @@ class Game extends React.Component {
                         />;
           break;
       case TAB_GALAXY:
-          tab = <Galaxy planet={this.state.planets[this.state.selectedPlanet]} />;
+          tab = <Galaxy planet={this.state.planets[this.state.selectedPlanet]}
+                        coordinates={this.state.coordinates}
+                        />;
           break;
       case TAB_OVERVIEW:
       default:
