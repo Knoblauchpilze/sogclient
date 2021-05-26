@@ -4,31 +4,63 @@ import React from 'react';
 import GalaxyNavigator from './GalaxyNavigator.jsx';
 import GalaxyPlanet from './GalaxyPlanet.jsx';
 
+import Server from '../game/server.js';
+
+import PlanetsModule from '../game/planets.js';
+import { PLANETS_FETCH_SUCCEEDED } from '../game/planets.js';
+
 class Galaxy extends React.Component {
   constructor(props) {
     super(props);
 
-    let galaxy = -1;
-    let system = -1;
-
-    if (props.planet) {
-      galaxy = props.planet.coordinate.galaxy;
-      system = props.planet.coordinate.system;
-    }
-
     this.state = {
-      // Defines the currently selected galaxy as displayed in
-      // the view. This will be updated when the player browses
-      // different galaxies.
-      galaxy: galaxy,
-
-      // Defines the currently selected solar system. Updated
-      // whenever the player browses to a different system.
-      system: system,
+      // Defines the current coordinates displayed by the galaxy view.
+      coordinates: {
+        galaxy: -1,
+        solar_system: -1,
+      },
     };
   }
 
+  fetchSystemData() {
+    // Fetch the data corresponding to this player's session
+    // from the server.
+    const server = new Server();
+    const planets = new PlanetsModule(server);
+
+    const game = this;
+
+    // Fetch the planets from the server for the
+    // player that is currently logged in.
+    planets.fetchPlanetsForSystem(this.props.coordinates.galaxy, this.props.coordinates.solar_system)
+      .then(function (res) {
+        if (res.status !== PLANETS_FETCH_SUCCEEDED) {
+          game.fetchDataFailed(res.status);
+        }
+        else {
+          game.fetchPlanetsSucceeded(res.planets);
+        }
+      })
+      .catch(err => game.fetchDataFailed(err));
+  }
+
+  fetchDataFailed(err) {
+    alert(err);
+  }
+
+  fetchPlanetsSucceeded(planets) {
+    // Update internal state: we also define the planet
+    // selected to be the first one.
+    this.setState({
+      planets: planets,
+    });
+
+    console.info("Fetched " + planets.length + " planet(s) for system " + this.props.coordinates.galaxy + ":" + this.props.coordinates.solar_system);
+  }
+
   render() {
+    // TODO: Handle the handling of the system data.
+
     return (
       <div className="galaxy_layout">
         <GalaxyNavigator />
