@@ -99,11 +99,19 @@ class Game extends React.Component {
       // remaining time. Expressed in milliseconds.
       interval: 1000,
 
-      // The current coordinate of the solar system displayed
-      // in the galaxy view.
-      coordinates: {
-        galaxy: -1,
-        solar_system: -1,
+      // The data for the system currently selected in the
+      // galaxy view. Contains all the relevant info that
+      // needs to be fetched to display the galaxy view.
+      system_data: {
+        // The current coordinate of the solar system displayed
+        // in the galaxy view.
+        coordinates: {
+          galaxy: -1,
+          solar_system: -1,
+        },
+
+        // The list of planets existing in the system.
+        planets: [],
       },
     };
 
@@ -251,14 +259,17 @@ class Game extends React.Component {
     this.setState({
       planets: planets,
       selectedPlanet: 0,
-
-      coordinates: {
-        galaxy: planets[0].coordinate.galaxy,
-        solar_system: planets[0].coordinate.system,
-      },
     });
 
     console.info("Fetched " + planets.length + " planet(s) for " + this.props.session.id);
+
+    // Update the selected system.
+    this.updateSelectedSystem(
+      // The `+1` comes from the fact that we expect the data
+      // to come from the UI where it has an offset of 1.
+      planets[0].coordinate.galaxy + 1,
+      planets[0].coordinate.system + 1,
+    );
   }
 
   fetchResourcesSucceeded(resources) {
@@ -296,6 +307,22 @@ class Game extends React.Component {
     });
   }
 
+  fetchSystemSucceeded(galaxy, solar_system, planets) {
+    // Update internal state: we need to register the planets of
+    // the current system along with the coordinates.
+    this.setState({
+      system_data: {
+        coordinates: {
+          galaxy: galaxy + 1,
+          solar_system: solar_system + 1,
+        },
+        planets: planets,
+      }
+    });
+
+    console.info("Fetched " + planets.length + " planet(s) for system " + galaxy + ":" + solar_system);
+  }
+
   updateSelectedPlanet(id) {
     // Update the selected planet index if it is
     // valid compared to the list of available
@@ -314,19 +341,34 @@ class Game extends React.Component {
 
   updateSelectedSystem(galaxy, system) {
     // Prevent out of bounds requests.
-    if (galaxy < 0 || id >= this.props.universe.galaxies_count) {
+    const iGalaxy = parseInt(galaxy, 10) - 1;
+    const iSystem = parseInt(system, 10) - 1;
+    console.log(": " + iGalaxy + "/" + iSystem);
+
+    if (iGalaxy < 0 || iGalaxy >= this.props.universe.galaxies_count) {
       return;
     }
-    if (system < 0 || id >= this.props.universe.galaxy_size) {
+    if (iSystem < 0 || iSystem >= this.props.universe.galaxy_size) {
       return;
     }
 
-    this.setState({
-      coordinates: {
-        galaxy: galaxy,
-        solar_system: system,
-      },
-    });
+    // Trigger a fetching of the data for the solar
+    // system that will be selected.
+    const server = new Server();
+    const planets = new PlanetsModule(server);
+
+    const game = this;
+
+    planets.fetchPlanetsForSystem(iGalaxy, iSystem)
+      .then(function (res) {
+        if (res.status !== PLANETS_FETCH_SUCCEEDED) {
+          game.fetchDataFailed(res.status);
+        }
+        else {
+          game.fetchSystemSucceeded(res.galaxy, res.solar_system, res.planets);
+        }
+      })
+      .catch(err => game.fetchDataFailed(err));
   }
 
   actionPerformed() {
@@ -460,7 +502,11 @@ class Game extends React.Component {
           break;
       case TAB_GALAXY:
           tab = <Galaxy planet={this.state.planets[this.state.selectedPlanet]}
-                        coordinates={this.state.coordinates}
+                        ships={this.state.ships}
+                        defenses={this.state.defenses}
+                        system={this.state.system_data}
+                        universe={this.props.universe}
+                        updateSystem={(galaxy, system) => this.updateSelectedSystem(galaxy, system)}
                         />;
           break;
       case TAB_OVERVIEW:
