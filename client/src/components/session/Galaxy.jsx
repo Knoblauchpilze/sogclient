@@ -4,72 +4,92 @@ import React from 'react';
 import GalaxyNavigator from './GalaxyNavigator.jsx';
 import GalaxyPlanet from './GalaxyPlanet.jsx';
 
-import Server from '../game/server.js';
-
-import PlanetsModule from '../game/planets.js';
-import { PLANETS_FETCH_SUCCEEDED } from '../game/planets.js';
-
 class Galaxy extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      // Defines the current coordinates displayed by the galaxy view.
-      coordinates: {
-        galaxy: -1,
-        solar_system: -1,
-      },
     };
   }
 
-  fetchSystemData() {
-    // Fetch the data corresponding to this player's session
-    // from the server.
-    const server = new Server();
-    const planets = new PlanetsModule(server);
+  generateInfo() {
+    let probes = 0;
+    let recyclers = 0;
+    let missiles = 0;
 
-    const game = this;
+    // TODO: Handle slots.
+    let usedSlots = 0;
+    let totalSlots = 0;
 
-    // Fetch the planets from the server for the
-    // player that is currently logged in.
-    planets.fetchPlanetsForSystem(this.props.coordinates.galaxy, this.props.coordinates.solar_system)
-      .then(function (res) {
-        if (res.status !== PLANETS_FETCH_SUCCEEDED) {
-          game.fetchDataFailed(res.status);
+    if (this.props.planet) {
+      // Fetch the description for needed ships.
+      if (this.props.ships && this.props.ships.length > 0) {
+        let eDesc = this.props.ships.find(e => e.name === "espionage probe");
+        if (eDesc) {
+          const built = this.props.planet.ships.find(e => e.id === eDesc.id);
+          probes = built.amount;
         }
-        else {
-          game.fetchPlanetsSucceeded(res.planets);
+
+        eDesc = this.props.ships.find(e => e.name === "recycler");
+        if (eDesc) {
+          const built = this.props.planet.ships.find(e => e.id === eDesc.id);
+          recyclers = built.amount;
         }
-      })
-      .catch(err => game.fetchDataFailed(err));
-  }
+      }
 
-  fetchDataFailed(err) {
-    alert(err);
-  }
+      if (this.props.defenses && this.props.defenses.length > 0) {
+        let eDesc = this.props.defenses.find(e => e.name === "interplanetary missile");
+        if (eDesc) {
+          const built = this.props.planet.defenses.find(e => e.id === eDesc.id);
+          missiles = built.amount;
+        }
+      }
+    }
 
-  fetchPlanetsSucceeded(planets) {
-    // Update internal state: we also define the planet
-    // selected to be the first one.
-    this.setState({
-      planets: planets,
-    });
-
-    console.info("Fetched " + planets.length + " planet(s) for system " + this.props.coordinates.galaxy + ":" + this.props.coordinates.solar_system);
+    return (
+      <div className="galaxy_ships_info">
+        <span className="galaxy_default_label">{probes + " espionage probe(s)"}</span>
+        <span className="galaxy_default_label">{recyclers + " recycler(s)"}</span>
+        <span className="galaxy_default_label">{missiles + " interplanetary missile(s)"}</span>
+        <span className="galaxy_default_label">{usedSlots + "/" + totalSlots + " slot(s)"}</span>
+      </div>
+    );
   }
 
   render() {
-    // TODO: Handle the handling of the system data.
+    // Note that as the 'planets' list provided in the props
+    // only defines the existing planet: we will have to do
+    // some generation of the data for planets that are not
+    // colonized yet.
+    let planets = [];
+    for (let id = 0 ; id < this.props.universe.solar_system_size ; ++id) {
+      let pID = this.props.system.planets.findIndex(p => p.coordinate.position === id);
+      let p;
 
+      if (pID < 0) {
+        p = {
+          coordinate: {
+            position: id,
+          },
+          name: "",
+          player: "",
+          guild: "",
+        };
+      }
+      else {
+        p = this.props.system.planets[pID];
+      }
+
+      planets.push(p);
+    }
+
+    // TODO: Handle the handling of the system data.
     return (
       <div className="galaxy_layout">
-        <GalaxyNavigator />
-        <div className="galaxy_ships_info">
-          <span className="galaxy_default_label">73 espionage probe(s)</span>
-          <span className="galaxy_default_label">144 recycler(s)</span>
-          <span className="galaxy_default_label">0 interplanetary missile(s)</span>
-          <span className="galaxy_default_label">2/13 slot(s)</span>
-        </div>
+        <GalaxyNavigator coordinates={this.props.system.coordinates} updateSystem={this.props.updateSystem} />
+        {
+          this.generateInfo()
+        }
 
         <div className="galaxy_layout_description">
           <span className="galaxy_system_header">Planet</span>
@@ -82,31 +102,9 @@ class Galaxy extends React.Component {
           <span className="galaxy_system_header">Actions</span>
         </div>
         <div className="galaxy_system_layout">
-          <GalaxyPlanet position={1}
-                        player={"Player 1"}
-                        planet={"987"}
-                        guild={"po"}
-                        />
-          <GalaxyPlanet position={2}
-                        player={"Player 2879817"}
-                        planet={"11"}
-                        guild={"zeiu"}
-                        />
-          <GalaxyPlanet position={3}
-                        player={"Player 897198719871"}
-                        planet={"uhupoi98719871"}
-                        guild={""}
-                        />
-          <GalaxyPlanet position={4}
-                        player={"aa"}
-                        planet={"uhupoi879971"}
-                        guild={"awesome_guild"}
-                        />
-          <GalaxyPlanet position={5}
-                        player={"a871"}
-                        planet={"11"}
-                        guild={"no_guild"}
-                        />
+          {
+            planets.map((p, id) => <GalaxyPlanet key={id} planet={p} />)
+          }
         </div>
 
         <div className="galaxy_view_messages">

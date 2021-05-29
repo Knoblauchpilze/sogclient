@@ -44,6 +44,10 @@ class PlanetsModule {
     // on the request's result.
     let out = {
       status: PLANETS_FETCH_FAILURE,
+
+      galaxy: galaxy,
+      solar_system: solar_system,
+
       planets: [],
     };
 
