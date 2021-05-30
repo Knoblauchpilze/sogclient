@@ -47,7 +47,11 @@ function GalaxyNavigator (props) {
                   onClick={() => props.updateSystem(props.coordinates.galaxy, props.coordinates.solar_system + 1)}
                   />
         </div>
-        <button className="galaxy_navigator_button">Refresh</button>
+        <button className="galaxy_navigator_button"
+                onClick={() => props.updateSystem(props.coordinates.galaxy, props.coordinates.solar_system)}
+                >
+          Refresh
+        </button>
       </div>
       <button className="galaxy_navigator_button">Expedition</button>
     </div>
