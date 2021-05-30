@@ -369,7 +369,6 @@ class Game extends React.Component {
     // Prevent out of bounds requests.
     const iGalaxy = parseInt(galaxy, 10) - 1;
     const iSystem = parseInt(system, 10) - 1;
-    console.log(": " + iGalaxy + "/" + iSystem);
 
     if (iGalaxy < 0 || iGalaxy >= this.props.universe.galaxies_count) {
       return;
