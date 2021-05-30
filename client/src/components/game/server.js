@@ -67,6 +67,10 @@ class Server {
     return this.serverURL() + "/planets?player=" + player;
   }
 
+  moonsURL(player) {
+    return this.serverURL() + "/moons?player=" + player;
+  }
+
   resourcesURL() {
     return this.serverURL() + "/resources";
   }

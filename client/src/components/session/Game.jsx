@@ -57,6 +57,11 @@ class Game extends React.Component {
       // the player currently logged in.
       planets: [],
 
+      // Defines the list of moons available for this
+      // game: it corresponds to all the moons owned by
+      // the player currently logged in.
+      moons: [],
+
       // Defines the list of resources available for this
       // game: it corresponds to constant data fetched
       // from the server and describing the properties of
@@ -151,6 +156,19 @@ class Game extends React.Component {
         }
       })
       .catch(err => game.fetchDataFailed(err));
+
+    // Fetch the moons from the server for the
+    // player that is currently logged in.
+    planets.fetchMoonsForPlayer(this.props.session.id)
+    .then(function (res) {
+      if (res.status !== PLANETS_FETCH_SUCCEEDED) {
+        game.fetchDataFailed(res.status);
+      }
+      else {
+        game.fetchMoonsSucceeded(res.moons);
+      }
+    })
+    .catch(err => game.fetchDataFailed(err));
 
     // Fetch the resources from the server.
     resources.fetchResources()
@@ -289,6 +307,13 @@ class Game extends React.Component {
       planets[0].coordinate.galaxy + 1,
       planets[0].coordinate.system + 1,
     );
+  }
+
+  fetchMoonsSucceeded(moons) {
+    // Update internal state.
+    this.setState({
+      moons: moons,
+    });
   }
 
   fetchResourcesSucceeded(resources) {

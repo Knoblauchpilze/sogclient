@@ -39,6 +39,37 @@ class PlanetsModule {
     return out;
   }
 
+  async fetchMoonsForPlayer(player) {
+    // Fetch moons from the server and discriminate
+    // on the request's result.
+    let out = {
+      status: PLANETS_FETCH_FAILURE,
+      moons: [],
+    };
+
+    let reqStatus = "";
+
+    const res = await fetch(this.server.moonsURL(player))
+      .catch(err => reqStatus = err);
+
+    if (reqStatus !== "") {
+      console.error("Failed to fetch moons: " + reqStatus);
+      return out;
+    }
+    if (!res.ok) {
+      out.status = res.statusText;
+      return out;
+    }
+
+    out.status = PLANETS_FETCH_SUCCEEDED;
+
+    // Extract moons into a meaningful object.
+    const rawMoons = await res.text();
+    out.moons = JSON.parse(rawMoons);
+
+    return out;
+  }
+
   async fetchPlanetsForSystem(galaxy, solar_system) {
     // Fetch planets from the server and discriminate
     // on the request's result.
