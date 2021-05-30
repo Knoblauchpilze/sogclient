@@ -19,7 +19,7 @@ function GalaxyPlanet (props) {
       <img className="galaxy_planet_base galaxy_planet_4" src={moon} alt="moon"/>
       <span className="galaxy_planet_base galaxy_planet_5 galaxy_planet_activity">*</span>
       <img className="galaxy_planet_base galaxy_planet_6" src={wreckfield} alt="debris_gone"/>
-      <span className="galaxy_planet_base galaxy_planet_7 galaxy_planet_label">{props.planet.player}</span>
+      <span className="galaxy_planet_base galaxy_planet_7 galaxy_planet_label">{props.planet.player_name}</span>
       <span className="galaxy_planet_base galaxy_planet_8 galaxy_planet_label">{props.guild}</span>
       <button className="galaxy_planet_base galaxy_planet_9 galaxy_planet_action galaxy_planet_spy"></button>
       <button className="galaxy_planet_base galaxy_planet_10 galaxy_planet_action galaxy_planet_friend"></button>

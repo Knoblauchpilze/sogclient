@@ -31,6 +31,8 @@ import ShipsModule from '../game/ships.js';
 import { SHIPS_FETCH_SUCCEEDED } from '../game/ships.js';
 import DefensesModule from '../game/defenses.js';
 import { DEFENSES_FETCH_SUCCEEDED } from '../game/defenses.js';
+import PlayersModule from '../game/players.js';
+import { PLAYERS_FETCH_SUCCEEDED } from '../game/players.js';
 
 import { computeActionCompletionTime } from '../game/actions.js';
 
@@ -85,6 +87,10 @@ class Game extends React.Component {
       // available in the game.
       defenses: [],
 
+      // Defines the list of players available for the universe
+      // associated to the current session.
+      players: [],
+
       // Defines the index of the selected planet among
       // the available list.
       selectedPlanet: -1,
@@ -129,6 +135,7 @@ class Game extends React.Component {
     const technologies = new TechnologiesModule(server);
     const ships = new ShipsModule(server);
     const defenses = new DefensesModule(server);
+    const players = new PlayersModule(server);
 
     const game = this;
 
@@ -201,6 +208,18 @@ class Game extends React.Component {
       }
       else {
         game.fetchDefensesSucceeded(res.defenses);
+      }
+    })
+    .catch(err => game.fetchDataFailed(err));
+
+    // Fetch the players from the server.
+    players.fetchPlayersForUniverse(this.props.session.universe)
+    .then(function (res) {
+      if (res.status !== PLAYERS_FETCH_SUCCEEDED) {
+        game.fetchDataFailed(res.status);
+      }
+      else {
+        game.fetchPlayersSucceeded(res.players);
       }
     })
     .catch(err => game.fetchDataFailed(err));
@@ -321,6 +340,13 @@ class Game extends React.Component {
     });
 
     console.info("Fetched " + planets.length + " planet(s) for system " + galaxy + ":" + solar_system);
+  }
+
+  fetchPlayersSucceeded(players) {
+    // Update internal state.
+    this.setState({
+      players: players,
+    });
   }
 
   updateSelectedPlanet(id) {
@@ -506,6 +532,7 @@ class Game extends React.Component {
                         defenses={this.state.defenses}
                         system={this.state.system_data}
                         universe={this.props.universe}
+                        players={this.state.players}
                         updateSystem={(galaxy, system) => this.updateSelectedSystem(galaxy, system)}
                         />;
           break;
