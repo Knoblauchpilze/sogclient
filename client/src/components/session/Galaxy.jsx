@@ -72,12 +72,17 @@ class Galaxy extends React.Component {
             position: id,
           },
           name: "",
+          player_name: "",
           player: "",
           guild: "",
         };
       }
       else {
         p = this.props.system.planets[pID];
+
+        // Attempt to find the player's name.
+        const pl = this.props.players.find(pla => pla.id === p.player);
+        p.player_name = pl.name;
       }
 
       planets.push(p);

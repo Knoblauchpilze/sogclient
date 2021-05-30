@@ -40,6 +40,10 @@ class Server {
     return this.playersURL() + "/" + id;
   }
 
+  playersForUniverse(universe) {
+    return this.playersURL() + "?universe=" + universe;
+  }
+
   playersDataKey() {
     return "player-data";
   }
