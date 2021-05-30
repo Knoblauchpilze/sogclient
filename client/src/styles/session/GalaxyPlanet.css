@@ -29,6 +29,12 @@
   font-weight: bold;
 }
 
+.galaxy_planet_distant_activity {
+  color: #dc6400;
+
+  font-weight: bold;
+}
+
 .galaxy_planet_action {
   background-size: contain;
   background-repeat: no-repeat;
@@ -77,7 +83,7 @@
 }
 
 .galaxy_planet_5 {
-  width: 10px;
+  width: 20px;
 }
 
 .galaxy_planet_6 {
