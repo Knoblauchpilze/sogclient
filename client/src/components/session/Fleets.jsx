@@ -112,6 +112,32 @@ class Fleets extends React.Component {
     });
   }
 
+  selectAllShips() {
+    // In case no data has been fetched from the server,
+    // do nothing.
+    if (!this.props.planet || this.props.planet.ships.length === 0) {
+      return;
+    }
+
+    // Otherwise, select all ships.
+    const selected = this.props.planet.ships.map(function (s) {
+      return {
+        id: s.id,
+        selected: s.amount,
+      };
+    });
+
+    this.setState({
+      selected: selected,
+    });
+  }
+
+  selectNoShips() {
+    this.setState({
+      selected: [],
+    });
+  }
+
   generateFleetInitView() {
     // Generate sections for combat and civil ships.
     const civilShips = [];
@@ -453,8 +479,12 @@ class Fleets extends React.Component {
           this.state.step === FLEET_INIT &&
           <div className="fleets_confirmation_panel">
             <div className="fleets_confirmation_element">
-              <button className="fleets_button fleets_all_ships">All</button>
-              <button className="fleets_button fleets_no_ship">0</button>
+              <button className="fleets_button fleets_all_ships" onClick={() => this.selectAllShips()}>
+                All
+              </button>
+              <button className="fleets_button fleets_no_ship" onClick={() => this.selectNoShips()}>
+                0
+              </button>
             </div>
             <div className="fleets_confirmation_element">
               <button className="fleets_next_step" onClick = {() => this.updateFleetStep(FLEET_FLIGHT)}>NEXT</button>
