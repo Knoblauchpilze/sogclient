@@ -35,7 +35,7 @@ class AccountSelector extends React.Component {
       accountMode: "signin",
 
       // The account data as currently filled by the
-      // user. Will be checked against server's data
+      // user. Will be checked against server data
       // when the user wants to log in (or register).
       account: NullAccount,
 

@@ -62,7 +62,7 @@ class App extends React.Component {
       // is trying to connect. Initialized with a null
       // value at first, the account selector will be
       // in charge of populating and validating it with
-      // the server's data
+      // the server data
       account: NullAccount,
 
       // The session data representing the game that the

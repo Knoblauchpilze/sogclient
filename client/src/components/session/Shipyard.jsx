@@ -36,7 +36,7 @@ class Shipyard extends React.Component {
       const out = p.getShipData(ships_list[id].name);
 
       if (!out.found) {
-        console.error("Failed to find ship \"" + ships_list[id].name + "\" from server's data");
+        console.error("Failed to find ship \"" + ships_list[id].name + "\" from server data");
       }
       else {
         switch (ships_list[id].kind) {
