@@ -41,7 +41,7 @@ class Facilities extends React.Component {
       const out = p.getBuildingData(buildings_list[id].name);
 
       if (!out.found) {
-        console.error("Failed to find building \"" + buildings_list[id].name + "\" from server's data");
+        console.error("Failed to find building \"" + buildings_list[id].name + "\" from server data");
       }
       else {
         // Also don't consider buildings that can only

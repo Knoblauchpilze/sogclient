@@ -38,7 +38,7 @@ class ResearchLab extends React.Component {
       const out = p.getTechnologyData(technologies_list[id].name);
 
       if (!out.found) {
-        console.error("Failed to find technology \"" + technologies_list[id].name + "\" from server's data");
+        console.error("Failed to find technology \"" + technologies_list[id].name + "\" from server data");
       }
       else {
         switch (technologies_list[id].type) {

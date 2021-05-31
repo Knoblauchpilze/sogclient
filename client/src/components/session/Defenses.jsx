@@ -34,7 +34,7 @@ class Defenses extends React.Component {
       const out = p.getDefenseData(defenses_list[id].name);
 
       if (!out.found) {
-        console.error("Failed to find defense \"" + defenses_list[id].name + "\" from server's data");
+        console.error("Failed to find defense \"" + defenses_list[id].name + "\" from server data");
       }
       else {
         defenses.push(out.defense);
