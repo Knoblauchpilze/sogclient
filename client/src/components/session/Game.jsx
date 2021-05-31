@@ -547,6 +547,14 @@ class Game extends React.Component {
           break;
       case TAB_FLEETS:
           tab = <Fleets planet={this.state.planets[this.state.selectedPlanet]}
+                        player={this.props.session}
+                        resources={this.state.resources}
+                        buildings={this.state.buildings}
+                        technologies={this.state.technologies}
+                        ships={this.state.ships}
+                        defenses={this.state.defenses}
+                        universe={this.props.universe}
+                        planets={this.state.planets}
                         actionPerformed={() => this.actionPerformed()}
                         />;
           break;
