@@ -143,6 +143,10 @@
   background-color: #c9e68d;
 }
 
+.fleets_next_step_disabled, .fleets_next_step_disabled:hover {
+  background-color: #222;
+}
+
 .fleets_previous_step {
   color: #fff;
   background-color: #b00;
