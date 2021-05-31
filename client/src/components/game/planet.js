@@ -5,6 +5,8 @@ import { technologies_list } from '../../datas/technologies.js';
 import { ships_list } from '../../datas/ships.js';
 import { defenses_list } from '../../datas/defenses.js';
 
+import { formatDuration } from '../game/amounts.js';
+
 import Server from '../game/server.js';
 
 // Defines a constant indicating that creating an upgrade
@@ -22,67 +24,6 @@ const PRODUCTION_UPDATE_POST_SUCCEEDED = "Update production successfully execute
 // Defines a constant indicating that updating the production
 // of resources on a planet failed.
 const PRODUCTION_UPDATE_POST_FAILED = "Failed to update production";
-
-function formatDuration(duration) {
-  // We will divide at most until we reach a duration
-  // of a week. Any longer duration will continue to
-  // add more weeks.
-  const s = Math.floor(duration * 3600.0) % 60;
-  const m = Math.floor(duration * 60.0) % 60;
-  const h = Math.floor(duration) % 24;
-  const d = Math.floor(duration / 24) % 7;
-  const w = Math.floor(duration / (24 * 7));
-
-  let out = "";
-
-  // Weeks.
-  if (w > 0) {
-    out += w;
-    out += "w";
-  }
-
-  // Days.
-  if (d > 0) {
-    if (out !== "") {
-      out += " ";
-    }
-
-    out += d;
-    out += "d"
-  }
-
-  // Hours.
-  if (h > 0) {
-    if (out !== "") {
-      out += " ";
-    }
-
-    out += h;
-    out += "h"
-  }
-
-  // Minutes.
-  if (m > 0) {
-    if (out !== "") {
-      out += " ";
-    }
-
-    out += m;
-    out += "m"
-  }
-
-  // Seconds.
-  if (s > 0) {
-    if (out !== "") {
-      out += " ";
-    }
-
-    out += s;
-    out += "s"
-  }
-
-  return out;
-}
 
 class Planet {
   // The `planet` defines the planet's data that is fetched

@@ -16,6 +16,8 @@ import deuterium from '../../assets/deuterium_mini.jpeg';
 import {ships_list} from '../../datas/ships.js';
 import { CIVIL_SHIP, COMBAT_SHIP } from '../../datas/ships.js';
 
+import { toFixedDigits, formatDuration } from '../game/amounts.js';
+
 // Defines the initial step of the fleets view where the
 // player can select ships to include in the fleet.
 const FLEET_INIT = "fleet_init";
@@ -28,6 +30,28 @@ const FLEET_FLIGHT = "fleet_flight";
 // the objective of the fleet along with the cargo that
 // will be carried with it.
 const FLEET_OBJECTIVE = "fleet_objective";
+
+function formatDate(date) {
+  const d = toFixedDigits(date.getDate(), 2);
+  const m = toFixedDigits(date.getMonth() + 1, 2);
+  const y = date.getFullYear();
+
+  const h = toFixedDigits(date.getHours(), 2);
+  const mn = toFixedDigits(date.getMinutes(), 2);
+  const s = toFixedDigits(date.getSeconds(), 2);
+
+  return d + "." + m + "." + y + " " + h + ":" + mn + ":" + s;
+}
+
+function computeFlightDuration(source, target, speed, ships, technologies, shipsData, techsData) {
+  // TODO: Handle this.
+  return 28000;
+}
+
+function computeFlightDistance(source, target) {
+  // TODO: Handle this.
+  return 5432;
+}
 
 class Fleets extends React.Component {
   constructor(props) {
@@ -42,12 +66,50 @@ class Fleets extends React.Component {
       // Defines the amount of ships selected for each
       // of the available item.
       selected: [],
+
+      // Defines whether or not the user can move on to
+      // the next step of the fleet creation.
+      validStep: false,
+
+      // Defines the destination that has been selected
+      // for this fleet and the properties of the flight.
+      destination: {
+        target: props.planet.id,
+        name: props.planet.name,
+
+        coordinate: {
+          galaxy: props.planet.coordinate.galaxy,
+          system: props.planet.coordinate.system,
+          position: props.planet.coordinate.position,
+          location: "debris",
+        },
+
+        // TODO: Handle distance computation.
+        distance: 5,
+      },
+
+      // The speed at which the fleet will move in the
+      // galaxy. Can be anything between 0 and 1.
+      flight_speed: 1.0,
+
+      // The duration of the flight in milliseconds.
+      flight_duration: 30000,
+
+      // The amount of cargo available for this fleet.
+      cargo: 0,
     };
 
     this.selectShips = this.selectShips.bind(this);
+    this.selectDestination = this.selectDestination.bind(this);
   }
 
-  updateFleetStep(step) {
+  updateFleetStep(step, next) {
+    // Only allow to move to the next step based on the
+    // valid state.
+    if (next && !this.state.validStep) {
+      return;
+    }
+
     this.setState({
       step: step,
     });
@@ -57,7 +119,7 @@ class Fleets extends React.Component {
     // TODO: Handle the sending.
     console.error("Should send fleet");
 
-    this.updateFleetStep(FLEET_INIT);
+    this.updateFleetStep(FLEET_INIT, false);
   }
 
   selectShips(ship, amount) {
@@ -107,8 +169,21 @@ class Fleets extends React.Component {
       selected.push(select);
     }
 
+    // Compute the duration of the flight.
+    const duration = computeFlightDuration(
+      this.props.planet.coordinate,
+      this.state.destination.coordinate,
+      this.state.flight_speed,
+      selected,
+      this.props.player.technologies,
+      this.props.ships,
+      this.props.technologies
+    );
+
     this.setState({
       selected: selected,
+      flight_duration: duration,
+      validStep: (selected.length > 0),
     });
   }
 
@@ -119,22 +194,138 @@ class Fleets extends React.Component {
       return;
     }
 
-    // Otherwise, select all ships.
-    const selected = this.props.planet.ships.map(function (s) {
-      return {
+    // Otherwise, select all ships that have a value of
+    // at least 0. We will accumulate the cargo space
+    // as well.
+    let cargo = 0;
+    let selected = [];
+
+    for (let id = 0 ; id < this.props.planet.ships.length ; ++id) {
+      const s = this.props.planet.ships[id];
+      if (this.props.planet.ships.length === 0) {
+        continue;
+      }
+
+      const sDesc = this.props.ships.find(shp => shp.id === s.id);
+      if (sDesc) {
+        cargo += (sDesc.cargo * s.amount);
+      }
+
+      selected.push({
         id: s.id,
         selected: s.amount,
-      };
-    });
+      });
+    }
+
+    // Compute the duration of the flight.
+    const duration = computeFlightDuration(
+      this.props.planet.coordinate,
+      this.state.destination.coordinate,
+      this.state.flight_speed,
+      selected,
+      this.props.player.technologies,
+      this.props.ships,
+      this.props.technologies
+    );
 
     this.setState({
       selected: selected,
+      cargo: cargo,
+      flight_duration: duration,
+      validStep: (selected.length > 0),
     });
   }
 
   selectNoShips() {
     this.setState({
       selected: [],
+      cargo: 0,
+      flight_duration: 0,
+      validStep: false,
+    });
+  }
+
+  selectDestination(galaxy, system, position, location) {
+    // Make sure that coordinates are valid compared to the
+    // universes bounds.
+    const iGalaxy = parseInt(galaxy);
+    const iSystem = parseInt(system);
+    const iPosition = parseInt(position);
+
+    if (iGalaxy < 0 || iGalaxy >= this.props.universe.galaxies_count) {
+      return;
+    }
+    if (iSystem < 0 || iSystem >= this.props.universe.galaxy_size) {
+      return;
+    }
+    if (iPosition < 0 || iPosition >= this.props.universe.solar_system_size) {
+      return;
+    }
+    if (location !== "planet" && location !== "moon" && location !== "debris") {
+      return;
+    }
+
+    // Make sure that we're not selecting the exact same
+    // planet we're on.
+    if (this.props.planet.coordinate.galaxy === iGalaxy &&
+        this.props.planet.coordinate.system === iSystem &&
+        this.props.planet.coordinate.position === iPosition &&
+        this.props.planet.coordinate.location === location)
+    {
+      return;
+    }
+
+    // Compute the duration of the flight.
+    const duration = computeFlightDuration(
+      this.props.planet.coordinate,
+      this.state.destination.coordinate,
+      this.state.flight_speed,
+      this.state.selected,
+      this.props.player.technologies,
+      this.props.ships,
+      this.props.technologies
+    );
+
+    // Compute the distance to the target.
+    const distance = computeFlightDistance(
+      this.props.planet.coordinate,
+      {
+        galaxy: iGalaxy,
+        system: iSystem,
+        position: iPosition,
+        location: location,
+      },
+    );
+
+    this.setState({
+      destination: {
+        coordinate: {
+          galaxy: iGalaxy,
+          system: iSystem,
+          position: iPosition,
+          location: location,
+        },
+        distance: distance,
+      },
+      flight_duration: duration,
+    });
+  }
+
+  selectFleetSpeed(speed) {
+    // Compute the duration of the flight.
+    const duration = computeFlightDuration(
+      this.props.planet.coordinate,
+      this.state.destination.coordinate,
+      speed,
+      this.state.selected,
+      this.props.player.technologies,
+      this.props.ships,
+      this.props.technologies
+    );
+
+    this.setState({
+      flight_speed: Math.max(Math.min(speed, 1.0), 0.1),
+      flight_duration: duration,
     });
   }
 
@@ -206,6 +397,22 @@ class Fleets extends React.Component {
   }
 
   generateFleetFlightView() {
+    const speeds = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
+
+    // Generate classes for source world.
+    const classSourcePlanet = (this.props.planet.coordinate.location === "planet" ? "fleet_flight_info_picture_selected" : "fleet_flight_info_picture");
+    const classSourceMoon = (this.props.planet.coordinate.location === "moon" ? "fleet_flight_info_picture_selected" : "fleet_flight_info_picture");
+
+    const classTargetPlanet = (this.state.destination.coordinate.location === "planet" ? "fleet_flight_info_picture_selected" : "fleet_flight_info_picture_selectable");
+    const classTargetMoon = (this.state.destination.coordinate.location === "moon" ? "fleet_flight_info_picture_selected" : "fleet_flight_info_picture_selectable");
+    const classTargetDebris = (this.state.destination.coordinate.location === "debris" ? "fleet_flight_info_picture_selected" : "fleet_flight_info_picture_selectable");
+
+    const arrival = new Date().getTime() + this.state.flight_duration;
+    const arrivalTime = new Date(arrival);
+    const flightDurationHour = this.state.flight_duration / (1000 * 3600);
+
+    // TODO: Handle shortcut and trigger of the selection of destination
+    // when a destination is chosen.
     return (
       <div className="fleet_flight_info">
         <div className="fleet_flight_coordinates">
@@ -213,18 +420,22 @@ class Fleets extends React.Component {
             <p className="fleet_flight_step_title">Take off location:</p>
             <div className="fleet_flight_endpoint_data">
               <div className="fleet_flight_endpoint_raw">
-                <p className="fleet_flight_endpoint_name">New horizons</p>
+                <p className="fleet_flight_endpoint_name">{this.props.planet.name}</p>
                 <div className="fleet_flight_endpoint_type">
-                  <img className="fleet_flight_info_picture" src={planet} alt="Planet" />
-                  <img className="fleet_flight_info_picture" src={moon} alt="Moon" />
+                  <img className={classSourcePlanet} src={planet} alt="Planet" />
+                  <img className={classSourceMoon} src={moon} alt="Moon" />
                 </div>
-                <p className="fleet_flight_general_text">Coordinates: <a href="../galaxy/galaxy.html">5:53:7</a></p>
+                <p className="fleet_flight_general_text">
+                  Coordinates: <a href="../galaxy/galaxy.html">
+                  {(this.props.planet.coordinate.galaxy + 1) + ":" + (this.props.planet.coordinate.system + 1) + ":" + (this.props.planet.coordinate.position + 1)}
+                  </a>
+                </p>
               </div>
               <div className="fleet_flight_distance">
                 <p className="fleet_flight_distance_indicator">&lt;</p>
                 <div>
                   <p className="fleet_flight_general_text">Distance:</p>
-                  <p className="fleet_flight_general_text">5</p>
+                  <p className="fleet_flight_general_text">{this.state.destination.distance}</p>
                 </div>
                 <p className="fleet_flight_distance_indicator">&gt;</p>
               </div>
@@ -236,19 +447,82 @@ class Fleets extends React.Component {
               <div className="fleet_flight_endpoint_raw">
                 <p className="fleet_flight_endpoint_name">New horizons</p>
                 <div className="fleet_flight_endpoint_type">
-                  <img className="fleet_flight_info_picture" src={planet} alt="Planet" />
-                  <img className="fleet_flight_info_picture" src={moon} alt="Moon" />
-                  <img className="fleet_flight_info_picture" src={debris} alt="Debris field" />
+                  <img className={classTargetPlanet}
+                       src={planet}
+                       alt="Planet"
+                       onClick={() => this.selectDestination(
+                        this.state.destination.coordinate.galaxy,
+                        this.state.destination.coordinate.system,
+                        this.state.destination.coordinate.position,
+                        "planet"
+                       )}
+                       />
+                  <img className={classTargetMoon}
+                       src={moon}
+                       alt="Moon"
+                       onClick={() => this.selectDestination(
+                        this.state.destination.coordinate.galaxy,
+                        this.state.destination.coordinate.system,
+                        this.state.destination.coordinate.position,
+                        "moon"
+                       )}
+                       />
+                  <img className={classTargetDebris}
+                       src={debris}
+                       alt="Debris field"
+                       onClick={() => this.selectDestination(
+                        this.state.destination.coordinate.galaxy,
+                        this.state.destination.coordinate.system,
+                        this.state.destination.coordinate.position,
+                        "debris"
+                       )}
+                       />
                 </div>
                 <div className="fleet_flight_destination_coord_selector">
                   <form className="destination_coord_selector">
-                    <input className="fleet_flight_destination_coord_selector_input" method="post" type="number" name="destination_galaxy" id="destination_galaxy" value="5" min="1" max="9"/>
+                    <input className="fleet_flight_destination_coord_selector_input"
+                           method="post"
+                           type="number"
+                           name="destination_galaxy"
+                           id="destination_galaxy"
+                           value={this.state.destination.coordinate.galaxy + 1}
+                           onChange={e => this.selectDestination(
+                             e.target.value - 1,
+                             this.state.destination.coordinate.system,
+                             this.state.destination.coordinate.position,
+                             this.state.destination.coordinate.location
+                            )}
+                           />
                   </form>
                   <form className="fleet_flight_destination_coord_selector">
-                    <input className="fleet_flight_destination_coord_selector_input" method="post" type="number" name="destination_system" id="destination_system" value="53" min="1" max="499"/>
+                    <input className="fleet_flight_destination_coord_selector_input"
+                           method="post"
+                           type="number"
+                           name="destination_system"
+                           id="destination_system"
+                           value={this.state.destination.coordinate.system + 1}
+                           onChange={e => this.selectDestination(
+                             this.state.destination.coordinate.galaxy,
+                             e.target.value - 1,
+                             this.state.destination.coordinate.position,
+                             this.state.destination.coordinate.location
+                            )}
+                           />
                   </form>
                   <form className="fleet_flight_destination_coord_selector">
-                    <input className="fleet_flight_destination_coord_selector_input" method="post" type="number" name="destination_position" id="destination_position" value="7" min="1" max="15"/>
+                    <input className="fleet_flight_destination_coord_selector_input"
+                           method="post"
+                           type="number"
+                           name="destination_position"
+                           id="destination_position"
+                           value={this.state.destination.coordinate.position + 1}
+                           onChange={e => this.selectDestination(
+                             this.state.destination.coordinate.galaxy,
+                             this.state.destination.coordinate.system,
+                             e.target.value - 1,
+                             this.state.destination.coordinate.location
+                           )}
+                           />
                   </form>
                 </div>
               </div>
@@ -256,14 +530,7 @@ class Fleets extends React.Component {
                 <p className="fleet_flight_general_text">Shortcuts:</p>
                 <form method="post">
                   <select className="fleet_flight_destination_selector" id="destination_shortcut" name="destination_shortcut">
-                    <option value="New Hypergate">New hypergate</option>
-                    <option value="Hyperion">Hyperion</option>
-                    <option value="Hypergate">Hypergate</option>
-                    <option value="Oasis Secundus">Oasis Secundus</option>
-                    <option value="Oasis">Oasis</option>
-                    <option value="Colonie">Colonie</option>
-                    <option value="Tau Ceti Central">Tau Ceti Central</option>
-                    <option value="New London">New London</option>
+                    {this.props.planets.map(p => <option value={p.name}>{p.name}</option>)}
                   </select>
                 </form>
                 <p className="fleet_flight_general_text">Combat forces:</p>
@@ -281,7 +548,7 @@ class Fleets extends React.Component {
             <div className="fleet_flight_flight_details">
               <div className="fleet_flight_detail_container">
                 <span className="fleet_flight_detail_entry">Duration of flight (one way):</span>
-                <span className="fleet_flight_detail_value">0:02:55h</span>
+                <span className="fleet_flight_detail_value">{formatDuration(flightDurationHour)}</span>
               </div>
               <div className="fleet_flight_detail_container">
                 <span className="fleet_flight_detail_entry">Deuterium consumption:</span>
@@ -294,35 +561,36 @@ class Fleets extends React.Component {
             <div className="fleet_flight_flight_details">
               <div className="fleet_flight_detail_container">
                 <span className="fleet_flight_detail_entry">Arrival:</span>
-                <span className="fleet_flight_detail_value">25.01.17 20:46:42</span>
+                <span className="fleet_flight_detail_value">{formatDate(new Date())}</span>
               </div>
               <div className="fleet_flight_detail_container">
                 <span className="fleet_flight_detail_entry">Return:</span>
-                <span className="fleet_flight_detail_value">25.01.17 20:49:38</span>
+                <span className="fleet_flight_detail_value">{formatDate(arrivalTime)}</span>
               </div>
               <div className="fleet_flight_detail_container">
                 <span className="fleet_flight_detail_entry">Empty cargo bays:</span>
-                <span className="fleet_flight_detail_value fleet_flight_detail_valid_value">23250000</span>
+                <span className="fleet_flight_detail_value fleet_flight_detail_valid_value">{this.state.cargo}</span>
               </div>
             </div>
           </div>
           <div className="fleet_flight_speed_container">
             <div className="fleet_flight_speed_selection">
-              <button className="fleet_flight_speed" >10</button>
-              <button className="fleet_flight_speed" >20</button>
-              <button className="fleet_flight_speed" >30</button>
-              <button className="fleet_flight_speed" >40</button>
-              <button className="fleet_flight_speed" >50</button>
-              <button className="fleet_flight_speed" >60</button>
-              <button className="fleet_flight_speed" >70</button>
-              <button className="fleet_flight_speed" >80</button>
-              <button className="fleet_flight_speed" >90</button>
-              <button className="fleet_flight_selected_speed" >100</button>
+              {
+                speeds.map(function (s) {
+                    let classes = "fleet_flight_speed";
+                    if (s === this.state.flight_speed) {
+                      classes += " fleet_flight_selected_speed";
+                    }
+                    return <button className={classes} onClick={() => this.selectFleetSpeed(s)}>{100 * s}</button>
+                  },
+                  this
+                )
+              }
               <span>%</span>
             </div>
             <div className="fleet_flight_confirmation_layout">
-              <button className="fleets_button fleets_previous_step" onClick={() => this.updateFleetStep(FLEET_INIT)} >BACK</button>
-              <button className="fleets_button fleets_next_step" onClick={() => this.updateFleetStep(FLEET_OBJECTIVE)}>NEXT</button>
+              <button className="fleets_button fleets_previous_step" onClick={() => this.updateFleetStep(FLEET_INIT, false)} >BACK</button>
+              <button className="fleets_button fleets_next_step" onClick={() => this.updateFleetStep(FLEET_OBJECTIVE, true)}>NEXT</button>
             </div>
           </div>
         </div>
@@ -454,7 +722,7 @@ class Fleets extends React.Component {
 
         <div className="fleet_objective_confirmation_layout">
           <div className="fleet_flight_confirmation_layout">
-            <button className="fleets_button fleets_previous_step" onClick={() => this.updateFleetStep(FLEET_FLIGHT)}>BACK</button>
+            <button className="fleets_button fleets_previous_step" onClick={() => this.updateFleetStep(FLEET_FLIGHT, false)}>BACK</button>
           </div>
           <div className="fleet_flight_confirmation_layout">
               <button className="fleets_button fleets_next_step" onClick={() => this.requestFleetSending()}>SEND FLEET</button>
@@ -465,6 +733,12 @@ class Fleets extends React.Component {
   }
 
   render() {
+    let classes = "fleets_button";
+    if (!this.state.validStep) {
+      classes += " fleets_next_step_disabled";
+    }
+
+    // TODO: Handle fleets count and expeditions count.
     return (
       <div className="fleets_layout fleets_creation_container">
         <div className="fleets_slots_layout">
@@ -487,7 +761,7 @@ class Fleets extends React.Component {
               </button>
             </div>
             <div className="fleets_confirmation_element">
-              <button className="fleets_next_step" onClick = {() => this.updateFleetStep(FLEET_FLIGHT)}>NEXT</button>
+              <button className={classes + " fleets_next_step"} onClick = {() => this.updateFleetStep(FLEET_FLIGHT, true)}>NEXT</button>
             </div>
           </div>
         }

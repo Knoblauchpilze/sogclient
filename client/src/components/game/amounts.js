@@ -7,7 +7,7 @@ const dotSeparatorThreshold = 1000;
 // the full display anymore.
 const shortNotationThreshold = 1000000;
 
-function toFixedDigits(val, digits) {
+export function toFixedDigits(val, digits) {
   // Error case somehow.
   if (digits < 2) {
     return val;
@@ -56,7 +56,7 @@ export function shortenAmount(amount) {
   }
 
   return lead + "," + toFixedDigits(trailing, 3) + "M";
-};
+}
 
 export function formatAmount(amount, forcePlusSign) {
   let out = "";
@@ -98,4 +98,65 @@ export function formatAmount(amount, forcePlusSign) {
   }
 
   return out;
-};
+}
+
+export function formatDuration(duration) {
+  // We will divide at most until we reach a duration
+  // of a week. Any longer duration will continue to
+  // add more weeks.
+  const s = Math.floor(duration * 3600.0) % 60;
+  const m = Math.floor(duration * 60.0) % 60;
+  const h = Math.floor(duration) % 24;
+  const d = Math.floor(duration / 24) % 7;
+  const w = Math.floor(duration / (24 * 7));
+
+  let out = "";
+
+  // Weeks.
+  if (w > 0) {
+    out += w;
+    out += "w";
+  }
+
+  // Days.
+  if (d > 0) {
+    if (out !== "") {
+      out += " ";
+    }
+
+    out += d;
+    out += "d"
+  }
+
+  // Hours.
+  if (h > 0) {
+    if (out !== "") {
+      out += " ";
+    }
+
+    out += h;
+    out += "h"
+  }
+
+  // Minutes.
+  if (m > 0) {
+    if (out !== "") {
+      out += " ";
+    }
+
+    out += m;
+    out += "m"
+  }
+
+  // Seconds.
+  if (s > 0) {
+    if (out !== "") {
+      out += " ";
+    }
+
+    out += s;
+    out += "s"
+  }
+
+  return out;
+}

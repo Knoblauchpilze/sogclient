@@ -82,6 +82,7 @@
 
 .fleets_button {
   margin: 0px 5px 0px 5px;
+  cursor: pointer;
 }
 
 .fleets_all_ships {
@@ -235,11 +236,19 @@
   padding: 5px 0px 5px 0px;
 }
 
-.fleet_flight_info_picture {
+.fleet_flight_info_picture, .fleet_flight_info_picture_selected, .fleet_flight_info_picture_selectable {
   max-width: 60px;
   max-height: 60px;
 
   margin: 0px 5px 0px 5px;
+
+  border: 2px #0000 solid;
+  border-radius: 4px;
+}
+
+.fleet_flight_info_picture_selected, .fleet_flight_info_picture_selectable:hover {
+  border: 2px #ff8c00 solid;
+  border-radius: 4px;
 }
 
 .fleet_flight_destination_selectors {
@@ -400,8 +409,11 @@
 
   border: none;
   border-radius: 4px;
+  border: 2px #ff8c0000 solid;
 
   font-weight: bold;
+
+  cursor: pointer;
 }
 
 .fleet_flight_speed:hover {
