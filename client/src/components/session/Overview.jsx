@@ -25,9 +25,9 @@ function Overview (props) {
 
     tempText = props.planet.min_temperature + "°C to " + props.planet.max_temperature + "°C";
 
-    coordsText = "[" + props.planet.coordinate.galaxy;
-    coordsText += ":" + props.planet.coordinate.system;
-    coordsText += ":" + props.planet.coordinate.position;
+    coordsText = "[" + (props.planet.coordinate.galaxy + 1);
+    coordsText += ":" + (props.planet.coordinate.system + 1);
+    coordsText += ":" + (props.planet.coordinate.position + 1);
     coordsText += "]";
   }
 
