@@ -70,21 +70,21 @@ class PlanetsModule {
     return out;
   }
 
-  async fetchPlanetsForSystem(galaxy, solar_system) {
+  async fetchPlanetsForSystem(galaxy, system) {
     // Fetch planets from the server and discriminate
     // on the request's result.
     let out = {
       status: PLANETS_FETCH_FAILURE,
 
       galaxy: galaxy,
-      solar_system: solar_system,
+      system: system,
 
       planets: [],
     };
 
     let reqStatus = "";
 
-    const res = await fetch(this.server.galaxyURL(galaxy, solar_system))
+    const res = await fetch(this.server.galaxyURL(galaxy, system))
       .catch(err => reqStatus = err);
 
     if (reqStatus !== "") {
