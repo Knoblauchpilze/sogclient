@@ -580,10 +580,22 @@ class Game extends React.Component {
   }
 
   render() {
+    let p = {
+      resources: [],
+      buildings: [],
+      buildings_upgrade: [],
+      technologies_upgrade: [],
+      ships_construction: [],
+      defenses_construction: [],
+    };
+    if (this.state.selectedPlanet >= 0) {
+      p = this.state.planets[this.state.selectedPlanet];
+    }
+
     return (
       <div className="game_layout">
         <div className="game_page_layout">
-          <ResourcesDisplay planet={this.state.planets[this.state.selectedPlanet]}
+          <ResourcesDisplay planet={p}
                             buildings={this.state.buildings}
                             resources={this.state.resources}
                             universe={this.props.universe}
@@ -592,7 +604,7 @@ class Game extends React.Component {
             <NavigationMenu updateGameTab={(tab) => this.updateGameTab(tab)}/>
             <div className="game_center_layout">
               {this.generateCurrentTab()}
-              <ConstructionList planet={this.state.planets[this.state.selectedPlanet]}
+              <ConstructionList planet={p}
                                 resources={this.state.resources}
                                 buildings={this.state.buildings}
                                 technologies={this.state.technologies}
