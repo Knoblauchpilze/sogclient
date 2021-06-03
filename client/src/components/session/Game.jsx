@@ -118,7 +118,7 @@ class Game extends React.Component {
         // in the galaxy view.
         coordinates: {
           galaxy: -1,
-          solar_system: -1,
+          system: -1,
         },
 
         // The list of planets existing in the system.
@@ -351,20 +351,20 @@ class Game extends React.Component {
     });
   }
 
-  fetchSystemSucceeded(galaxy, solar_system, planets) {
+  fetchSystemSucceeded(galaxy, system, planets) {
     // Update internal state: we need to register the planets of
     // the current system along with the coordinates.
     this.setState({
       system_data: {
         coordinates: {
           galaxy: galaxy + 1,
-          solar_system: solar_system + 1,
+          system: system + 1,
         },
         planets: planets,
       }
     });
 
-    console.info("Fetched " + planets.length + " planet(s) for system " + galaxy + ":" + solar_system);
+    console.info("Fetched " + planets.length + " planet(s) for system " + galaxy + ":" + system);
   }
 
   fetchPlayersSucceeded(players) {
@@ -415,7 +415,7 @@ class Game extends React.Component {
           game.fetchDataFailed(res.status);
         }
         else {
-          game.fetchSystemSucceeded(res.galaxy, res.solar_system, res.planets);
+          game.fetchSystemSucceeded(res.galaxy, res.system, res.planets);
         }
       })
       .catch(err => game.fetchDataFailed(err));

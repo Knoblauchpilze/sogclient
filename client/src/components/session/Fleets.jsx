@@ -17,6 +17,7 @@ import {ships_list} from '../../datas/ships.js';
 import { CIVIL_SHIP, COMBAT_SHIP } from '../../datas/ships.js';
 
 import { toFixedDigits, formatDuration } from '../game/amounts.js';
+import { computeDistance, computeDuration } from '../game/fleet.js';
 
 // Defines the initial step of the fleets view where the
 // player can select ships to include in the fleet.
@@ -43,14 +44,22 @@ function formatDate(date) {
   return d + "." + m + "." + y + " " + h + ":" + mn + ":" + s;
 }
 
-function computeFlightDuration(source, target, speed, ships, technologies, shipsData, techsData) {
-  // TODO: Handle this.
-  return 28000;
-}
+function computeFlightDetails(source, target, speed, ratio, ships, technologies, shipsData, techsData) {
+  // First, compute the distance from the source to
+  // the target.
+  const distance = computeDistance(source, target);
 
-function computeFlightDistance(source, target) {
+  // Generate ships data based on the selected ships
+  // and the technologies available.
+
   // TODO: Handle this.
-  return 5432;
+  const duration = computeDuration(distance, speed, ratio, ships, technologies);
+
+  // Generate output object.
+  return {
+    distance: distance,
+    duration: duration,
+  };
 }
 
 class Fleets extends React.Component {
@@ -84,7 +93,7 @@ class Fleets extends React.Component {
           location: "debris",
         },
 
-        // TODO: Handle distance computation.
+        // At first, the distance is set to `5`.
         distance: 5,
       },
 
@@ -93,7 +102,7 @@ class Fleets extends React.Component {
       flight_speed: 1.0,
 
       // The duration of the flight in milliseconds.
-      flight_duration: 30000,
+      flight_duration: 60000,
 
       // The amount of cargo available for this fleet.
       cargo: 0,
@@ -170,10 +179,11 @@ class Fleets extends React.Component {
     }
 
     // Compute the duration of the flight.
-    const duration = computeFlightDuration(
+    const fDetails = computeFlightDetails(
       this.props.planet.coordinate,
       this.state.destination.coordinate,
       this.state.flight_speed,
+      1.0 / this.universe.fleet_speed,
       selected,
       this.props.player.technologies,
       this.props.ships,
@@ -182,7 +192,7 @@ class Fleets extends React.Component {
 
     this.setState({
       selected: selected,
-      flight_duration: duration,
+      flight_duration: fDetails.duration,
       validStep: (selected.length > 0),
     });
   }
@@ -218,11 +228,12 @@ class Fleets extends React.Component {
     }
 
     // Compute the duration of the flight.
-    const duration = computeFlightDuration(
+    const fDetails = computeFlightDetails(
       this.props.planet.coordinate,
       this.state.destination.coordinate,
       this.state.flight_speed,
-      selected,
+      1.0 / this.universe.fleet_speed,
+      this.state.selected,
       this.props.player.technologies,
       this.props.ships,
       this.props.technologies
@@ -231,7 +242,7 @@ class Fleets extends React.Component {
     this.setState({
       selected: selected,
       cargo: cargo,
-      flight_duration: duration,
+      flight_duration: fDetails.duration,
       validStep: (selected.length > 0),
     });
   }
@@ -252,13 +263,21 @@ class Fleets extends React.Component {
     const iSystem = parseInt(system);
     const iPosition = parseInt(position);
 
-    if (iGalaxy < 0 || iGalaxy >= this.props.universe.galaxies_count) {
+    const dCoords = {
+      galaxy: iGalaxy,
+      system: iSystem,
+      position: iPosition,
+      location: location,
+    };
+
+
+    if (dCoords.galaxy < 0 || dCoords.galaxy >= this.props.universe.galaxies_count) {
       return;
     }
-    if (iSystem < 0 || iSystem >= this.props.universe.galaxy_size) {
+    if (dCoords.system < 0 || dCoords.system >= this.props.universe.galaxy_size) {
       return;
     }
-    if (iPosition < 0 || iPosition >= this.props.universe.solar_system_size) {
+    if (dCoords.position < 0 || dCoords.position >= this.props.universe.solar_system_size) {
       return;
     }
     if (location !== "planet" && location !== "moon" && location !== "debris") {
@@ -267,56 +286,42 @@ class Fleets extends React.Component {
 
     // Make sure that we're not selecting the exact same
     // planet we're on.
-    if (this.props.planet.coordinate.galaxy === iGalaxy &&
-        this.props.planet.coordinate.system === iSystem &&
-        this.props.planet.coordinate.position === iPosition &&
+    if (this.props.planet.coordinate.galaxy === dCoords.galaxy &&
+        this.props.planet.coordinate.system === dCoords.system &&
+        this.props.planet.coordinate.position === dCoords.position &&
         this.props.planet.coordinate.location === location)
     {
       return;
     }
 
-    // Compute the duration of the flight.
-    const duration = computeFlightDuration(
+    // Compute the flight details.
+    const fDetails = computeFlightDetails(
       this.props.planet.coordinate,
-      this.state.destination.coordinate,
+      dCoords,
       this.state.flight_speed,
+      1.0 / this.universe.fleet_speed,
       this.state.selected,
       this.props.player.technologies,
       this.props.ships,
       this.props.technologies
     );
 
-    // Compute the distance to the target.
-    const distance = computeFlightDistance(
-      this.props.planet.coordinate,
-      {
-        galaxy: iGalaxy,
-        system: iSystem,
-        position: iPosition,
-        location: location,
-      },
-    );
-
     this.setState({
       destination: {
-        coordinate: {
-          galaxy: iGalaxy,
-          system: iSystem,
-          position: iPosition,
-          location: location,
-        },
-        distance: distance,
+        coordinate: dCoords,
+        distance: fDetails.distance,
       },
-      flight_duration: duration,
+      flight_duration: fDetails.duration,
     });
   }
 
   selectFleetSpeed(speed) {
     // Compute the duration of the flight.
-    const duration = computeFlightDuration(
+    const fDetails = computeFlightDetails(
       this.props.planet.coordinate,
       this.state.destination.coordinate,
-      speed,
+      Math.max(Math.min(speed, 1.0), 0.1),
+      1.0 / this.universe.fleet_speed,
       this.state.selected,
       this.props.player.technologies,
       this.props.ships,
@@ -325,7 +330,7 @@ class Fleets extends React.Component {
 
     this.setState({
       flight_speed: Math.max(Math.min(speed, 1.0), 0.1),
-      flight_duration: duration,
+      flight_duration: fDetails.duration,
     });
   }
 
