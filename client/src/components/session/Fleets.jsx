@@ -51,9 +51,22 @@ function computeFlightDetails(source, target, speed, ratio, ships, technologies,
 
   // Generate ships data based on the selected ships
   // and the technologies available.
+  let shps = [];
+  for (let id = 0 ; id < ships.length ; ++id) {
+    const shp = ships[id];
+    let sDesc = shipsData.find(s => s.id === shp.id);
 
-  // TODO: Handle this.
-  const duration = computeDuration(distance, speed, ratio, ships, technologies);
+    if (!sDesc) {
+      console.error("Failed to get data for ship \"" + shp.id + "\"");
+      continue;
+    }
+
+    sDesc.count = shp.selected;
+
+    shps.push(sDesc);
+  }
+
+  const duration = computeDuration(distance, speed, ratio, shps, technologies);
 
   // Generate output object.
   return {
@@ -183,7 +196,7 @@ class Fleets extends React.Component {
       this.props.planet.coordinate,
       this.state.destination.coordinate,
       this.state.flight_speed,
-      1.0 / this.universe.fleet_speed,
+      1.0 / this.props.universe.fleet_speed,
       selected,
       this.props.player.technologies,
       this.props.ships,
@@ -232,7 +245,7 @@ class Fleets extends React.Component {
       this.props.planet.coordinate,
       this.state.destination.coordinate,
       this.state.flight_speed,
-      1.0 / this.universe.fleet_speed,
+      1.0 / this.props.universe.fleet_speed,
       this.state.selected,
       this.props.player.technologies,
       this.props.ships,
@@ -299,7 +312,7 @@ class Fleets extends React.Component {
       this.props.planet.coordinate,
       dCoords,
       this.state.flight_speed,
-      1.0 / this.universe.fleet_speed,
+      1.0 / this.props.universe.fleet_speed,
       this.state.selected,
       this.props.player.technologies,
       this.props.ships,
@@ -321,7 +334,7 @@ class Fleets extends React.Component {
       this.props.planet.coordinate,
       this.state.destination.coordinate,
       Math.max(Math.min(speed, 1.0), 0.1),
-      1.0 / this.universe.fleet_speed,
+      1.0 / this.props.universe.fleet_speed,
       this.state.selected,
       this.props.player.technologies,
       this.props.ships,
@@ -412,8 +425,10 @@ class Fleets extends React.Component {
     const classTargetMoon = (this.state.destination.coordinate.location === "moon" ? "fleet_flight_info_picture_selected" : "fleet_flight_info_picture_selectable");
     const classTargetDebris = (this.state.destination.coordinate.location === "debris" ? "fleet_flight_info_picture_selected" : "fleet_flight_info_picture_selectable");
 
-    const arrival = new Date().getTime() + this.state.flight_duration;
-    const arrivalTime = new Date(arrival);
+    const arrivalT = new Date().getTime() + this.state.flight_duration;
+    const arrivalTime = new Date(arrivalT);
+    const returnT = new Date().getTime() + 2 * this.state.flight_duration;
+    const returnTime = new Date(returnT);
     const flightDurationHour = this.state.flight_duration / (1000 * 3600);
 
     // TODO: Handle shortcut and trigger of the selection of destination
@@ -566,11 +581,11 @@ class Fleets extends React.Component {
             <div className="fleet_flight_flight_details">
               <div className="fleet_flight_detail_container">
                 <span className="fleet_flight_detail_entry">Arrival:</span>
-                <span className="fleet_flight_detail_value">{formatDate(new Date())}</span>
+                <span className="fleet_flight_detail_value">{formatDate(arrivalTime)}</span>
               </div>
               <div className="fleet_flight_detail_container">
                 <span className="fleet_flight_detail_entry">Return:</span>
-                <span className="fleet_flight_detail_value">{formatDate(arrivalTime)}</span>
+                <span className="fleet_flight_detail_value">{formatDate(returnTime)}</span>
               </div>
               <div className="fleet_flight_detail_container">
                 <span className="fleet_flight_detail_entry">Empty cargo bays:</span>
