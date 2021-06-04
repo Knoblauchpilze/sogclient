@@ -16,8 +16,8 @@ import deuterium from '../../assets/deuterium_mini.jpeg';
 import {ships_list} from '../../datas/ships.js';
 import { CIVIL_SHIP, COMBAT_SHIP } from '../../datas/ships.js';
 
-import { toFixedDigits, formatDuration } from '../game/amounts.js';
-import { computeDistance, computeDuration } from '../game/fleet.js';
+import { toFixedDigits, formatDuration, formatAmount } from '../game/amounts.js';
+import { computeDistance, computeDuration, computeConsumption } from '../game/fleet.js';
 
 // Defines the initial step of the fleets view where the
 // player can select ships to include in the fleet.
@@ -44,7 +44,7 @@ function formatDate(date) {
   return d + "." + m + "." + y + " " + h + ":" + mn + ":" + s;
 }
 
-function computeFlightDetails(source, target, speed, ratio, ships, technologies, shipsData, techsData) {
+function computeFlightDetails(source, target, speed, ratio, consoRatio, ships, technologies, shipsData, resourcesData) {
   // First, compute the distance from the source to
   // the target.
   const distance = computeDistance(source, target);
@@ -68,10 +68,30 @@ function computeFlightDetails(source, target, speed, ratio, ships, technologies,
 
   const duration = computeDuration(distance, speed, ratio, shps, technologies);
 
+  // Compute consumption. We will select the conso
+  // only for deuterium.
+  const consumption = computeConsumption(distance, duration, 0, ratio, consoRatio, shps, technologies);
+
+  let conso = 0;
+  const deut = resourcesData.find(r => r.name === "deuterium");
+  if (!deut) {
+    console.error("Failed to find description for deuterium from server's data");
+  }
+  else {
+    const dCons = consumption.find(c => c.resource === deut.id);
+    if (!dCons) {
+      console.error("Fleet does not seem to use any deuterium");
+    }
+    else {
+      conso = Math.ceil(dCons.amount);
+    }
+  }
+
   // Generate output object.
   return {
     distance: distance,
     duration: duration,
+    consumption: conso,
   };
 }
 
@@ -116,6 +136,9 @@ class Fleets extends React.Component {
 
       // The duration of the flight in milliseconds.
       flight_duration: 60000,
+
+      // The consumption of the flight in units.
+      flight_consumption: 0,
 
       // The amount of cargo available for this fleet.
       cargo: 0,
@@ -197,15 +220,17 @@ class Fleets extends React.Component {
       this.state.destination.coordinate,
       this.state.flight_speed,
       1.0 / this.props.universe.fleet_speed,
+      this.props.universe.fleets_consumption_ratio,
       selected,
       this.props.player.technologies,
       this.props.ships,
-      this.props.technologies
+      this.props.resources
     );
 
     this.setState({
       selected: selected,
       flight_duration: fDetails.duration,
+      flight_consumption: fDetails.consumption,
       validStep: (selected.length > 0),
     });
   }
@@ -246,16 +271,18 @@ class Fleets extends React.Component {
       this.state.destination.coordinate,
       this.state.flight_speed,
       1.0 / this.props.universe.fleet_speed,
+      this.props.universe.fleets_consumption_ratio,
       this.state.selected,
       this.props.player.technologies,
       this.props.ships,
-      this.props.technologies
+      this.props.resources
     );
 
     this.setState({
       selected: selected,
       cargo: cargo,
       flight_duration: fDetails.duration,
+      flight_consumption: fDetails.consumption,
       validStep: (selected.length > 0),
     });
   }
@@ -313,10 +340,11 @@ class Fleets extends React.Component {
       dCoords,
       this.state.flight_speed,
       1.0 / this.props.universe.fleet_speed,
+      this.props.universe.fleets_consumption_ratio,
       this.state.selected,
       this.props.player.technologies,
       this.props.ships,
-      this.props.technologies
+      this.props.resources
     );
 
     this.setState({
@@ -325,6 +353,7 @@ class Fleets extends React.Component {
         distance: fDetails.distance,
       },
       flight_duration: fDetails.duration,
+      flight_consumption: fDetails.consumption,
     });
   }
 
@@ -335,15 +364,17 @@ class Fleets extends React.Component {
       this.state.destination.coordinate,
       Math.max(Math.min(speed, 1.0), 0.1),
       1.0 / this.props.universe.fleet_speed,
+      this.props.universe.fleets_consumption_ratio,
       this.state.selected,
       this.props.player.technologies,
       this.props.ships,
-      this.props.technologies
+      this.props.resources
     );
 
     this.setState({
       flight_speed: Math.max(Math.min(speed, 1.0), 0.1),
       flight_duration: fDetails.duration,
+      flight_consumption: fDetails.consumption,
     });
   }
 
@@ -433,6 +464,7 @@ class Fleets extends React.Component {
 
     // TODO: Handle shortcut and trigger of the selection of destination
     // when a destination is chosen.
+    // TODO: Handle percentage of cargo used by consumption.
     return (
       <div className="fleet_flight_info">
         <div className="fleet_flight_coordinates">
@@ -572,7 +604,9 @@ class Fleets extends React.Component {
               </div>
               <div className="fleet_flight_detail_container">
                 <span className="fleet_flight_detail_entry">Deuterium consumption:</span>
-                <span className="fleet_flight_detail_value fleet_flight_detail_valid_value">35 (1%)</span>
+                <span className="fleet_flight_detail_value fleet_flight_detail_valid_value">
+                  {formatAmount(this.state.flight_consumption) + " (1%)"}
+                </span>
               </div>
               <div className="fleet_flight_detail_container">
                 <span className="fleet_flight_detail_entry">Speed (max 22500):</span>
