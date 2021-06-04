@@ -75,8 +75,7 @@ export function computeDuration(distance, speedFactor, ratio, ships, technologie
   // component.
   // This link describes how to do it:
   // https://www.w3schools.com/jsref/jsref_max_value.asp
-  let maxSpeed = 100;
-  maxSpeed = maxSpeed.MAX_VALUE;
+  let maxSpeed = Number.MAX_VALUE;
 
   for (let id = 0 ; id < ships.length ; ++id) {
     const s = ships[id];
