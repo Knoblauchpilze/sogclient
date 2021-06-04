@@ -103,3 +103,76 @@ export function computeDuration(distance, speedFactor, ratio, ships, technologie
   // milliseconds: this will allow to keep more precision.
   return 1000.0 * flightTimeSec;
 }
+
+export function computeConsumption(distance, flightTimeMs, deploymentTimeMs, ratio, conso, ships, technologies) {
+  // Compute the raw flight time in seconds. Internally
+  // it is expressed in milliseconds and also already
+  // updated with the parent universe's fleets speed.
+  const rawFlightTimeSec = flightTimeMs / (1000 * ratio);
+
+  // Now we can compute the total consumption by summing
+  // the individual consumptions of ships.
+  let consumption = [];
+
+  for (let id = 0 ; id < ships.length ; ++id) {
+    const s = ships[id];
+    const engine = selectEngine(s, technologies);
+    const speed = computeSpeed(engine, technologies);
+
+    for (let idC = 0 ; idC < s.consumption.length ; ++idC) {
+      const fuel = s.consumption[idC];
+
+      // The values and formulas are extracted from here:
+      // https://ogame.fandom.com/wiki/Talk:Fuel_Consumption
+      const sk = 35000.0 * Math.sqrt(distance * 10.0 / speed) / (rawFlightTimeSec - 10.0);
+      const cons = fuel.amount * s.count * distance * Math.pow(1.0 + sk / 10.0, 2.0) / 35000.0;
+
+      let ex = consumption.findIndex(c => c.resource === fuel.resource);
+      if (ex === -1) {
+        consumption.push({
+          resource: fuel.resource,
+          amount: cons,
+        });
+      }
+      else {
+        consumption[ex].amount += cons;
+      }
+    }
+  }
+
+  // Handle the deployment time of the fleet.
+  if (deploymentTimeMs > 0) {
+    // For each ship, add the consumption knowing that the
+    // deployment time is expressed in seconds.
+    const dTimeH = deploymentTimeMs / (3600.0 * 1000.0);
+
+    for (let id = 0 ; id < ships.length ; ++id) {
+      const s = ships[id];
+
+      for (let idC = 0 ; idC < s.deployment_cost.length ; ++idC) {
+        const fuel = s.deployment_cost[idC];
+        const cons = fuel.amount * dTimeH * s.count;
+
+        let ex = consumption.findIndex(c => c.resource === fuel.resource);
+        if (ex === -1) {
+          consumption.push({
+            resource: fuel.resource,
+            amount: cons,
+          });
+        }
+        else {
+          consumption[ex].amount += cons;
+        }
+      }
+    }
+  }
+
+  // Save the data in the fleet itself. We will also
+  // use the consumption ratio to scale the amount of
+  // fuel needed.
+  for (let id = 0 ; id < consumption.length ; ++id) {
+    consumption[id].amount *= conso;
+  }
+
+  return consumption;
+}
