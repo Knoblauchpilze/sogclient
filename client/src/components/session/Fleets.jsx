@@ -171,6 +171,9 @@ class Fleets extends React.Component {
     // Check whether this ship already is selected.
     const sID = this.state.selected.findIndex(s => s.id === ship);
     let iAmount = parseInt(amount, 10);
+    if (amount === "") {
+      iAmount = 0;
+    }
 
     let select = {
       id: ship,
@@ -214,6 +217,20 @@ class Fleets extends React.Component {
       selected.push(select);
     }
 
+    // Update cargo space.
+    let cargo = 0;
+    for (let id = 0 ; id < selected.length ; ++id) {
+      const s = selected[id];
+      if (this.props.planet.ships.length === 0) {
+        continue;
+      }
+
+      const sDesc = this.props.ships.find(shp => shp.id === s.id);
+      if (sDesc) {
+        cargo += (sDesc.cargo * s.selected);
+      }
+    }
+
     // Compute the duration of the flight.
     const fDetails = computeFlightDetails(
       this.props.planet.coordinate,
@@ -229,6 +246,7 @@ class Fleets extends React.Component {
 
     this.setState({
       selected: selected,
+      cargo: cargo,
       flight_duration: fDetails.duration,
       flight_consumption: fDetails.consumption,
       validStep: (selected.length > 0),
@@ -250,9 +268,6 @@ class Fleets extends React.Component {
 
     for (let id = 0 ; id < this.props.planet.ships.length ; ++id) {
       const s = this.props.planet.ships[id];
-      if (this.props.planet.ships.length === 0) {
-        continue;
-      }
 
       const sDesc = this.props.ships.find(shp => shp.id === s.id);
       if (sDesc) {
@@ -462,6 +477,8 @@ class Fleets extends React.Component {
     const returnTime = new Date(returnT);
     const flightDurationHour = this.state.flight_duration / (1000 * 3600);
 
+    const tankUsage = Math.floor(100.0 * this.state.flight_consumption / this.state.cargo);
+
     // TODO: Handle shortcut and trigger of the selection of destination
     // when a destination is chosen.
     // TODO: Handle percentage of cargo used by consumption.
@@ -582,7 +599,7 @@ class Fleets extends React.Component {
                 <p className="fleet_flight_general_text">Shortcuts:</p>
                 <form method="post">
                   <select className="fleet_flight_destination_selector" id="destination_shortcut" name="destination_shortcut">
-                    {this.props.planets.map(p => <option value={p.name}>{p.name}</option>)}
+                    {this.props.planets.map(p => <option key={p.name} value={p.name}>{p.name}</option>)}
                   </select>
                 </form>
                 <p className="fleet_flight_general_text">Combat forces:</p>
@@ -605,7 +622,7 @@ class Fleets extends React.Component {
               <div className="fleet_flight_detail_container">
                 <span className="fleet_flight_detail_entry">Deuterium consumption:</span>
                 <span className="fleet_flight_detail_value fleet_flight_detail_valid_value">
-                  {formatAmount(this.state.flight_consumption) + " (1%)"}
+                  {formatAmount(this.state.flight_consumption) + " (" + tankUsage + "%)"}
                 </span>
               </div>
               <div className="fleet_flight_detail_container">
@@ -635,7 +652,7 @@ class Fleets extends React.Component {
                     if (s === this.state.flight_speed) {
                       classes += " fleet_flight_selected_speed";
                     }
-                    return <button className={classes} onClick={() => this.selectFleetSpeed(s)}>{100 * s}</button>
+                    return <button className={classes} key={s} onClick={() => this.selectFleetSpeed(s)}>{100 * s}</button>
                   },
                   this
                 )
