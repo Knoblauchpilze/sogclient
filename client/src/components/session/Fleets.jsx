@@ -17,7 +17,7 @@ import {ships_list} from '../../datas/ships.js';
 import { CIVIL_SHIP, COMBAT_SHIP } from '../../datas/ships.js';
 
 import { toFixedDigits, formatDuration, formatAmount } from '../game/amounts.js';
-import { computeDistance, computeDuration, computeConsumption } from '../game/fleet.js';
+import { computeDistance, computeDuration, computeConsumption, computeMaxSpeed } from '../game/fleet.js';
 
 // Defines the initial step of the fleets view where the
 // player can select ships to include in the fleet.
@@ -87,11 +87,15 @@ function computeFlightDetails(source, target, speed, ratio, consoRatio, ships, t
     }
   }
 
+  // Compute the maximum speed for this fleet.
+  const maxSpeed = computeMaxSpeed(shps, technologies);
+
   // Generate output object.
   return {
     distance: distance,
     duration: duration,
     consumption: conso,
+    maxSpeed: maxSpeed,
   };
 }
 
@@ -142,6 +146,10 @@ class Fleets extends React.Component {
 
       // The amount of cargo available for this fleet.
       cargo: 0,
+
+      // The maximum speed that can be reached by the
+      // fleet assuming a 100% speed.
+      speed: 1.0,
     };
 
     this.selectShips = this.selectShips.bind(this);
@@ -249,6 +257,7 @@ class Fleets extends React.Component {
       cargo: cargo,
       flight_duration: fDetails.duration,
       flight_consumption: fDetails.consumption,
+      speed: fDetails.maxSpeed,
       validStep: (selected.length > 0),
     });
   }
@@ -298,6 +307,7 @@ class Fleets extends React.Component {
       cargo: cargo,
       flight_duration: fDetails.duration,
       flight_consumption: fDetails.consumption,
+      speed: fDetails.maxSpeed,
       validStep: (selected.length > 0),
     });
   }
@@ -307,6 +317,7 @@ class Fleets extends React.Component {
       selected: [],
       cargo: 0,
       flight_duration: 0,
+      speed: 1,
       validStep: false,
     });
   }
@@ -632,7 +643,7 @@ class Fleets extends React.Component {
                 </span>
               </div>
               <div className="fleet_flight_detail_container">
-                <span className="fleet_flight_detail_entry">Speed (max 22500):</span>
+                <span className="fleet_flight_detail_entry">{"Speed (max " + this.state.speed + "):"}</span>
               </div>
             </div>
             <div className="fleet_flight_flight_details">
