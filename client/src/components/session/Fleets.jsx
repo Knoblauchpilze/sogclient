@@ -66,6 +66,7 @@ function computeFlightDetails(source, target, speed, ratio, consoRatio, ships, t
     shps.push(sDesc);
   }
 
+  // Compute duration of the flight for this fleet.
   const duration = computeDuration(distance, speed, ratio, shps, technologies);
 
   // Compute consumption. We will select the conso
@@ -310,6 +311,9 @@ class Fleets extends React.Component {
 
     for (let id = 0 ; id < this.props.planet.ships.length ; ++id) {
       const s = this.props.planet.ships[id];
+      if (s.amount === 0) {
+        continue;
+      }
 
       const sDesc = this.props.ships.find(shp => shp.id === s.id);
       if (sDesc) {
@@ -329,7 +333,7 @@ class Fleets extends React.Component {
       this.state.flight_speed,
       1.0 / this.props.universe.fleet_speed,
       this.props.universe.fleets_consumption_ratio,
-      this.state.selected,
+      selected,
       this.props.player.technologies,
       this.props.ships,
       this.props.resources
@@ -655,8 +659,13 @@ class Fleets extends React.Component {
               <div className="fleet_flight_destination_quick_select">
                 <p className="fleet_flight_general_text">Shortcuts:</p>
                 <form method="post">
-                  <select className="fleet_flight_destination_selector" id="destination_shortcut" name="destination_shortcut">
-                    {this.props.planets.map(p => <option key={p.name} value={p.name}>{p.name}</option>)}
+                  <select className="fleet_flight_destination_selector"
+                          id="destination_shortcut"
+                          name="destination_shortcut"
+                          value={this.state.selectedPlanet}
+                          onChange={e => this.handleTargetShortcut(e.target.value)}
+                          >
+                    {this.props.planets.map(p => <option key={p.name} value={p.id}>{p.name}</option>)}
                   </select>
                 </form>
                 <p className="fleet_flight_general_text">Combat forces:</p>
