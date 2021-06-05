@@ -478,10 +478,16 @@ class Fleets extends React.Component {
     const flightDurationHour = this.state.flight_duration / (1000 * 3600);
 
     const tankUsage = Math.floor(100.0 * this.state.flight_consumption / this.state.cargo);
+    let consoClasses = "fleet_flight_detail_value";
+    if (tankUsage < 100.0) {
+      consoClasses += " fleet_flight_detail_valid_value";
+    }
+    else {
+      consoClasses += " fleet_flight_detail_invalid_value";
+    }
 
     // TODO: Handle shortcut and trigger of the selection of destination
     // when a destination is chosen.
-    // TODO: Handle percentage of cargo used by consumption.
     return (
       <div className="fleet_flight_info">
         <div className="fleet_flight_coordinates">
@@ -621,7 +627,7 @@ class Fleets extends React.Component {
               </div>
               <div className="fleet_flight_detail_container">
                 <span className="fleet_flight_detail_entry">Deuterium consumption:</span>
-                <span className="fleet_flight_detail_value fleet_flight_detail_valid_value">
+                <span className={consoClasses}>
                   {formatAmount(this.state.flight_consumption) + " (" + tankUsage + "%)"}
                 </span>
               </div>
