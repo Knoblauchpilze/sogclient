@@ -315,6 +315,11 @@
   text-decoration: underline;
 }
 
+.fleet_flight_galaxy_link:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .fleet_flight_distance {
   background-color: #141e26;
 

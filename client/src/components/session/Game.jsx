@@ -421,6 +421,13 @@ class Game extends React.Component {
       .catch(err => game.fetchDataFailed(err));
   }
 
+  moveToGalaxyView(galaxy, system) {
+    // We need to request the tab to switch to galaxy
+    // view, and also update the selected system.
+    this.updateGameTab(TAB_GALAXY);
+    this.updateSelectedSystem(galaxy, system);
+  }
+
   actionPerformed() {
     // We should reload the planets available for this player.
     const server = new Server();
@@ -556,6 +563,7 @@ class Game extends React.Component {
                         universe={this.props.universe}
                         planets={this.state.planets}
                         actionPerformed={() => this.actionPerformed()}
+                        viewSystem={(galaxy, system) => this.moveToGalaxyView(galaxy, system)}
                         />;
           break;
       case TAB_GALAXY:
