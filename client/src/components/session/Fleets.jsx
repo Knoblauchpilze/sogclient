@@ -114,6 +114,11 @@ class Fleets extends React.Component {
       // of the available item.
       selected: [],
 
+      // The index of the selected planet, as an identifier
+      // of the planet or a string literal indicating that
+      // no planet is selected.
+      selectedPlanet: props.planet.id,
+
       // Defines whether or not the user can move on to
       // the next step of the fleet creation.
       validStep: false,
@@ -373,7 +378,6 @@ class Fleets extends React.Component {
       location: location,
     };
 
-
     if (dCoords.galaxy < 0 || dCoords.galaxy >= this.props.universe.galaxies_count) {
       return;
     }
@@ -441,6 +445,29 @@ class Fleets extends React.Component {
       flight_consumption: fDetails.consumption,
       validStep: this.validateStep(this.state.step, this.state.selected, fDetails.consumption, this.state.cargo),
     });
+  }
+
+  handleTargetShortcut(target) {
+    // Attempt to find the corresponding element in the
+    // list of planets for this player.
+    const planet = this.props.planets.find(p => p.id === target);
+    if (!planet) {
+      console.error("Failed to fetch planet \"" + target + "\" in player's planets");
+      return;
+    }
+
+    this.setState({
+      selectedPlanet: target
+    });
+
+    // Handle the selection of this destination for the
+    // fleet.
+    this.selectDestination(
+      planet.coordinate.galaxy,
+      planet.coordinate.system,
+      planet.coordinate.position,
+      planet.coordinate.location
+    );
   }
 
   generateFleetInitView() {
@@ -541,8 +568,6 @@ class Fleets extends React.Component {
       classes += " fleets_next_step_disabled";
     }
 
-    // TODO: Handle shortcut and trigger of the selection of destination
-    // when a destination is chosen.
     return (
       <div className="fleet_flight_info">
         <div className="fleet_flight_coordinates">
