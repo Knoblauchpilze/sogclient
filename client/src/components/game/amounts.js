@@ -158,5 +158,10 @@ export function formatDuration(duration) {
     out += "s"
   }
 
+  if (s === 0 && out === "") {
+    const ms = toFixedDigits(Math.floor(duration * 3600.0 * 1000.0), 3);
+    out = "0." + ms + "s";
+  }
+
   return out;
 }
