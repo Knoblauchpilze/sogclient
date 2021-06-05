@@ -156,6 +156,38 @@ class Fleets extends React.Component {
     this.selectDestination = this.selectDestination.bind(this);
   }
 
+  validateStep(step, selected, conso, cargo) {
+    let valid = false;
+
+    if (step === FLEET_INIT) {
+      valid = selected.length > 0;
+    }
+    else if (step === FLEET_FLIGHT) {
+      // We have to make sure that:
+      //   - there's enough fuel on the planet.
+      //   - there's enough space in the fuel tank.
+      const rDesc = this.props.resources.find(r => r.name === "deuterium");
+      if (!rDesc) {
+        console.error("Failed to fetch resource description for deuterium from server data");
+        return;
+      }
+
+      const rData = this.props.planet.resources.find(r => r.resource === rDesc.id);
+      if (!rData) {
+        console.error("Failed to fetch deuterium data for planet");
+        return;
+      }
+
+      valid = conso <= cargo && conso < rData.amount;
+    }
+    else {
+      // Case of a fleet objective.
+      valid = false;
+    }
+
+    return valid;
+  }
+
   updateFleetStep(step, next) {
     // Only allow to move to the next step based on the
     // valid state.
@@ -165,6 +197,7 @@ class Fleets extends React.Component {
 
     this.setState({
       step: step,
+      validStep: this.validateStep(step, this.state.selected, this.state.flight_consumption, this.state.cargo),
     });
   }
 
@@ -380,6 +413,7 @@ class Fleets extends React.Component {
       },
       flight_duration: fDetails.duration,
       flight_consumption: fDetails.consumption,
+      validStep: this.validateStep(this.state.step, this.state.selected, fDetails.consumption, this.state.cargo),
     });
   }
 
@@ -401,6 +435,7 @@ class Fleets extends React.Component {
       flight_speed: Math.max(Math.min(speed, 1.0), 0.1),
       flight_duration: fDetails.duration,
       flight_consumption: fDetails.consumption,
+      validStep: this.validateStep(this.state.step, this.state.selected, fDetails.consumption, this.state.cargo),
     });
   }
 
@@ -497,6 +532,11 @@ class Fleets extends React.Component {
       consoClasses += " fleet_flight_detail_invalid_value";
     }
 
+    let classes = "fleets_button";
+    if (!this.state.validStep) {
+      classes += " fleets_next_step_disabled";
+    }
+
     // TODO: Handle shortcut and trigger of the selection of destination
     // when a destination is chosen.
     return (
@@ -511,10 +551,10 @@ class Fleets extends React.Component {
                   <img className={classSourcePlanet} src={planet} alt="Planet" />
                   <img className={classSourceMoon} src={moon} alt="Moon" />
                 </div>
-                <p className="fleet_flight_general_text">
-                  Coordinates: <a href="../galaxy/galaxy.html">
-                  {(this.props.planet.coordinate.galaxy + 1) + ":" + (this.props.planet.coordinate.system + 1) + ":" + (this.props.planet.coordinate.position + 1)}
-                  </a>
+                <p className="fleet_flight_general_text" onClick={() => this.props.viewSystem(this.props.planet.coordinate.galaxy, this.props.planet.coordinate.system)}>
+                  Coordinates: <span className="fleet_flight_galaxy_link">
+                    {(this.props.planet.coordinate.galaxy + 1) + ":" + (this.props.planet.coordinate.system + 1) + ":" + (this.props.planet.coordinate.position + 1)}
+                  </span>
                 </p>
               </div>
               <div className="fleet_flight_distance">
@@ -678,7 +718,7 @@ class Fleets extends React.Component {
             </div>
             <div className="fleet_flight_confirmation_layout">
               <button className="fleets_button fleets_previous_step" onClick={() => this.updateFleetStep(FLEET_INIT, false)} >BACK</button>
-              <button className="fleets_button fleets_next_step" onClick={() => this.updateFleetStep(FLEET_OBJECTIVE, true)}>NEXT</button>
+              <button className={classes + " fleets_next_step"} onClick={() => this.updateFleetStep(FLEET_OBJECTIVE, true)}>NEXT</button>
             </div>
           </div>
         </div>
