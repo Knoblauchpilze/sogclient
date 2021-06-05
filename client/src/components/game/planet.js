@@ -329,7 +329,7 @@ class Planet {
     }
 
     // Fetch levels of robotics and nanite factories.
-    const rf = this.data.planet.buildings.find(b => b.name === "robotics factory");
+    const rf = this.data.planet.buildings.find(b => b.name === "shipyard");
     const nf = this.data.planet.buildings.find(b => b.name === "nanite factory");
 
     let rfLvl = 0;
