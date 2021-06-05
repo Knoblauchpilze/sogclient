@@ -110,6 +110,13 @@ export function computeConsumption(distance, flightTimeMs, deploymentTimeMs, rat
 
       // The values and formulas are extracted from here:
       // https://ogame.fandom.com/wiki/Talk:Fuel_Consumption
+      // Note that in case the speed of the ship is set to
+      // `0` we will consider that it does not contribute
+      // to any consumption.
+      if (speed === 0) {
+        continue;
+      }
+
       const sk = 35000.0 * Math.sqrt(distance * 10.0 / speed) / (rawFlightTimeSec - 10.0);
       const cons = fuel.amount * s.count * distance * Math.pow(1.0 + sk / 10.0, 2.0) / 35000.0;
 
