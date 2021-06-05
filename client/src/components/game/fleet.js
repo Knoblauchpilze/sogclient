@@ -70,22 +70,8 @@ function computeSpeed(engine, technologies) {
 }
 
 export function computeDuration(distance, speedFactor, ratio, ships, technologies) {
-// Compute the maximum speed of the fleet. This will
-  // correspond to the speed of the slowest ship in the
-  // component.
-  // This link describes how to do it:
-  // https://www.w3schools.com/jsref/jsref_max_value.asp
-  let maxSpeed = Number.MAX_VALUE;
-
-  for (let id = 0 ; id < ships.length ; ++id) {
-    const s = ships[id];
-    const engine = selectEngine(s, technologies);
-    const speed = computeSpeed(engine, technologies);
-
-    if (speed < maxSpeed) {
-      maxSpeed = speed;
-    }
-  }
+  // Determine maximum speed for this fleet.
+  const maxSpeed = computeMaxSpeed(ships, technologies);
 
   // Compute the duration of the flight given the distance.
   // Note that the speed percentage is interpreted as such:
@@ -175,4 +161,25 @@ export function computeConsumption(distance, flightTimeMs, deploymentTimeMs, rat
   }
 
   return consumption;
+}
+
+export function computeMaxSpeed(ships, technologies) {
+  // Compute the maximum speed of the fleet. This will
+  // correspond to the speed of the slowest ship in the
+  // component.
+  // This link describes how to do it:
+  // https://www.w3schools.com/jsref/jsref_max_value.asp
+  let maxSpeed = Number.MAX_VALUE;
+
+  for (let id = 0 ; id < ships.length ; ++id) {
+    const s = ships[id];
+    const engine = selectEngine(s, technologies);
+    const speed = computeSpeed(engine, technologies);
+
+    if (speed < maxSpeed) {
+      maxSpeed = speed;
+    }
+  }
+
+  return maxSpeed;
 }
