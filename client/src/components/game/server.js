@@ -91,6 +91,10 @@ class Server {
     return this.serverURL() + "/defenses";
   }
 
+  fleetObjectivesURL() {
+    return this.serverURL() + "/fleets/objectives";
+  }
+
   upgradeActionDataKey() {
     return "action-data";
   }

@@ -33,6 +33,8 @@ import DefensesModule from '../game/defenses.js';
 import { DEFENSES_FETCH_SUCCEEDED } from '../game/defenses.js';
 import PlayersModule from '../game/players.js';
 import { PLAYERS_FETCH_SUCCEEDED } from '../game/players.js';
+import FleetObjectivesModule from '../game/fleet_objectives.js';
+import { FLEET_OBJECTIVES_FETCH_SUCCEEDED } from '../game/fleet_objectives.js';
 
 import { computeActionCompletionTime } from '../game/actions.js';
 
@@ -92,6 +94,11 @@ class Game extends React.Component {
       // available in the game.
       defenses: [],
 
+      // Defines the list of fleet objectives available for
+      // this game: it corresponds to the data to send fleets
+      // on a specific mission.
+      fleetObjectives: [],
+
       // Defines the list of players available for the universe
       // associated to the current session.
       players: [],
@@ -140,6 +147,7 @@ class Game extends React.Component {
     const technologies = new TechnologiesModule(server);
     const ships = new ShipsModule(server);
     const defenses = new DefensesModule(server);
+    const objectives = new FleetObjectivesModule(server);
     const players = new PlayersModule(server);
 
     const game = this;
@@ -226,6 +234,18 @@ class Game extends React.Component {
       }
       else {
         game.fetchDefensesSucceeded(res.defenses);
+      }
+    })
+    .catch(err => game.fetchDataFailed(err));
+
+    // Fetch the fleet objectives from the server.
+    objectives.fetchObjectives()
+    .then(function (res) {
+      if (res.status !== FLEET_OBJECTIVES_FETCH_SUCCEEDED) {
+        game.fetchDataFailed(res.status);
+      }
+      else {
+        game.fetchFleetObjectivesSucceeded(res.objectives);
       }
     })
     .catch(err => game.fetchDataFailed(err));
@@ -348,6 +368,13 @@ class Game extends React.Component {
     // Update internal state.
     this.setState({
       defenses: defenses,
+    });
+  }
+
+  fetchFleetObjectivesSucceeded(objectives) {
+    // Update internal state.
+    this.setState({
+      fleetObjectives: objectives,
     });
   }
 
@@ -560,6 +587,7 @@ class Game extends React.Component {
                         technologies={this.state.technologies}
                         ships={this.state.ships}
                         defenses={this.state.defenses}
+                        fleet_objectives={this.state.fleetObjectives}
                         universe={this.props.universe}
                         planets={this.state.planets}
                         actionPerformed={() => this.actionPerformed()}

@@ -88,11 +88,11 @@
   background-image: url("acs_defend_selected.jpeg");
 }
 
-.fleet_objective_attack {
+.fleet_objective_attacking {
   background-image: url("attack_valid.jpeg");
 }
 
-.fleet_objective_attack:focus {
+.fleet_objective_attacking:focus {
   background-image: url("attack_selected.jpeg");
 }
 
