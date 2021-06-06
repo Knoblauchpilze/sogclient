@@ -8,7 +8,7 @@ function FleetObjective (props) {
 
   return (
     <div className="fleet_objective_layout">
-      <button className={"fleet_objective_mission " + iconClass}></button>
+      <button className={"fleet_objective_mission " + iconClass} onClick={() => props.updateObjective(props.name)}></button>
       <p className="fleet_objective_mission_label">{props.label}</p>
     </div>
   );

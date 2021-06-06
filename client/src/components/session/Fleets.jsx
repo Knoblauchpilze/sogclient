@@ -16,6 +16,8 @@ import deuterium from '../../assets/deuterium_mini.jpeg';
 import {ships_list} from '../../datas/ships.js';
 import { CIVIL_SHIP, COMBAT_SHIP } from '../../datas/ships.js';
 
+import {fleet_objectives_list} from '../../datas/fleet_objectives.js';
+
 import { toFixedDigits, formatDuration, formatAmount } from '../game/amounts.js';
 import { computeDistance, computeDuration, computeConsumption, computeMaxSpeed } from '../game/fleet.js';
 
@@ -31,6 +33,10 @@ const FLEET_FLIGHT = "fleet_flight";
 // the objective of the fleet along with the cargo that
 // will be carried with it.
 const FLEET_OBJECTIVE = "fleet_objective";
+
+// Defines a string literal for an undefined fleet
+// objective.
+const UNDEFINED_OBJECTIVE = "Undefined";
 
 function formatDate(date) {
   const d = toFixedDigits(date.getDate(), 2);
@@ -156,6 +162,13 @@ class Fleets extends React.Component {
       // The maximum speed that can be reached by the
       // fleet assuming a 100% speed.
       speed: 1.0,
+
+      // Defines the properties of the mission that this
+      // fleet will be tasked with.
+      mission: {
+        objective: UNDEFINED_OBJECTIVE,
+        text: "Undefined",
+      }
     };
 
     this.selectShips = this.selectShips.bind(this);
@@ -199,6 +212,13 @@ class Fleets extends React.Component {
     // valid state.
     if (next && !this.state.validStep) {
       return;
+    }
+
+    // In case the coordinate indicate a debris, update the mission
+    // to be harvesting. Otherwise, assume transport. We also want
+    // to only update it in case it is still set to undefined.
+    if (this.state.mission.objective === UNDEFINED_OBJECTIVE) {
+      this.updateObjective(this.state.destination.coordinate.location === "debris" ? "harvesting" : "transport");
     }
 
     this.setState({
@@ -423,6 +443,10 @@ class Fleets extends React.Component {
       flight_consumption: fDetails.consumption,
       validStep: this.validateStep(this.state.step, this.state.selected, fDetails.consumption, this.state.cargo),
     });
+
+    // In case the coordinate indicate a debris, update the mission
+    // to be harvesting. Otherwise, assume transport.
+    this.updateObjective(dCoords.location === "debris" ? "harvesting" : "transport");
   }
 
   selectFleetSpeed(speed) {
@@ -468,6 +492,30 @@ class Fleets extends React.Component {
       planet.coordinate.position,
       planet.coordinate.location
     );
+  }
+
+  updateObjective(objective) {
+    // Update the mission objective.
+    const oData = fleet_objectives_list.find(o => o.key === objective);
+    if (!oData) {
+      console.error("Failed to update fleet objective to \"" + objective + "\"");
+      return;
+    }
+
+    const oDesc = this.props.fleet_objectives.find(o => o.name === oData.key);
+    if (!oDesc) {
+      console.error("Failed to update fleet objective to \"" + objective + "\"");
+      return;
+    }
+
+    // TODO: Perform validation for mission.
+
+    this.setState({
+      mission: {
+        objective: oDesc.id,
+        text: oData.name,
+      },
+    });
   }
 
   generateFleetInitView() {
@@ -765,7 +813,7 @@ class Fleets extends React.Component {
       <div className="fleets_creation_container">
         <div className="fleet_flight_detail_container">
           <span className="fleet_objective_mission_text">Mission:</span>
-          <span className="fleet_objective_mission_entry">Deployment</span>
+          <span className="fleet_objective_mission_entry">{this.state.mission.text}</span>
           <span className="fleet_objective_mission_text">Target:</span>
           <span className="fleet_objective_mission_entry"><a href="../galaxy/galaxy.html">[5:53:7]</a></span>
           <span className="fleet_objective_mission_text">Player name:</span>
@@ -775,16 +823,16 @@ class Fleets extends React.Component {
         <div className="fleet_objectives_layout">
           <p className="fleet_flight_step_title">Select mission for target:</p>
           <div className="fleet_objective_missions_layout">
-            <FleetObjective label={"Expedition"} icon={"expedition"}/>
-            <FleetObjective label={"Colonization"} icon={"colonization"}/>
-            <FleetObjective label={"Harvest debris field"} icon={"harvesting"}/>
-            <FleetObjective label={"Transport"} icon={"transport"}/>
-            <FleetObjective label={"Deployment"} icon={"deployment"}/>
-            <FleetObjective label={"Espionage"} icon={"espionage"}/>
-            <FleetObjective label={"ACS Defend"} icon={"acs_defend"}/>
-            <FleetObjective label={"Attack"} icon={"attack"}/>
-            <FleetObjective label={"Moon destruction"} icon={"destroy"}/>
-            <FleetObjective label={"ACS Attack"} icon={"acs_attack"}/>
+            {
+              fleet_objectives_list.map(o =>
+                <FleetObjective key={o.key}
+                                name={o.key}
+                                label={o.name}
+                                icon={o.icon}
+                                updateObjective={obj => this.updateObjective(obj)}
+                                />
+              )
+            }
           </div>
           <div>
             <p className="fleet_objective_mission_desc fleet_objective_mission_title">Mission: deployment</p>
