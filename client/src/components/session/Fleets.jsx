@@ -13,6 +13,7 @@ import metal from '../../assets/metal_mini.jpeg';
 import crystal from '../../assets/crystal_mini.jpeg';
 import deuterium from '../../assets/deuterium_mini.jpeg';
 
+import {resources_list} from '../../datas/resources.js';
 import {ships_list} from '../../datas/ships.js';
 import { CIVIL_SHIP, COMBAT_SHIP } from '../../datas/ships.js';
 
@@ -110,6 +111,29 @@ class Fleets extends React.Component {
   constructor(props) {
     super(props);
 
+    // Generate the cargo resources from the properties.
+    let cargoDesc = [];
+    for (let id = 0 ; id < resources_list.length ; ++id) {
+      const rData = resources_list[id];
+      const rDesc = props.resources.find(r => r.name === rData.name);
+      if (!rDesc) {
+        console.error("Failed to fetch data for resource \"" + rData.name + "\"");
+        continue;
+      }
+
+      // Only consider movable resources.
+      if (!rDesc.movable) {
+        continue;
+      }
+
+      cargoDesc.push({
+        resource: rDesc.id,
+        name: rData.name,
+        amount: 0,
+        icon: rData.icon,
+      });
+    }
+
     this.state = {
       // Defines the current state of the fleets view as
       // an enumeration: this allows to adapt the items
@@ -163,6 +187,9 @@ class Fleets extends React.Component {
       // fleet assuming a 100% speed.
       speed: 1.0,
 
+      // The cargo transported by the fleet.
+      cargo_desc: cargoDesc,
+
       // Defines the properties of the mission that this
       // fleet will be tasked with.
       mission: {
@@ -173,6 +200,9 @@ class Fleets extends React.Component {
 
     this.selectShips = this.selectShips.bind(this);
     this.selectDestination = this.selectDestination.bind(this);
+    this.addCargo = this.addCargo.bind(this);
+    this.addAllCargo = this.addAllCargo.bind(this);
+    this.removeAllCargo = this.removeAllCargo.bind(this);
   }
 
   validateStep(step, selected, conso, cargo) {
@@ -518,6 +548,18 @@ class Fleets extends React.Component {
     });
   }
 
+  addCargo(res, amount) {
+    console.log("Add some res: " + res + ": " + amount);
+  }
+
+  addAllCargo(res) {
+    console.log("Add all res: " + res);
+  }
+
+  removeAllCargo(res) {
+    console.log("Remove all res: " + res);
+  }
+
   generateFleetInitView() {
     // Generate sections for combat and civil ships.
     const civilShips = [];
@@ -809,15 +851,28 @@ class Fleets extends React.Component {
   }
 
   generateFleeObjectiveView() {
+    const arrivalT = new Date().getTime() + this.state.flight_duration;
+    const arrivalTime = new Date(arrivalT);
+    const returnT = new Date().getTime() + 2 * this.state.flight_duration;
+    const returnTime = new Date(returnT);
+    const flightDurationHour = this.state.flight_duration / (1000 * 3600);
+
+    const tankUsage = Math.floor(100.0 * this.state.flight_consumption / this.state.cargo);
+
+    // TODO: Player name should be the planet's player name.
     return (
       <div className="fleets_creation_container">
         <div className="fleet_flight_detail_container">
           <span className="fleet_objective_mission_text">Mission:</span>
           <span className="fleet_objective_mission_entry">{this.state.mission.text}</span>
           <span className="fleet_objective_mission_text">Target:</span>
-          <span className="fleet_objective_mission_entry"><a href="../galaxy/galaxy.html">[5:53:7]</a></span>
+          <span className="fleet_objective_mission_entry fleet_flight_galaxy_link"
+                onClick={() => this.props.viewSystem(this.props.planet.coordinate.galaxy, this.props.planet.coordinate.system)}
+                >
+            {(this.state.destination.coordinate.galaxy + 1) + ":" + (this.state.destination.coordinate.system + 1) + ":" + (this.state.destination.coordinate.position + 1)}
+          </span>
           <span className="fleet_objective_mission_text">Player name:</span>
-          <span className="fleet_objective_mission_entry">tttttttttttttttttttt</span>
+          <span className="fleet_objective_mission_entry">{this.props.player.name}</span>
         </div>
 
         <div className="fleet_objectives_layout">
@@ -846,23 +901,29 @@ class Fleets extends React.Component {
             <div className="fleet_flight_flight_details">
               <div className="fleet_flight_objective_detail_summary">
                 <span className="fleet_flight_detail_entry">Target:</span>
-                <span className="fleet_flight_detail_value"><a href="../galaxy/galaxy.html">[5:53:7]</a></span>
+                <span className="fleet_flight_detail_value fleet_flight_galaxy_link"
+                      onClick={() => this.props.viewSystem(this.props.planet.coordinate.galaxy, this.props.planet.coordinate.system)}
+                      >
+                  {(this.state.destination.coordinate.galaxy + 1) + ":" + (this.state.destination.coordinate.system + 1) + ":" + (this.state.destination.coordinate.position + 1)}
+                </span>
               </div>
               <div className="fleet_flight_objective_detail_summary">
                 <span className="fleet_flight_detail_entry">Duration of flight (one way):</span>
-                <span className="fleet_flight_detail_value">0:02:55h</span>
+                <span className="fleet_flight_detail_value">{formatDuration(flightDurationHour)}</span>
               </div>
               <div className="fleet_flight_objective_detail_summary">
                 <span className="fleet_flight_detail_entry">Arrival:</span>
-                <span className="fleet_flight_detail_value">25.01.17 20:46:42 Clock</span>
+                <span className="fleet_flight_detail_value">{formatDate(arrivalTime)}</span>
               </div>
               <div className="fleet_flight_objective_detail_summary">
                 <span className="fleet_flight_detail_entry">Return:</span>
-                <span className="fleet_flight_detail_value">25.01.17 20:49:38 Clock</span>
+                <span className="fleet_flight_detail_value">{formatDate(returnTime)}</span>
               </div>
               <div className="fleet_flight_objective_detail_summary">
                 <span className="fleet_flight_detail_entry">Deuterium consumption:</span>
-                <span className="fleet_flight_detail_value fleet_flight_detail_valid_value">35 (1%)</span>
+                <span className="fleet_flight_detail_value fleet_flight_detail_valid_value">
+                  {formatAmount(this.state.flight_consumption) + " (" + tankUsage + "%)"}
+                </span>
               </div>
             </div>
           </div>
@@ -871,42 +932,38 @@ class Fleets extends React.Component {
             <p className="fleet_flight_step_title">Load resources</p>
             <div className="fleet_objective_cargo_management">
               <div className="fleet_objective_cargo_selectors">
-                <div className="fleet_objective_cargo_resource_container">
-                  <img className="fleet_objective_cargo_resource" src={metal} alt="Metal" />
-                  <div className="fleet_objective_cargo_resource_selector">
-                    <form>
-                      <input className="cargo_resource_selector" method="post" type="number" name="cargo_metal" id="cargo_metal" value="0" min="0" max="3104"/>
-                    </form>
-                    <div className="fleet_objective_cargo_quick_access">
-                      <button className="cargo_resource_access">&lt;&lt;</button>
-                      <button className="cargo_resource_access">&gt;&gt;</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="fleet_objective_cargo_resource_container">
-                  <img className="fleet_objective_cargo_resource" src={crystal} alt="Crystal" />
-                  <div className="fleet_objective_cargo_resource_selector">
-                    <form>
-                      <input className="cargo_resource_selector" method="post" type="number" name="cargo_crystal" id="cargo_crystal" value="0" min="0" max="3104"/>
-                    </form>
-                    <div className="fleet_objective_cargo_quick_access">
-                      <button className="cargo_resource_access">&lt;&lt;</button>
-                      <button className="cargo_resource_access">&gt;&gt;</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="fleet_objective_cargo_resource_container">
-                  <img className="fleet_objective_cargo_resource" src={deuterium} alt="Deuterium" />
-                  <div className="fleet_objective_cargo_resource_selector">
-                    <form>
-                      <input className="cargo_resource_selector" method="post" type="number" name="cargo_deuterium" id="cargo_deuterium" value="0" min="0" max="3104"/>
-                    </form>
-                    <div className="fleet_objective_cargo_quick_access">
-                      <button className="cargo_resource_access">&lt;&lt;</button>
-                      <button className="cargo_resource_access">&gt;&gt;</button>
-                    </div>
-                  </div>
-                </div>
+                {
+                  this.state.cargo_desc.map(function (cd) {
+                    return (
+                      <div key={cd.resource} className="fleet_objective_cargo_resource_container">
+                        <img className="fleet_objective_cargo_resource" src={cd.icon} alt={cd.name} />
+                        <div className="fleet_objective_cargo_resource_selector">
+                          <form>
+                            <input className="cargo_resource_selector"
+                                  method="post"
+                                  type="number"
+                                  name={"cargo_" + cd.name}
+                                  id={"cargo_" + cd.resource}
+                                  value={cd.amount}
+                                  onChange={(e) => this.addCargo(cd.resource, e.target.value)}
+                                  />
+                          </form>
+                          <div className="fleet_objective_cargo_quick_access">
+                            <button className="cargo_resource_access"
+                                    onClick={(e) => this.addAllCargo(cd.resource)}>
+                              &lt;&lt;
+                            </button>
+                            <button className="cargo_resource_access"
+                                    onClick={(e) => this.removeAllCargo(cd.resource)}
+                                    >
+                              &gt;&gt;
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                }
               </div>
               <div className="fleet_objective_cargo_selectors">
                 <div className="fleet_objective_cargo_layout">
