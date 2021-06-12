@@ -592,6 +592,8 @@
 .cargo_fill_all {
   min-width: 30px;
   min-height: 30px;
+
+  cursor: pointer;
 }
 
 .fleet_objective_confirmation_layout {

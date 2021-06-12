@@ -9,10 +9,6 @@ import planet from '../../assets/fleets/planet.png';
 import moon from '../../assets/fleets/moon.png';
 import debris from '../../assets/fleets/debris.png';
 
-import metal from '../../assets/metal_mini.jpeg';
-import crystal from '../../assets/crystal_mini.jpeg';
-import deuterium from '../../assets/deuterium_mini.jpeg';
-
 import {resources_list} from '../../datas/resources.js';
 import {ships_list} from '../../datas/ships.js';
 import { CIVIL_SHIP, COMBAT_SHIP } from '../../datas/ships.js';
@@ -182,6 +178,9 @@ class Fleets extends React.Component {
 
       // The amount of cargo available for this fleet.
       cargo: 0,
+
+      // The amount of used cargo for this fleet.
+      used_cargo: 0,
 
       // The maximum speed that can be reached by the
       // fleet assuming a 100% speed.
@@ -549,15 +548,160 @@ class Fleets extends React.Component {
   }
 
   addCargo(res, amount) {
-    console.log("Add some res: " + res + ": " + amount);
+    // Add the maximum amount of the resource provided in input
+    // based on what is still available on the planet and the
+    // remaining cargo space.
+    let updated = this.state.cargo_desc;
+
+    let iAmount = parseInt(amount, 10);
+    if (amount === "") {
+      iAmount = 0;
+    }
+
+    const rDesc = this.props.planet.resources.find(r => r.resource === res);
+    if (!rDesc) {
+      console.error("Failed to add cargo for resource \"" + res + "\"");
+      return;
+    }
+
+    const rID = updated.findIndex(r => r.resource === res);
+    if (rID < 0) {
+      console.error("Failed to register cargo for resource \"" + res + "\"");
+      return;
+    }
+
+    // Amount already used and remaining
+    const remaining = rDesc.amount - updated[rID].amount;
+    const alreadyLoaded = updated[rID].amount;
+
+    // Amount of cargo
+    const available = this.state.cargo - this.state.used_cargo + alreadyLoaded;
+
+    // Amount that can be loaded (and consolidate with the
+    // amount requested).
+    const toLoad = Math.min(Math.min(available, remaining), iAmount);
+
+    updated[rID].amount = toLoad;
+
+    // Compute the total cargo used.
+    const usedCargo = this.state.used_cargo - alreadyLoaded + toLoad;
+
+    this.setState({
+      cargo_desc: updated,
+      used_cargo: usedCargo,
+    });
+  }
+
+  loadAllCargo() {
+    // Fill the cargo bay with an equal amount of resources.
+    let updated = this.state.cargo_desc;
+
+    // Traverse each resource and pillage as much as possible.
+    let remainingRes = updated.length;
+    let available = this.state.cargo;
+
+    const depleted = [];
+    for (let id = 0 ; id < updated.length ; ++id) {
+      updated[id].amount = 0;
+      depleted.push(0);
+    }
+
+    while (remainingRes > 0) {
+      // Account the amount of resources that will be used
+      // on this round.
+      let toLoad = available / remainingRes;
+
+      for (let id = 0 ; id < updated.length ; ++id) {
+        // Find the resource on the planet.
+        const rDesc = this.props.planet.resources.find(r => r.resource === updated[id].resource);
+        if (!rDesc) {
+          console.error("Failed to add cargo for resource \"" + updated[id].resource + "\"");
+          continue;
+        }
+
+        // In case the resource is depleted (meaning everything
+        // is already loaded), skip it.
+        if (depleted[id] === 1) {
+          continue;
+        }
+
+        // Compute the amount still available on the planet.
+        const remaining = rDesc.amount - updated[id].amount;
+        const alreadyLoaded = updated[id].amount;
+        const amount = Math.round(Math.min(remaining, toLoad));
+
+        updated[id].amount += amount;
+        available -= amount;
+
+        // Deplete the resource if needed.
+        if (amount <= 0.0) {
+          depleted[id] = 1;
+          --remainingRes;
+        }
+      }
+    }
+
+    this.setState({
+      cargo_desc: updated,
+      used_cargo: (this.state.cargo - available),
+    });
   }
 
   addAllCargo(res) {
-    console.log("Add all res: " + res);
+    // Add the maximum amount of the resource provided in input
+    // based on what is still available on the planet and the
+    // remaining cargo space.
+    let updated = this.state.cargo_desc;
+
+    const rDesc = this.props.planet.resources.find(r => r.resource === res);
+    if (!rDesc) {
+      console.error("Failed to add cargo for resource \"" + res + "\"");
+      return;
+    }
+
+    const rID = updated.findIndex(r => r.resource === res);
+    if (rID < 0) {
+      console.error("Failed to register cargo for resource \"" + res + "\"");
+      return;
+    }
+
+    // Amount already used and remaining
+    const remaining = rDesc.amount - updated[rID].amount;
+
+    // Amount of cargo
+    const available = this.state.cargo - this.state.used_cargo;
+
+    // Amount that can be loaded.
+    const toLoad = Math.min(available, remaining);
+
+    updated[rID].amount += toLoad;
+
+    // Compute the total cargo used.
+    const usedCargo = this.state.used_cargo + toLoad;
+
+    this.setState({
+      cargo_desc: updated,
+      used_cargo: usedCargo,
+    });
   }
 
   removeAllCargo(res) {
-    console.log("Remove all res: " + res);
+    // Set amounts to `0`.
+    let updated = this.state.cargo_desc;
+
+    const id = updated.findIndex(r => r.resource === res);
+    if (id < 0) {
+      console.error("Failed to remove cargo for resource \"" + res + "\"");
+      return;
+    }
+
+    const used = this.state.used_cargo - updated[id].amount;
+    updated[id].amount = 0;
+
+    this.setState({
+      cargo_desc: updated,
+      used_cargo: used,
+    });
   }
 
   generateFleetInitView() {
@@ -933,7 +1077,12 @@ class Fleets extends React.Component {
             <div className="fleet_objective_cargo_management">
               <div className="fleet_objective_cargo_selectors">
                 {
-                  this.state.cargo_desc.map(function (cd) {
+                  // Note that we use an arrow notation as explained in this
+                  // link:
+                  // https://stackoverflow.com/questions/50965798/react-onclick-function-in-map-function
+                  // Otherwise the `this` used in the `onClick` handlers will
+                  // fail to be resolve.
+                  this.state.cargo_desc.map((cd) => {
                     return (
                       <div key={cd.resource} className="fleet_objective_cargo_resource_container">
                         <img className="fleet_objective_cargo_resource" src={cd.icon} alt={cd.name} />
@@ -945,16 +1094,17 @@ class Fleets extends React.Component {
                                   name={"cargo_" + cd.name}
                                   id={"cargo_" + cd.resource}
                                   value={cd.amount}
-                                  onChange={(e) => this.addCargo(cd.resource, e.target.value)}
+                                  onChange={e => this.addCargo(cd.resource, e.target.value)}
                                   />
                           </form>
                           <div className="fleet_objective_cargo_quick_access">
                             <button className="cargo_resource_access"
-                                    onClick={(e) => this.addAllCargo(cd.resource)}>
+                                    onClick={() => this.removeAllCargo(cd.resource)}
+                                    >
                               &lt;&lt;
                             </button>
                             <button className="cargo_resource_access"
-                                    onClick={(e) => this.removeAllCargo(cd.resource)}
+                                    onClick={() => this.addAllCargo(cd.resource)}
                                     >
                               &gt;&gt;
                             </button>
@@ -967,7 +1117,10 @@ class Fleets extends React.Component {
               </div>
               <div className="fleet_objective_cargo_selectors">
                 <div className="fleet_objective_cargo_layout">
-                  <button className="cargo_resource_access cargo_fill_all">&gt;&gt;</button>
+                  <button className="cargo_resource_access cargo_fill_all"
+                          onClick={() => this.loadAllCargo()}>
+                    &gt;&gt;
+                  </button>
                   <span className="fleet_objective_cargo_info">all resources</span>
                 </div>
                 <div className="fleet_objective_cargo_layout">
@@ -976,9 +1129,9 @@ class Fleets extends React.Component {
                     <div className="fleet_cargo_progression"></div>
                   </div>
                   <div>
-                    <span className="fleet_objective_cargo_info">19856321</span>
+                    <span className="fleet_objective_cargo_info">{formatAmount(this.state.used_cargo, false)}</span>
                     <span className="fleet_objective_cargo_info">/</span>
-                    <span className="fleet_objective_cargo_info">23250000</span>
+                    <span className="fleet_objective_cargo_info">{formatAmount(this.state.cargo, false)}</span>
                   </div>
                 </div>
 
