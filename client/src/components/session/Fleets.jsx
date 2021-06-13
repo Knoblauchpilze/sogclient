@@ -259,6 +259,7 @@ class Fleets extends React.Component {
   requestFleetSending() {
     // TODO: Handle the sending.
     console.error("Should send fleet");
+    // TODO: Should handle reset of properties.
 
     this.updateFleetStep(FLEET_INIT, false);
   }
@@ -1074,6 +1075,7 @@ class Fleets extends React.Component {
                                 name={o.key}
                                 label={o.name}
                                 icon={o.icon}
+                                selected={o.name === this.state.mission.text}
                                 updateObjective={obj => this.updateObjective(obj)}
                                 />
               )
