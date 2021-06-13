@@ -8,6 +8,9 @@ function FleetObjective (props) {
   if (props.selected) {
     iconClass += "_selected";
   }
+  if (!props.selectable) {
+    iconClass += " fleet_objective_disabled";
+  }
 
   return (
     <div className="fleet_objective_layout">
