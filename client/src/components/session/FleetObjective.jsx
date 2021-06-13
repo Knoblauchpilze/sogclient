@@ -4,7 +4,10 @@ import React from 'react';
 
 function FleetObjective (props) {
   // Generate class name from icon.
-  const iconClass = "fleet_objective_" + props.icon;
+  let iconClass = "fleet_objective_" + props.icon;
+  if (props.selected) {
+    iconClass += "_selected";
+  }
 
   return (
     <div className="fleet_objective_layout">

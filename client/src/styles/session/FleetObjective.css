@@ -36,7 +36,7 @@
   background-image: url("expedition_valid.jpeg");
 }
 
-.fleet_objective_expedition:focus {
+.fleet_objective_expedition_selected {
   background-image: url("expedition_selected.jpeg");
 }
 
@@ -44,7 +44,7 @@
   background-image: url("colonization_valid.jpeg");
 }
 
-.fleet_objective_colonization:focus {
+.fleet_objective_colonization_selected {
   background-image: url("colonization_selected.jpeg");
 }
 
@@ -52,7 +52,7 @@
   background-image: url("harvesting_valid.jpeg");
 }
 
-.fleet_objective_harvesting:focus {
+.fleet_objective_harvesting_selected {
   background-image: url("harvesting_selected.jpeg");
 }
 
@@ -60,7 +60,7 @@
   background-image: url("transport_valid.jpeg");
 }
 
-.fleet_objective_transport:focus {
+.fleet_objective_transport_selected {
   background-image: url("transport_selected.jpeg");
 }
 
@@ -68,7 +68,7 @@
   background-image: url("deployment_valid.jpeg");
 }
 
-.fleet_objective_deployment:focus {
+.fleet_objective_deployment_selected {
   background-image: url("deployment_selected.jpeg");
 }
 
@@ -76,7 +76,7 @@
   background-image: url("espionage_valid.jpeg");
 }
 
-.fleet_objective_espionage:focus {
+.fleet_objective_espionage_selected {
   background-image: url("espionage_selected.jpeg");
 }
 
@@ -84,7 +84,7 @@
   background-image: url("acs_defend_valid.jpeg");
 }
 
-.fleet_objective_acs_defend:focus {
+.fleet_objective_acs_defend_selected {
   background-image: url("acs_defend_selected.jpeg");
 }
 
@@ -92,7 +92,7 @@
   background-image: url("attack_valid.jpeg");
 }
 
-.fleet_objective_attacking:focus {
+.fleet_objective_attacking_selected {
   background-image: url("attack_selected.jpeg");
 }
 
@@ -100,7 +100,7 @@
   background-image: url("destroy_valid.jpeg");
 }
 
-.fleet_objective_destroy:focus {
+.fleet_objective_destroy_selected {
   background-image: url("destroy_selected.jpeg");
 }
 
@@ -108,6 +108,6 @@
   background-image: url("acs_attack_valid.jpeg");
 }
 
-.fleet_objective_acs_attack:focus {
+.fleet_objective_acs_attack_selected {
   background-image: url("acs_attack_selected.jpeg");
 }
