@@ -32,6 +32,11 @@
   text-align: center;
 }
 
+.fleet_objective_disabled {
+  background-color: #0008;
+  background-blend-mode: multiply;
+}
+
 .fleet_objective_expedition {
   background-image: url("expedition_valid.jpeg");
 }

@@ -130,6 +130,19 @@ class Fleets extends React.Component {
       });
     }
 
+    let fObjectives = [];
+    for (let id = 0 ; id < fleet_objectives_list.length ; ++id) {
+      const fo = fleet_objectives_list[id];
+
+      fObjectives.push({
+        name: fo.name,
+        key: fo.key,
+        icon: fo.icon,
+        description: fo.description,
+        selectable: true,
+      });
+    }
+
     this.state = {
       // Defines the current state of the fleets view as
       // an enumeration: this allows to adapt the items
@@ -194,9 +207,15 @@ class Fleets extends React.Component {
       mission: {
         objective: UNDEFINED_OBJECTIVE,
         text: "Undefined",
-      }
+      },
+
+      // Whether or not fleet objectives are available given
+      // the current fleet composition.
+      fleet_objectives: fObjectives,
     };
 
+    this.updateFleetStep = this.updateFleetStep.bind(this);
+    this.updateObjective = this.updateObjective.bind(this);
     this.selectShips = this.selectShips.bind(this);
     this.selectDestination = this.selectDestination.bind(this);
     this.addCargo = this.addCargo.bind(this);
@@ -254,6 +273,19 @@ class Fleets extends React.Component {
       step: step,
       validStep: this.validateStep(step, this.state.selected, this.state.flight_consumption, this.state.cargo),
     });
+  }
+
+  updateSelectableObjectives(selected, coordinate) {
+    let fo = this.state.fleet_objectives;
+
+    // Traverse the list of objectives and determine whether
+    // each one is valid or not.
+    for (let id = 0 ; id < fo.length ; ++id) {
+      // TODO: Perform validation for mission.
+      fo[id].selectable = false;
+    }
+
+    return fo;
   }
 
   requestFleetSending() {
@@ -347,6 +379,9 @@ class Fleets extends React.Component {
       updated[id].amount = 0;
     }
 
+    // Update the selectable fleet objectives.
+    const objectives = this.updateSelectableObjectives(selected, this.state.destination.coordinate);
+
     this.setState({
       selected: selected,
       cargo: cargo,
@@ -361,6 +396,7 @@ class Fleets extends React.Component {
         objective: UNDEFINED_OBJECTIVE,
         text: "Undefined",
       },
+      objectives: objectives,
     });
   }
 
@@ -413,6 +449,9 @@ class Fleets extends React.Component {
       updated[id].amount = 0;
     }
 
+    // Update the selectable fleet objectives.
+    const objectives = this.updateSelectableObjectives(selected, this.state.destination.coordinate);
+
     this.setState({
       selected: selected,
       cargo: cargo,
@@ -427,6 +466,7 @@ class Fleets extends React.Component {
         objective: UNDEFINED_OBJECTIVE,
         text: "Undefined",
       },
+      objectives: objectives,
     });
   }
 
@@ -435,6 +475,12 @@ class Fleets extends React.Component {
     let updated = this.state.cargo_desc;
     for (let id = 0 ; id < updated.length ; ++id) {
       updated[id].amount = 0;
+    }
+
+    // Update the selectable fleet objectives.
+    let objectives = this.state.objectives;
+    for (let id = 0 ; id < objectives.length ; ++id) {
+      objectives[id].selectable = true;
     }
 
     this.setState({
@@ -450,6 +496,7 @@ class Fleets extends React.Component {
         objective: UNDEFINED_OBJECTIVE,
         text: "Undefined",
       },
+      objectives: objectives,
     });
   }
 
@@ -503,6 +550,9 @@ class Fleets extends React.Component {
       this.props.resources
     );
 
+    // Update the selectable fleet objectives.
+    const objectives = this.updateSelectableObjectives(this.state.selected, dCoords);
+
     this.setState({
       destination: {
         coordinate: dCoords,
@@ -510,6 +560,7 @@ class Fleets extends React.Component {
       },
       flight_duration: fDetails.duration,
       flight_consumption: fDetails.consumption,
+      objectives: objectives,
       validStep: this.validateStep(this.state.step, this.state.selected, fDetails.consumption, this.state.cargo),
     });
 
@@ -565,9 +616,13 @@ class Fleets extends React.Component {
 
   updateObjective(objective) {
     // Update the mission objective.
-    const oData = fleet_objectives_list.find(o => o.key === objective);
+    const oData = this.state.fleet_objectives.find(o => o.key === objective);
     if (!oData) {
       console.error("Failed to update fleet objective to \"" + objective + "\"");
+      return;
+    }
+    if (!oData.selectable) {
+      console.error("Tried to use invalid fleet objective \"" + objective + "\"");
       return;
     }
 
@@ -576,8 +631,6 @@ class Fleets extends React.Component {
       console.error("Failed to update fleet objective to \"" + objective + "\"");
       return;
     }
-
-    // TODO: Perform validation for mission.
 
     this.setState({
       mission: {
@@ -1070,12 +1123,13 @@ class Fleets extends React.Component {
           <p className="fleet_flight_step_title">Select mission for target:</p>
           <div className="fleet_objective_missions_layout">
             {
-              fleet_objectives_list.map(o =>
+              this.state.fleet_objectives.map(o =>
                 <FleetObjective key={o.key}
                                 name={o.key}
                                 label={o.name}
                                 icon={o.icon}
                                 selected={o.name === this.state.mission.text}
+                                selectable={o.selectable}
                                 updateObjective={obj => this.updateObjective(obj)}
                                 />
               )
