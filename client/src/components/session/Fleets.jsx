@@ -666,8 +666,15 @@ class Fleets extends React.Component {
 
         // Compute the amount still available on the planet.
         const remaining = rDesc.amount - updated[id].amount;
-        const alreadyLoaded = updated[id].amount;
-        const amount = Math.round(Math.min(remaining, toLoad));
+        let amount = Math.round(Math.min(remaining, toLoad));
+
+        // In case the total amount to load is smaller than
+        // `1` and we're processing the first resource we
+        // will round to the upper value to make sure that
+        // we use all the available cargo.
+        if (toLoad > 0.0 && toLoad < 1.0 && id === 0) {
+          amount = 1.0;
+        }
 
         updated[id].amount += amount;
         available -= amount;
