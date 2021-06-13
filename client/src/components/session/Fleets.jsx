@@ -340,13 +340,26 @@ class Fleets extends React.Component {
       this.props.resources
     );
 
+    // Reset the cargo description.
+    let updated = this.state.cargo_desc;
+    for (let id = 0 ; id < updated.length ; ++id) {
+      updated[id].amount = 0;
+    }
+
     this.setState({
       selected: selected,
       cargo: cargo,
+      used_cargo: 0,
       flight_duration: fDetails.duration,
       flight_consumption: fDetails.consumption,
       speed: fDetails.maxSpeed,
       validStep: (selected.length > 0),
+      cargo_desc: updated,
+      // Reset the mission objective
+      mission: {
+        objective: UNDEFINED_OBJECTIVE,
+        text: "Undefined",
+      },
     });
   }
 
@@ -393,23 +406,49 @@ class Fleets extends React.Component {
       this.props.resources
     );
 
+    // Reset the cargo description.
+    let updated = this.state.cargo_desc;
+    for (let id = 0 ; id < updated.length ; ++id) {
+      updated[id].amount = 0;
+    }
+
     this.setState({
       selected: selected,
       cargo: cargo,
+      used_cargo: 0,
       flight_duration: fDetails.duration,
       flight_consumption: fDetails.consumption,
       speed: fDetails.maxSpeed,
       validStep: (selected.length > 0),
+      cargo_desc: updated,
+      // Reset the mission objective
+      mission: {
+        objective: UNDEFINED_OBJECTIVE,
+        text: "Undefined",
+      },
     });
   }
 
   selectNoShips() {
+    // Reset the cargo description.
+    let updated = this.state.cargo_desc;
+    for (let id = 0 ; id < updated.length ; ++id) {
+      updated[id].amount = 0;
+    }
+
     this.setState({
       selected: [],
       cargo: 0,
+      used_cargo: 0,
       flight_duration: 0,
       speed: 1,
       validStep: false,
+      cargo_desc: updated,
+      // Reset the mission objective
+      mission: {
+        objective: UNDEFINED_OBJECTIVE,
+        text: "Undefined",
+      },
     });
   }
 
