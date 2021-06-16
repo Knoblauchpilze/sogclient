@@ -103,6 +103,16 @@ function computeFlightDetails(source, target, speed, ratio, consoRatio, ships, t
   };
 }
 
+function hasShips(ships, ship, selected) {
+  const sDesc = ships.find(s => s.name === ship);
+  let available = false;
+  if (sDesc) {
+    available = selected.findIndex(s => s.id === sDesc.id) >= 0;
+  }
+
+  return available;
+}
+
 class Fleets extends React.Component {
   constructor(props) {
     super(props);
@@ -262,16 +272,30 @@ class Fleets extends React.Component {
       return;
     }
 
+    // We also want to take into account whether or not a recycler is
+    // selected in the fleet, which would determine if the harvesting
+    // mission is allowed and if the location is allowed to be debris.
+    let destination = this.state.destination;
+
+    const hasRec = hasShips(this.props.ships, "recycler", this.state.selected);
+    if (this.state.destination.coordinate.location === "debris" && !hasRec) {
+      destination.coordinate.location = "planet";
+    }
+
     // In case the coordinate indicate a debris, update the mission
     // to be harvesting. Otherwise, assume transport. We also want
     // to only update it in case it is still set to undefined.
+    const fo = this.updateSelectableObjectives(this.state.selected, destination.coordinate);
+
     if (this.state.mission.objective === UNDEFINED_OBJECTIVE) {
-      this.updateObjective(this.state.destination.coordinate.location === "debris" ? "harvesting" : "transport");
+      this.updateObjective(destination.coordinate.location === "debris" ? "harvesting" : "transport");
     }
 
     this.setState({
       step: step,
+      destination: destination,
       validStep: this.validateStep(step, this.state.selected, this.state.flight_consumption, this.state.cargo),
+      objectives: fo,
     });
   }
 
@@ -280,9 +304,46 @@ class Fleets extends React.Component {
 
     // Traverse the list of objectives and determine whether
     // each one is valid or not.
+    // TODO: Reste of the objective.
     for (let id = 0 ; id < fo.length ; ++id) {
-      // TODO: Perform validation for mission.
-      fo[id].selectable = false;
+      let selectable = false;
+
+      switch (fo[id].key) {
+        case "expedition":
+          selectable = coordinate.position >= this.props.universe.solar_system_size;
+          break;
+        case "colonization":
+          selectable = coordinate.location === "planet" && hasShips(this.props.ships, "colony ship", selected);
+          break;
+        case "harvesting":
+          selectable = coordinate.location === "debris" && hasShips(this.props.ships, "recycler", selected);
+          break;
+        case "transport":
+          selectable = coordinate.location !== "debris";
+          break;
+        case "deployment":
+          selectable = coordinate.location !== "debris";
+          break;
+        case "espionage":
+          selectable = coordinate.location !== "debris" && hasShips(this.props.ships, "espionage probe", selected);
+          break;
+        case "ACS defend":
+          break;
+        case "attacking":
+          break;
+        case "destroy":
+          selectable = coordinate.location === "moon" && hasShips(this.props.ships, "deathstar", selected);
+          break;
+        case "ACS attack":
+          break;
+        default:
+          console.error("Failed to update unknown fleet objective \"" + fo[id].key + "\"");
+          break;
+      }
+
+      console.log("obj " + fo[id].key + " is " + selectable);
+
+      fo[id].selectable = selectable;
     }
 
     return fo;
@@ -391,7 +452,7 @@ class Fleets extends React.Component {
       speed: fDetails.maxSpeed,
       validStep: (selected.length > 0),
       cargo_desc: updated,
-      // Reset the mission objective
+      // Reset the mission objective.
       mission: {
         objective: UNDEFINED_OBJECTIVE,
         text: "Undefined",
@@ -534,6 +595,12 @@ class Fleets extends React.Component {
         this.props.planet.coordinate.position === dCoords.position &&
         this.props.planet.coordinate.location === location)
     {
+      return;
+    }
+
+    // Make sure that if the location indicates that some
+    // debris are targeted, we have at least one recycler.
+    if (location === "debris" && !hasShips(this.props.ships, "recycler", this.state.selected)) {
       return;
     }
 
