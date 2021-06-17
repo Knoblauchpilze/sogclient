@@ -1,6 +1,7 @@
 
 import '../../styles/session/Fleets.css';
 import '../../styles/session/Game.css';
+
 import React from 'react';
 import FleetShip from './FleetShip.jsx';
 import FleetObjective from './FleetObjective.jsx';
@@ -1292,6 +1293,13 @@ class Fleets extends React.Component {
       classes += " fleets_next_step_disabled";
     }
 
+    const cargoProg ={
+      // The minimum width defined in the css class named
+      // `fleet_objective_cargo_percentage` is 150px: we
+      // compute the percentage based on the cargo usage.
+      width: Math.round(150.0 * this.state.used_cargo / this.state.cargo),
+    };
+
     // TODO: Player name should be the planet's player name.
     return (
       <div className="fleets_creation_container">
@@ -1417,7 +1425,7 @@ class Fleets extends React.Component {
                 <div className="fleet_objective_cargo_layout">
                   <span className="fleet_objective_cargo_info">cargo bay:</span>
                   <div className="fleet_objective_cargo_percentage">
-                    <div className="fleet_cargo_progression"></div>
+                    <div className="fleet_cargo_progression" style={cargoProg}></div>
                   </div>
                   <div>
                     <span className="fleet_objective_cargo_info">{formatAmount(this.state.used_cargo, false)}</span>
