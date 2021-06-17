@@ -50,6 +50,13 @@ const TARGET_NEUTRAL = "neutral";
 // Defines a string literal for a hostile body.
 const TARGET_HOSTILE = "hostile";
 
+// A string literal for a location that is not claimed
+// by any player yet.
+const TARGET_NOT_CREATED = "Uncharted territory";
+
+// A string literal for an inexisting player.
+const TARGET_NOT_OWNED = "Not owned";
+
 function formatDate(date) {
   const d = toFixedDigits(date.getDate(), 2);
   const m = toFixedDigits(date.getMonth() + 1, 2);
@@ -206,6 +213,9 @@ class Fleets extends React.Component {
         // And that it does not belong to the player.
         faction: TARGET_NEUTRAL,
 
+        // So no player name is defined.
+        player: TARGET_NOT_OWNED,
+
         // At first, the distance is set to `5`.
         distance: 5,
       },
@@ -263,6 +273,9 @@ class Fleets extends React.Component {
     // the fleet's destination.
     let exist = false;
     let status = TARGET_NEUTRAL;
+    let target = "";
+    let name = TARGET_NOT_CREATED;
+    let player = TARGET_NOT_OWNED;
 
     let destination = this.state.destination;
 
@@ -272,10 +285,18 @@ class Fleets extends React.Component {
       // this player or not.
       exist = true;
       status = (planet.player === this.props.player.id ? TARGET_FRIENDLY : TARGET_HOSTILE);
+
+      target = planet.id;
+      name = planet.name;
+      player = planet.player_name;
     }
 
     destination.exist = exist;
     destination.faction = status;
+
+    destination.target = target;
+    destination.name = name;
+    destination.player = player;
 
     this.setState({
       destination: destination,
@@ -329,6 +350,8 @@ class Fleets extends React.Component {
     if (next && !this.state.validStep) {
       return;
     }
+
+    console.log("s: " + JSON.stringify(this.state.destination));
 
     // We also want to take into account whether or not a recycler is
     // selected in the fleet, which would determine if the harvesting
@@ -721,13 +744,22 @@ class Fleets extends React.Component {
 
     this.setState({
       destination: {
+        // Reset target's data (will be populated when the planet
+        // data is received with `fetchSystemSucceeded`).
+        target: "",
+        name: TARGET_NOT_CREATED,
+
         coordinate: dCoords,
-        distance: fDetails.distance,
 
         // Assume the destination does not exist and that
         // it is a neutral target.
         exist: true,
         faction: TARGET_NEUTRAL,
+
+        // Reset player.
+        player: TARGET_NOT_OWNED,
+
+        distance: fDetails.distance,
       },
 
       flight_duration: fDetails.duration,
@@ -1288,11 +1320,6 @@ class Fleets extends React.Component {
 
     const tankUsage = Math.floor(100.0 * this.state.flight_consumption / this.state.cargo);
 
-    let classes = "fleets_button";
-    if (!this.state.validStep) {
-      classes += " fleets_next_step_disabled";
-    }
-
     const cargoProg ={
       // The minimum width defined in the css class named
       // `fleet_objective_cargo_percentage` is 150px: we
@@ -1300,7 +1327,8 @@ class Fleets extends React.Component {
       width: Math.round(150.0 * this.state.used_cargo / this.state.cargo),
     };
 
-    // TODO: Player name should be the planet's player name.
+    console.log("p: " + JSON.stringify(this.state.destination));
+
     return (
       <div className="fleets_creation_container">
         <div className="fleet_flight_detail_container">
@@ -1310,10 +1338,10 @@ class Fleets extends React.Component {
           <span className="fleet_objective_mission_entry fleet_flight_galaxy_link"
                 onClick={() => this.props.viewSystem(this.props.planet.coordinate.galaxy, this.props.planet.coordinate.system)}
                 >
-            {(this.state.destination.coordinate.galaxy + 1) + ":" + (this.state.destination.coordinate.system + 1) + ":" + (this.state.destination.coordinate.position + 1)}
+            {this.state.destination.name + " " + (this.state.destination.coordinate.galaxy + 1) + ":" + (this.state.destination.coordinate.system + 1) + ":" + (this.state.destination.coordinate.position + 1)}
           </span>
           <span className="fleet_objective_mission_text">Player name:</span>
-          <span className="fleet_objective_mission_entry">{this.props.player.name}</span>
+          <span className="fleet_objective_mission_entry">{this.state.destination.player}</span>
         </div>
 
         <div className="fleet_objectives_layout">
@@ -1444,7 +1472,7 @@ class Fleets extends React.Component {
             <button className="fleets_button fleets_previous_step" onClick={() => this.updateFleetStep(FLEET_FLIGHT, false)}>BACK</button>
           </div>
           <div className="fleet_flight_confirmation_layout">
-            <button className={classes + " fleets_next_step"} onClick={() => this.requestFleetSending()}>SEND FLEET</button>
+            <button className="fleets_button fleets_next_step" onClick={() => this.requestFleetSending()}>SEND FLEET</button>
           </div>
         </div>
       </div>
