@@ -13,6 +13,11 @@ import {resources_list} from '../../datas/resources.js';
 import {ships_list} from '../../datas/ships.js';
 import { CIVIL_SHIP, COMBAT_SHIP } from '../../datas/ships.js';
 
+import Server from '../game/server.js';
+
+import PlanetsModule from '../game/planets.js';
+import { PLANETS_FETCH_SUCCEEDED } from '../game/planets.js';
+
 import {fleet_objectives_list} from '../../datas/fleet_objectives.js';
 
 import { toFixedDigits, formatDuration, formatAmount } from '../game/amounts.js';
@@ -34,6 +39,15 @@ const FLEET_OBJECTIVE = "fleet_objective";
 // Defines a string literal for an undefined fleet
 // objective.
 const UNDEFINED_OBJECTIVE = "Undefined";
+
+// Defines a string literal for an allied target.
+const TARGET_FRIENDLY = "friendly";
+
+// Defines a string literal for a neutral target.
+const TARGET_NEUTRAL = "neutral";
+
+// Defines a string literal for a hostile body.
+const TARGET_HOSTILE = "hostile";
 
 function formatDate(date) {
   const d = toFixedDigits(date.getDate(), 2);
@@ -185,6 +199,12 @@ class Fleets extends React.Component {
           location: "debris",
         },
 
+        // Assume the destination exists.
+        exist: true,
+
+        // And that it does not belong to the player.
+        faction: TARGET_NEUTRAL,
+
         // At first, the distance is set to `5`.
         distance: 5,
       },
@@ -233,7 +253,35 @@ class Fleets extends React.Component {
     this.removeAllCargo = this.removeAllCargo.bind(this);
   }
 
-  validateStep(step, selected, conso, cargo) {
+  fetchDataFailed(err) {
+    alert(err);
+  }
+
+  fetchSystemSucceeded(galaxy, system, planets) {
+    // Fetch the planet based on the position requested for
+    // the fleet's destination.
+    let exist = false;
+    let status = TARGET_NEUTRAL;
+
+    let destination = this.state.destination;
+
+    const planet = planets.find(p => p.coordinate.position === destination.coordinate.position);
+    if (planet) {
+      // The planet does exist: check whether it belongs to
+      // this player or not.
+      exist = true;
+      status = (planet.player === this.props.player.id ? TARGET_FRIENDLY : TARGET_HOSTILE);
+    }
+
+    destination.exist = exist;
+    destination.faction = status;
+
+    this.setState({
+      destination: destination,
+    });
+  }
+
+  validateStep(step, destination, selected, conso, cargo) {
     let valid = false;
 
     if (step === FLEET_INIT) {
@@ -243,6 +291,8 @@ class Fleets extends React.Component {
       // We have to make sure that:
       //   - there's enough fuel on the planet.
       //   - there's enough space in the fuel tank.
+      //   - the destination is not identical to the
+      //     the starting location.
       const rDesc = this.props.resources.find(r => r.name === "deuterium");
       if (!rDesc) {
         console.error("Failed to fetch resource description for deuterium from server data");
@@ -255,7 +305,14 @@ class Fleets extends React.Component {
         return;
       }
 
-      valid = conso <= cargo && conso < rData.amount;
+      const validCoords = (
+        destination.galaxy !== this.props.planet.coordinate.galaxy ||
+        destination.system !== this.props.planet.coordinate.system ||
+        destination.position !== this.props.planet.coordinate.position ||
+        destination.location !== this.props.planet.coordinate.location
+      );
+
+      valid = validCoords && conso <= cargo && conso < rData.amount;
     }
     else {
       // Case of a fleet objective.
@@ -294,7 +351,7 @@ class Fleets extends React.Component {
     this.setState({
       step: step,
       destination: destination,
-      validStep: this.validateStep(step, this.state.selected, this.state.flight_consumption, this.state.cargo),
+      validStep: this.validateStep(step, destination.coordinate, this.state.selected, this.state.flight_consumption, this.state.cargo),
       objectives: fo,
     });
   }
@@ -304,7 +361,6 @@ class Fleets extends React.Component {
 
     // Traverse the list of objectives and determine whether
     // each one is valid or not.
-    // TODO: Reste of the objective.
     for (let id = 0 ; id < fo.length ; ++id) {
       let selectable = false;
 
@@ -313,35 +369,72 @@ class Fleets extends React.Component {
           selectable = coordinate.position >= this.props.universe.solar_system_size;
           break;
         case "colonization":
-          selectable = coordinate.location === "planet" && hasShips(this.props.ships, "colony ship", selected);
+          selectable = (
+            coordinate.location === "planet" &&
+            hasShips(this.props.ships, "colony ship", selected) &&
+            this.state.destination.exist === false
+          );
           break;
         case "harvesting":
-          selectable = coordinate.location === "debris" && hasShips(this.props.ships, "recycler", selected);
+          selectable = (
+            coordinate.location === "debris" &&
+            hasShips(this.props.ships, "recycler", selected)
+          );
           break;
         case "transport":
-          selectable = coordinate.location !== "debris";
+          selectable = (
+            coordinate.location !== "debris" &&
+            this.state.destination.exist === true
+          );
           break;
         case "deployment":
-          selectable = coordinate.location !== "debris";
+          selectable = (
+            coordinate.location !== "debris" &&
+            this.state.destination.exist === true &&
+            this.state.destination.faction === TARGET_FRIENDLY
+          );
           break;
         case "espionage":
-          selectable = coordinate.location !== "debris" && hasShips(this.props.ships, "espionage probe", selected);
+          selectable = (
+            coordinate.location !== "debris" &&
+            hasShips(this.props.ships, "espionage probe", selected) &&
+            this.state.destination.exist === true &&
+            this.state.destination.faction === TARGET_HOSTILE
+          );
           break;
         case "ACS defend":
+          selectable = (
+            coordinate.location !== "debris" &&
+            this.state.destination.exist === true &&
+            this.state.destination.faction === TARGET_HOSTILE
+          );
           break;
         case "attacking":
+          selectable = (
+            coordinate.location !== "debris" &&
+            this.state.destination.exist === true &&
+            this.state.destination.faction === TARGET_HOSTILE
+          );
           break;
         case "destroy":
-          selectable = coordinate.location === "moon" && hasShips(this.props.ships, "deathstar", selected);
+          selectable = (
+            coordinate.location === "moon" &&
+            hasShips(this.props.ships, "deathstar", selected) &&
+            this.state.destination.exist === true &&
+            this.state.destination.faction === TARGET_HOSTILE
+          );
           break;
         case "ACS attack":
+          selectable = (
+            coordinate.location !== "debris" &&
+            this.state.destination.exist === true &&
+            this.state.destination.faction === TARGET_HOSTILE
+          );
           break;
         default:
           console.error("Failed to update unknown fleet objective \"" + fo[id].key + "\"");
           break;
       }
-
-      console.log("obj " + fo[id].key + " is " + selectable);
 
       fo[id].selectable = selectable;
     }
@@ -624,16 +717,35 @@ class Fleets extends React.Component {
       destination: {
         coordinate: dCoords,
         distance: fDetails.distance,
+
+        // Assume the destination does not exist and that
+        // it is a neutral target.
+        exist: true,
+        faction: TARGET_NEUTRAL,
       },
+
       flight_duration: fDetails.duration,
       flight_consumption: fDetails.consumption,
       objectives: objectives,
-      validStep: this.validateStep(this.state.step, this.state.selected, fDetails.consumption, this.state.cargo),
+      validStep: this.validateStep(this.state.step, dCoords, this.state.selected, fDetails.consumption, this.state.cargo),
     });
 
-    // In case the coordinate indicate a debris, update the mission
-    // to be harvesting. Otherwise, assume transport.
-    this.updateObjective(dCoords.location === "debris" ? "harvesting" : "transport");
+    // Fetch the destination planet's data.
+    const server = new Server();
+    const planets = new PlanetsModule(server);
+
+    const game = this;
+
+    planets.fetchPlanetsForSystem(iGalaxy, iSystem)
+      .then(function (res) {
+        if (res.status !== PLANETS_FETCH_SUCCEEDED) {
+          game.fetchDataFailed(res.status);
+        }
+        else {
+          game.fetchSystemSucceeded(res.galaxy, res.system, res.planets);
+        }
+      })
+      .catch(err => game.fetchDataFailed(err));
   }
 
   selectFleetSpeed(speed) {
@@ -654,7 +766,7 @@ class Fleets extends React.Component {
       flight_speed: Math.max(Math.min(speed, 1.0), 0.1),
       flight_duration: fDetails.duration,
       flight_consumption: fDetails.consumption,
-      validStep: this.validateStep(this.state.step, this.state.selected, fDetails.consumption, this.state.cargo),
+      validStep: this.validateStep(this.state.step, this.state.destination.coordinate, this.state.selected, fDetails.consumption, this.state.cargo),
     });
   }
 
