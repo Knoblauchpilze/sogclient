@@ -443,6 +443,11 @@ class Fleets extends React.Component {
   }
 
   requestFleetSending() {
+    // Only process the request if the fleet is ready to be sent.
+    if (!this.state.validStep) {
+      return;
+    }
+
     // TODO: Handle the sending.
     console.error("Should send fleet");
     // TODO: Should handle reset of properties.
@@ -1282,6 +1287,11 @@ class Fleets extends React.Component {
 
     const tankUsage = Math.floor(100.0 * this.state.flight_consumption / this.state.cargo);
 
+    let classes = "fleets_button";
+    if (!this.state.validStep) {
+      classes += " fleets_next_step_disabled";
+    }
+
     // TODO: Player name should be the planet's player name.
     return (
       <div className="fleets_creation_container">
@@ -1426,7 +1436,7 @@ class Fleets extends React.Component {
             <button className="fleets_button fleets_previous_step" onClick={() => this.updateFleetStep(FLEET_FLIGHT, false)}>BACK</button>
           </div>
           <div className="fleet_flight_confirmation_layout">
-              <button className="fleets_button fleets_next_step" onClick={() => this.requestFleetSending()}>SEND FLEET</button>
+            <button className={classes + " fleets_next_step"} onClick={() => this.requestFleetSending()}>SEND FLEET</button>
           </div>
         </div>
       </div>
