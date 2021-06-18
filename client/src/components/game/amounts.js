@@ -38,14 +38,7 @@ export function shortenAmount(amount) {
   if (amount < shortNotationThreshold) {
     // Insert dot separator in the amount to make
     // it more readable.
-    const lead = Math.floor(amount / dotSeparatorThreshold);
-    const trailing = amount - lead * dotSeparatorThreshold;
-
-    if (trailing === 0) {
-      return lead + "k";
-    }
-
-    return lead + "." + toFixedDigits(trailing, 3) + "k";
+    return formatAmount(amount);
   }
 
   const lead = Math.floor(amount / shortNotationThreshold);

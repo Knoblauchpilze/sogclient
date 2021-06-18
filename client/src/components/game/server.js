@@ -148,6 +148,25 @@ class Server {
   galaxyURL(galaxy, system) {
     return this.serverURL() + "/planets?galaxy=" + galaxy + "&solar_system=" + system;
   }
+
+  fleetsURL(acs) {
+    return this.serverURL() + "/fleets" + (acs ? "/acs" : "");
+  }
+
+  fleetDataKey() {
+    return "fleet-data";
+  }
+
+  fleetIDFromResponse(response) {
+    // The response is expected to look like so:
+    // '"[/fleets/id]"'. So first trim until
+    // the beginning of the identifier.
+    const parts = response.split('/');
+    const idAndExtra = parts[parts.length - 1];
+
+    // And then clean the end of the string.
+    return idAndExtra.slice(0, idAndExtra.length - 2);
+  }
 }
 
 const NullAccount = {

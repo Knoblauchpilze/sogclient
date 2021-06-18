@@ -16,6 +16,9 @@ import { CIVIL_SHIP, COMBAT_SHIP } from '../../datas/ships.js';
 
 import Server from '../game/server.js';
 
+import Planet from '../game/planet.js';
+import { FLEET_CREATION_POST_SUCCEEDED } from '../game/planet.js';
+
 import PlanetsModule from '../game/planets.js';
 import { PLANETS_FETCH_SUCCEEDED } from '../game/planets.js';
 
@@ -303,6 +306,61 @@ class Fleets extends React.Component {
     });
   }
 
+  createFleetSucceeded(fleet) {
+    console.info("Successfully created fleet \"" + fleet + "\"");
+
+    // Reset the properties so that we can send a new fleet.
+    let cargoDesc = this.state.cargo_desc;
+    cargoDesc.forEach(c => c.amount = 0);
+
+    let fObjectives = this.state.fleet_objectives;
+    fObjectives.forEach(e => e.selectable = false);
+
+    this.setState({
+      step: FLEET_INIT,
+
+      selected: [],
+      selectedPlanet: this.props.planet.id,
+      validStep: false,
+
+      destination: {
+        target: this.props.planet.id,
+        name: this.props.planet.name,
+
+        coordinate: {
+          galaxy: this.props.planet.coordinate.galaxy,
+          system: this.props.planet.coordinate.system,
+          position: this.props.planet.coordinate.position,
+          location: "debris",
+        },
+
+        exist: true,
+        faction: TARGET_NEUTRAL,
+        player: TARGET_NOT_OWNED,
+        distance: 5,
+      },
+
+      flight_speed: 1.0,
+      flight_duration: 60000,
+      flight_consumption: 0,
+      cargo: 0,
+      used_cargo: 0,
+      speed: 1.0,
+
+      // The cargo transported by the fleet.
+      cargo_desc: cargoDesc,
+
+      mission: {
+        objective: UNDEFINED_OBJECTIVE,
+        text: "Undefined",
+      },
+
+      // Whether or not fleet objectives are available given
+      // the current fleet composition.
+      fleet_objectives: fObjectives,
+    });
+  }
+
   validateStep(step, destination, selected, conso, cargo) {
     let valid = false;
 
@@ -338,7 +396,7 @@ class Fleets extends React.Component {
     }
     else {
       // Case of a fleet objective.
-      valid = false;
+      valid = true;
     }
 
     return valid;
@@ -350,8 +408,6 @@ class Fleets extends React.Component {
     if (next && !this.state.validStep) {
       return;
     }
-
-    console.log("s: " + JSON.stringify(this.state.destination));
 
     // We also want to take into account whether or not a recycler is
     // selected in the fleet, which would determine if the harvesting
@@ -472,11 +528,70 @@ class Fleets extends React.Component {
       return;
     }
 
-    // TODO: Handle the sending.
-    console.error("Should send fleet");
-    // TODO: Should handle reset of properties.
+    // Create an object to handle the creation of the fleet.
+    const p = new Planet(
+      this.props.planet,
+      this.props.player.technologies,
+      this.props.planets,
+      this.props.universe,
+      this.props.resources,
+      this.props.buildings,
+      this.props.technologies,
+      this.props.ships,
+      this.props.defenses,
+    );
 
-    this.updateFleetStep(FLEET_INIT, false);
+    const tab = this;
+
+    // Generate the fleet object.
+    const fleet = {
+      universe: this.props.universe.id,
+      objective: this.state.mission.objective,
+      player: this.props.player.id,
+      source: this.props.planet.id,
+      source_type: "planet",
+      target_coordinates: this.state.destination.coordinate,
+      target: this.state.destination.target,
+      acs: "", // TODO: Handle ACS.
+      speed: this.state.flight_speed,
+      deployment_time: 0, // TODO: Handle deployment time.
+      ships: [],
+      cargo: [],
+    };
+
+    // Generate ships.
+    for (let id = 0 ; id < this.state.selected.length ; ++id) {
+      const s = this.state.selected[id];
+
+      fleet.ships.push({
+        ship: s.id,
+        count: s.selected,
+      });
+    }
+
+    // Generate cargo.
+    for (let id = 0 ; id < this.state.cargo_desc.length ; ++id) {
+      const c = this.state.cargo_desc[id];
+      if (c.amount <= 0) {
+        continue;
+      }
+
+      fleet.cargo.push({
+        resource: c.resource,
+        amount: c.amount,
+      });
+    }
+
+    p.createFleet(fleet)
+      .then(function (res) {
+        if (res.status !== FLEET_CREATION_POST_SUCCEEDED) {
+          tab.fetchDataFailed(res.status);
+        }
+        else {
+          tab.createFleetSucceeded(res.fleet);
+        }
+      })
+      .catch(err => tab.fetchDataFailed(err));
   }
 
   selectShips(ship, amount) {
@@ -1327,8 +1442,6 @@ class Fleets extends React.Component {
       width: Math.round(150.0 * this.state.used_cargo / this.state.cargo),
     };
 
-    console.log("p: " + JSON.stringify(this.state.destination));
-
     return (
       <div className="fleets_creation_container">
         <div className="fleet_flight_detail_container">
@@ -1516,7 +1629,7 @@ class Fleets extends React.Component {
         {this.state.step === FLEET_OBJECTIVE && this.generateFleeObjectiveView()}
       </div>
     );
-    // Should use: https://www.youtube.com/watch?v=cVAqJyRyTIg to create step 3
+    // TODO: Should use: https://www.youtube.com/watch?v=cVAqJyRyTIg to create step 3.
   }
 }
 
