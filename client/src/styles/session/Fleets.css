@@ -244,6 +244,8 @@
 
   border: 2px #0000 solid;
   border-radius: 4px;
+
+  cursor: pointer;
 }
 
 .fleet_flight_info_picture_selected, .fleet_flight_info_picture_selectable:hover {

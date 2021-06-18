@@ -25,6 +25,14 @@ const PRODUCTION_UPDATE_POST_SUCCEEDED = "Update production successfully execute
 // of resources on a planet failed.
 const PRODUCTION_UPDATE_POST_FAILED = "Failed to update production";
 
+// Defins a constant indicating that creating a fleet for a
+// planet succeeded.
+const FLEET_CREATION_POST_SUCCEEDED = "Fleet successfully created";
+
+// Defins a constant indicating that creating a fleet for a
+// planet failed.
+const FLEET_CREATION_POST_FAILED = "Failed to create fleet";
+
 class Planet {
   // The `planet` defines the planet's data that is fetched
   // from the server.
@@ -868,11 +876,75 @@ class Planet {
 
     return out;
   }
+
+  async createFleet(fleet) {
+    const out = {
+      status: FLEET_CREATION_POST_FAILED,
+      fleet: "",
+    };
+
+    // Create the action object to post.
+    const data = {
+      universe: fleet.universe,
+      objective: fleet.objective,
+      player: fleet.player,
+      source: fleet.source,
+      source_type: fleet.source_type,
+      target_coordinates: fleet.target_coordinates,
+      target: fleet.target,
+      acs: fleet.acs,
+      speed: fleet.speed,
+      deployment_time: fleet.deployment_time,
+      ships: fleet.ships,
+      cargo: fleet.cargo,
+    };
+
+    // Generate the post request to create the fleet.
+    const server = new Server();
+
+    const formData  = new FormData();
+    formData.append(server.fleetDataKey(), JSON.stringify(data));
+
+    let opts = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+      },
+      body: formData,
+    };
+
+    // Execute the request.
+    let reqStatus = "";
+
+    const res = await fetch(server.fleetsURL(fleet.acs !== "" ? true : false), opts)
+      .catch(err => reqStatus = err);
+
+    if (reqStatus !== "") {
+      out.status = reqStatus;
+      return out;
+    }
+
+    if (!res.ok) {
+      out.status = await res.text();
+      return out;
+    }
+
+    // Fetch the identifier returned by the server.
+    // It is returned through a format that is not
+    // exactly pure so we clean it through a server
+    // dedicated method.
+    const fleetID = await res.text();
+    out.fleet = server.fleetIDFromResponse(fleetID);
+    out.status = FLEET_CREATION_POST_SUCCEEDED;
+
+    return out;
+  }
 }
 
 export {
   UPGRADE_ACTION_POST_SUCCEEDED,
   PRODUCTION_UPDATE_POST_SUCCEEDED,
+  FLEET_CREATION_POST_SUCCEEDED,
 };
 
 export default Planet;
