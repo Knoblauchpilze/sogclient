@@ -89,8 +89,14 @@ class Lobby extends React.Component {
       this.props.loginStep === ACCOUNT_SELECTION ?
       <AccountSelector updateAccount={acc => this.updateAccount(acc)} autologin={this.props.autologin}/> :
       this.props.loginStep === SESSION_SELECTION ?
-      <SessionSelector account={this.props.account} updateSession={sess => this.updateSession(sess)} createSession={() => this.createSession()} /> :
-      <SessionCreator account={this.props.account} updateSession={sess => this.updateSession(sess)} cancelCreation={() => this.backToSessionList()}/>
+      <SessionSelector account={this.props.account}
+                       updateSession={sess => this.updateSession(sess)}
+                       createSession={() => this.createSession()}
+                       /> :
+      <SessionCreator account={this.props.account}
+                      updateSession={sess => this.updateSession(sess)}
+                      cancelCreation={() => this.backToSessionList()}
+                      />
     );
   }
 }

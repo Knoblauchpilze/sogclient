@@ -105,8 +105,8 @@ class Game extends React.Component {
       // associated to the current session.
       players: [],
 
-      // Defines the rankings for the universe the session is
-      // currently associated to.
+      // Defines the rankings for the universe the session
+      // is currently associated to.
       rankings: [],
 
       // Defines the index of the selected planet among

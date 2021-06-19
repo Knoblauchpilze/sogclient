@@ -175,11 +175,13 @@ class App extends React.Component {
           <Game account={this.state.account}
                 session={this.state.session}
                 universe={this.state.universe}
+                rankings={this.state.rankings}
                 />
           :
           <Lobby loginStep={this.state.loginStep}
                  updateLoginStep={(step) => this.updateLoginStep(step)}
                  account={this.state.account}
+                 rankings={this.state.rankings}
                  updateAccount={(acc) => this.updateAccount(acc)}
                  performLogin={(acc, sess) => this.performLogin(acc, sess)}
                  autologin={this.state.autologin}
