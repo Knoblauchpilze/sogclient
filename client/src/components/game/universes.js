@@ -3,6 +3,9 @@
 const UNIVERSES_FETCH_SUCCEEDED = "Universes fetched";
 const UNIVERSES_FETCH_FAILURE = "Failed to fetch universes";
 
+const RANKINGS_FETCH_SUCCEEDED = "Rankings fetched";
+const RANKINGS_FETCH_FAILURE = "Failed to fetch rankings";
+
 class UniversesModule {
   constructor(server) {
     this.server = server;
@@ -38,10 +41,43 @@ class UniversesModule {
 
     return out;
   }
+
+  async fetchRankings(uni) {
+    // Fetch universes from the server and discriminate
+    // on the request's result.
+    let out = {
+      status: RANKINGS_FETCH_FAILURE,
+      universe: uni,
+      rankings: [],
+    };
+
+    let reqStatus = "";
+
+    const res = await fetch(this.server.rankingsURL(uni))
+      .catch(err => reqStatus = err);
+
+    if (reqStatus !== "") {
+      console.error("Failed to fetch rankings: " + reqStatus);
+      return out;
+    }
+    if (!res.ok) {
+      out.status = res.statusText;
+      return out;
+    }
+
+    out.status = RANKINGS_FETCH_SUCCEEDED;
+
+    // Extract rankings into a meaningful object.
+    const rawRankings = await res.text();
+    out.rankings = JSON.parse(rawRankings);
+
+    return out;
+  }
 }
 
 export {
   UNIVERSES_FETCH_SUCCEEDED,
+  RANKINGS_FETCH_SUCCEEDED,
 };
 
 export default UniversesModule;

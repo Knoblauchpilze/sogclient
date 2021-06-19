@@ -12,6 +12,7 @@ function Overview (props) {
   let diameterText = "";
   let tempText = "";
   let coordsText = "";
+  let rank = 0;
 
   if (props.planet) {
     title = "General view - " + props.planet.name;
@@ -29,6 +30,11 @@ function Overview (props) {
     coordsText += ":" + (props.planet.coordinate.system + 1);
     coordsText += ":" + (props.planet.coordinate.position + 1);
     coordsText += "]";
+
+    const rk = props.rankings.find(r => r.player === props.planet.player);
+    if (rk) {
+      rank = rk.rank + 1;
+    }
   }
 
   let points = 0;
@@ -53,7 +59,7 @@ function Overview (props) {
                             link={"../galaxy/galaxy.html"}
                             />
         <OverviewPlanetProp title={"Points"}
-                            value={points + " (Rank TODO out of TODO)"}
+                            value={points + " (Rank " + rank + " out of " + props.rankings.length + ")"}
                             link={"../rankings/rankings.html"}
                             />
         <OverviewPlanetProp title={"Honorific points"}

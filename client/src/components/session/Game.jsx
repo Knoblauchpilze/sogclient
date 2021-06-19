@@ -31,10 +31,12 @@ import ShipsModule from '../game/ships.js';
 import { SHIPS_FETCH_SUCCEEDED } from '../game/ships.js';
 import DefensesModule from '../game/defenses.js';
 import { DEFENSES_FETCH_SUCCEEDED } from '../game/defenses.js';
-import PlayersModule from '../game/players.js';
-import { PLAYERS_FETCH_SUCCEEDED } from '../game/players.js';
 import FleetObjectivesModule from '../game/fleet_objectives.js';
 import { FLEET_OBJECTIVES_FETCH_SUCCEEDED } from '../game/fleet_objectives.js';
+import PlayersModule from '../game/players.js';
+import { PLAYERS_FETCH_SUCCEEDED } from '../game/players.js';
+import UniversesModule from '../game/universes.js';
+import { RANKINGS_FETCH_SUCCEEDED } from '../game/universes.js';
 
 import { computeActionCompletionTime } from '../game/actions.js';
 
@@ -103,6 +105,10 @@ class Game extends React.Component {
       // associated to the current session.
       players: [],
 
+      // Defines the rankings for the universe the session is
+      // currently associated to.
+      rankings: [],
+
       // Defines the index of the selected planet among
       // the available list.
       selectedPlanet: -1,
@@ -149,6 +155,7 @@ class Game extends React.Component {
     const defenses = new DefensesModule(server);
     const objectives = new FleetObjectivesModule(server);
     const players = new PlayersModule(server);
+    const universes = new UniversesModule(server);
 
     const game = this;
 
@@ -261,6 +268,19 @@ class Game extends React.Component {
       }
     })
     .catch(err => game.fetchDataFailed(err));
+
+    // Fetch the rankings from the server for the
+    // player that is currently logged in.
+    universes.fetchRankings(this.props.session.universe)
+      .then(function (res) {
+        if (res.status !== RANKINGS_FETCH_SUCCEEDED) {
+          game.fetchDataFailed(res.status);
+        }
+        else {
+          game.fetchRankingsSucceeded(res.rankings);
+        }
+      })
+      .catch(err => game.fetchDataFailed(err));
 
     this.timer = setInterval(this.countDown, this.state.interval);
   }
@@ -398,6 +418,13 @@ class Game extends React.Component {
     // Update internal state.
     this.setState({
       players: players,
+    });
+  }
+
+  fetchRankingsSucceeded(rankings) {
+    // Update internal state.
+    this.setState({
+      rankings: rankings,
     });
   }
 
@@ -608,6 +635,7 @@ class Game extends React.Component {
       default:
         tab = <Overview planet={this.state.planets[this.state.selectedPlanet]}
                         player={this.props.session}
+                        rankings={this.state.rankings}
                         />;
         break;
     }
