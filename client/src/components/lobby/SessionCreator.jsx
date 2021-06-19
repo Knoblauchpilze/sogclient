@@ -15,8 +15,8 @@ import { SESSIONS_FETCH_SUCCEEDED } from '../game/sessions.js';
 import { SESSION_FETCH_SUCCEEDED } from '../game/sessions.js';
 import { SESSION_REGISTRATION_SUCCEEDED } from '../game/sessions.js';
 
-import UniverseFetcher from '../game/universes.js';
-import { UNIVERSES_FETCH_SUCCEEDED } from '../game/universes.js';
+import UniversesModule from '../game/universes.js';
+import { UNIVERSES_FETCH_SUCCEEDED, RANKINGS_FETCH_SUCCEEDED } from '../game/universes.js';
 
 class SessionCreator extends React.Component {
   constructor(props) {
@@ -44,6 +44,10 @@ class SessionCreator extends React.Component {
       // The list of all universes: this is used so that
       // we can associate valid data for a session.
       universes: [],
+
+      // Defines the rankings for the universes into which
+      // the player has a session.
+      rankings: [],
     };
   }
 
@@ -93,10 +97,24 @@ class SessionCreator extends React.Component {
       sessions: sessions,
       availableUniverses: unis,
     });
-  }
 
-  fetchedSessionFailure(err) {
-    alert(err);
+    // Fetch the rankings from the server for the
+    // universes that are available for the player.
+    if (sessions.length === 0) {
+      return;
+    }
+
+    // Transform the input data into a list of identifiers.
+    let ids = sessions.map(s => s.universe);
+
+    const server = new Server();
+    const universes = new UniversesModule(server);
+
+    const sessSelector = this;
+
+    universes.fetchAllRankings(ids)
+      .then(res => sessSelector.fetchRankingsSucceeded(res))
+      .catch(err => sessSelector.fetchDataFailed(err));
   }
 
   fetchedSession(sess) {
@@ -136,13 +154,13 @@ class SessionCreator extends React.Component {
       sess.fetch(inSess)
         .then(function (res) {
           if (res.status !== SESSION_FETCH_SUCCEEDED) {
-            sessSelector.fetchedSessionFailure(res.status);
+            sessSelector.fetchDataFailed(res.status);
           }
           else {
             sessSelector.fetchedSession(res.session);
           }
         })
-        .catch(err => sessSelector.fetchedSessionFailure(err));
+        .catch(err => sessSelector.fetchDataFailed(err));
 
       return;
     }
@@ -152,20 +170,43 @@ class SessionCreator extends React.Component {
     sess.register(inSess)
       .then(function (res) {
         if (res.status !== SESSION_REGISTRATION_SUCCEEDED) {
-          sessSelector.fetchedSessionFailure(res.status);
+          sessSelector.fetchDataFailed(res.status);
         }
         else {
           sessSelector.fetchedSession(res.session);
         }
       })
-      .catch(err => sessSelector.fetchedSessionFailure(err));
+      .catch(err => sessSelector.fetchDataFailed(err));
+  }
+
+  fetchRankingsSucceeded(rankings) {
+    // Keep only rankings.
+    const ranks = [];
+
+    for (let id = 0 ; id < rankings.length ; ++id) {
+      const r = rankings[id];
+      if (r.status !== RANKINGS_FETCH_SUCCEEDED) {
+        console.error("Failed to fetch rankings for universe \"" + r.universe + "\"");
+        continue;
+      }
+
+      ranks.push({
+        universe: r.universe,
+        rankings: r.rankings,
+      });
+    }
+
+    // Update internal state.
+    this.setState({
+      rankings: ranks,
+    });
   }
 
   componentDidMount() {
     // Fetch the list of universes from the server.
     const server = new Server();
     const sess = new SessionsModule(server);
-    const unis = new UniverseFetcher(server);
+    const unis = new UniversesModule(server);
 
     const sessSelector = this;
 
@@ -211,13 +252,24 @@ class SessionCreator extends React.Component {
       // Fetch the universe associated to this session.
       const uniData = sessSelec.state.universes.find(uni => uni.id === sess.universe);
 
+      const rData = sessSelec.state.rankings.find(
+        r => r.universe === uniData.id
+      );
+      let rank = "Unknown";
+      if (rData) {
+        const p = rData.rankings.find(r => r.player === sess.id);
+        if (p) {
+          rank = (p.rank + 1) + " / " + rData.rankings.length;
+        }
+      }
+
       // Generate the player's data.
       const player = new Session({
         universe: new Universe(uniData),
         account: sess.account,
         player: sess.id,
         name: sess.name,
-        rank: "TODO",
+        rank: rank,
       });
 
       // Return the visual component.
@@ -239,11 +291,11 @@ class SessionCreator extends React.Component {
     return this.state.availableUniverses.map(uni => (
       <UniverseDesc key={`${uni.id}`}
                     player={new Session({
-                      universe: new Universe(uni),
-                      account: this.props.account.id,
-                      player: "",
-                      name: "",
-                      rank: "TODO",
+                    universe: new Universe(uni),
+                    account: this.props.account.id,
+                    player: "",
+                    name: "",
+                    rank: "",
                     })}
                     selectSession={session => this.selectSession(session)}
                     />

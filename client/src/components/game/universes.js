@@ -73,6 +73,17 @@ class UniversesModule {
 
     return out;
   }
+
+  async fetchAllRankings(unis) {
+    const out = [];
+
+    for (let id = 0 ; id < unis.length ; ++id) {
+      const res = await this.fetchRankings(unis[id]);
+      out.push(res);
+    }
+
+    return out;
+  }
 }
 
 export {
