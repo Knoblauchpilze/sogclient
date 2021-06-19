@@ -63,6 +63,10 @@ class Server {
     return this.serverURL() + "/universes";
   }
 
+  rankingsURL(uni) {
+    return this.universesURL() + "/" + uni + "/rankings"
+  }
+
   planetsURL(player) {
     return this.serverURL() + "/planets?player=" + player;
   }
