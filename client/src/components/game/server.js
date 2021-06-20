@@ -149,8 +149,8 @@ class Server {
     return this.serverURL() + "/planets/" + planet + "/production";
   }
 
-  galaxyURL(galaxy, system) {
-    return this.serverURL() + "/planets?galaxy=" + galaxy + "&solar_system=" + system;
+  galaxyURL(galaxy, system, universe) {
+    return this.serverURL() + "/planets?galaxy=" + galaxy + "&solar_system=" + system + "&universe=" + universe;
   }
 
   fleetsURL(acs) {
