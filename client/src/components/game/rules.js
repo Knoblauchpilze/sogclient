@@ -45,5 +45,5 @@ export function computePlanetsSlots(technologies) {
     return 1;
   }
 
-  return 2 + (ast.level - 1) / 2;
+  return Math.floor(2 + (ast.level - 1) / 2);
 }

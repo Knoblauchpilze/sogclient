@@ -681,9 +681,10 @@ class Game extends React.Component {
                                 />
             </div>
             <PlanetsList planets={this.state.planets}
-                        selected={this.state.selectedPlanet}
-                        updateSelectedPlanet={(id) => this.updateSelectedPlanet(id)}
-                        />
+                         player={this.props.session}
+                         selected={this.state.selectedPlanet}
+                         updateSelectedPlanet={(id) => this.updateSelectedPlanet(id)}
+                         />
           </div>
         </div>
       </div>

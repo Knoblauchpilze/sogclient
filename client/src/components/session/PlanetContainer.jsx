@@ -11,11 +11,11 @@ function PlanetContainer (props) {
     classes += " planet_container_layout_selected";
   }
 
-  let coords = "[" + props.planet.coordinate.galaxy;
+  let coords = "[" + (props.planet.coordinate.galaxy + 1);
   coords += ":";
-  coords += props.planet.coordinate.system;
+  coords += (props.planet.coordinate.system + 1);
   coords += ":";
-  coords += props.planet.coordinate.position;
+  coords += (props.planet.coordinate.position + 1);
   coords += "]";
 
   // See here for how to attach the on click to elements
