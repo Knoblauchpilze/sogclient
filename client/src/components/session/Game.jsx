@@ -167,7 +167,7 @@ class Game extends React.Component {
           game.fetchDataFailed(res.status);
         }
         else {
-          game.fetchPlanetsSucceeded(res.planets);
+          game.fetchPlanetsSucceeded(res.planets, true);
         }
       })
       .catch(err => game.fetchDataFailed(err));
@@ -330,7 +330,7 @@ class Game extends React.Component {
     alert(err);
   }
 
-  fetchPlanetsSucceeded(planets) {
+  fetchPlanetsSucceeded(planets, updateSystem) {
     // Update internal state: we also define the planet
     // selected to be the first one.
     this.setState({
@@ -340,13 +340,15 @@ class Game extends React.Component {
 
     console.info("Fetched " + planets.length + " planet(s) for " + this.props.session.id);
 
-    // Update the selected system.
-    this.updateSelectedSystem(
-      // The `+1` comes from the fact that we expect the data
-      // to come from the UI where it has an offset of 1.
-      planets[0].coordinate.galaxy + 1,
-      planets[0].coordinate.system + 1,
-    );
+    // Update the selected system if needed.
+    if (updateSystem) {
+      this.updateSelectedSystem(
+        // The `+1` comes from the fact that we expect the data
+        // to come from the UI where it has an offset of 1.
+        planets[0].coordinate.galaxy + 1,
+        planets[0].coordinate.system + 1,
+      );
+    }
   }
 
   fetchMoonsSucceeded(moons) {
@@ -463,7 +465,7 @@ class Game extends React.Component {
 
     const game = this;
 
-    planets.fetchPlanetsForSystem(iGalaxy, iSystem)
+    planets.fetchPlanetsForSystem(iGalaxy, iSystem, this.props.session.universe)
       .then(function (res) {
         if (res.status !== PLANETS_FETCH_SUCCEEDED) {
           game.fetchDataFailed(res.status);
@@ -478,11 +480,11 @@ class Game extends React.Component {
   moveToGalaxyView(galaxy, system) {
     // We need to request the tab to switch to galaxy
     // view, and also update the selected system.
-    this.updateGameTab(TAB_GALAXY);
+    this.updateGameTab(TAB_GALAXY, false);
     this.updateSelectedSystem(galaxy, system);
   }
 
-  actionPerformed() {
+  actionPerformed(updateSystem) {
     // We should reload the planets available for this player.
     const server = new Server();
     const planets = new PlanetsModule(server);
@@ -495,15 +497,15 @@ class Game extends React.Component {
           game.fetchDataFailed(res.status);
         }
         else {
-          game.fetchPlanetsSucceeded(res.planets);
+          game.fetchPlanetsSucceeded(res.planets, updateSystem);
         }
       })
       .catch(err => game.fetchDataFailed(err));
   }
 
-  updateGameTab(tab) {
+  updateGameTab(tab, updateSystem) {
     // Handle reload of data.
-    this.actionPerformed();
+    this.actionPerformed(updateSystem);
 
     // Update the tab displayed on the central view
     // of the game.
@@ -526,7 +528,7 @@ class Game extends React.Component {
                          defenses={this.state.defenses}
                          universe={this.props.universe}
                          planets={this.state.planets}
-                         actionPerformed={() => this.actionPerformed()}
+                         actionPerformed={() => this.actionPerformed(true)}
                          />;
           break;
       case TAB_PRODUCTION_SETTINGS:
@@ -539,7 +541,7 @@ class Game extends React.Component {
                                   defenses={this.state.defenses}
                                   universe={this.props.universe}
                                   planets={this.state.planets}
-                                  actionPerformed={() => this.actionPerformed()}
+                                  actionPerformed={() => this.actionPerformed(true)}
                                   />;
         break;
       case TAB_FACILITIES:
@@ -552,7 +554,7 @@ class Game extends React.Component {
                           defenses={this.state.defenses}
                           universe={this.props.universe}
                           planets={this.state.planets}
-                          actionPerformed={() => this.actionPerformed()}
+                          actionPerformed={() => this.actionPerformed(true)}
                           />;
           break;
       case TAB_RESEARCH_LAB:
@@ -565,7 +567,7 @@ class Game extends React.Component {
                            defenses={this.state.defenses}
                            universe={this.props.universe}
                            planets={this.state.planets}
-                           actionPerformed={() => this.actionPerformed()}
+                           actionPerformed={() => this.actionPerformed(true)}
                            />;
           break;
       case TAB_TECH_TREE:
@@ -590,7 +592,7 @@ class Game extends React.Component {
                         defenses={this.state.defenses}
                         universe={this.props.universe}
                         planets={this.state.planets}
-                        actionPerformed={() => this.actionPerformed()}
+                        actionPerformed={() => this.actionPerformed(true)}
                         />;
           break;
       case TAB_DEFENSES:
@@ -603,7 +605,7 @@ class Game extends React.Component {
                         defenses={this.state.defenses}
                         universe={this.props.universe}
                         planets={this.state.planets}
-                        actionPerformed={() => this.actionPerformed()}
+                        actionPerformed={() => this.actionPerformed(true)}
                         />;
           break;
       case TAB_FLEETS:
@@ -637,6 +639,7 @@ class Game extends React.Component {
         tab = <Overview planet={this.state.planets[this.state.selectedPlanet]}
                         player={this.props.session}
                         rankings={this.state.rankings}
+                        viewSystem={(galaxy, system) => this.moveToGalaxyView(galaxy, system)}
                         />;
         break;
     }
@@ -666,7 +669,7 @@ class Game extends React.Component {
                             universe={this.props.universe}
                             />
           <div className="game_internal_layout">
-            <NavigationMenu updateGameTab={(tab) => this.updateGameTab(tab)}/>
+            <NavigationMenu updateGameTab={(tab) => this.updateGameTab(tab, true)}/>
             <div className="game_center_layout">
               {this.generateCurrentTab()}
               <ConstructionList planet={p}

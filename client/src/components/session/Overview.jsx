@@ -14,6 +14,11 @@ function Overview (props) {
   let coordsText = "";
   let rank = 0;
 
+  let coords = {
+    galaxy: 0,
+    system: 0
+  };
+
   if (props.planet) {
     title = "General view - " + props.planet.name;
 
@@ -25,6 +30,9 @@ function Overview (props) {
     diameterText = props.planet.diameter + " (" + used + "/" + props.planet.fields + ")";
 
     tempText = props.planet.min_temperature + "°C to " + props.planet.max_temperature + "°C";
+
+    coords.galaxy = props.planet.coordinate.galaxy;
+    coords.system = props.planet.coordinate.system;
 
     coordsText = "[" + (props.planet.coordinate.galaxy + 1);
     coordsText += ":" + (props.planet.coordinate.system + 1);
@@ -56,7 +64,7 @@ function Overview (props) {
                             />
         <OverviewPlanetProp title={"Position"}
                             value={coordsText}
-                            link={"../galaxy/galaxy.html"}
+                            link={() => props.viewSystem(coords.galaxy, coords.system)}
                             />
         <OverviewPlanetProp title={"Points"}
                             value={points + " (Rank " + rank + " out of " + props.rankings.length + ")"}
