@@ -13,22 +13,19 @@
   text-align: left;
 }
 
-.overview_planet_prop_value, #overview_planet_options {
+.overview_planet_prop_value {
   color: #fff;
 
   text-align: right;
 }
 
-.overview_planet_prop_value a {
+.overview_planet_prop_link {
   text-decoration: none;
   white-space: nowrap;
+
+  cursor: pointer;
 }
 
-.overview_planet_prop_value a:visited {
-  color: inherit;
-}
-
-.overview_planet_prop_value a:hover {
-  color: inherit;
+.overview_planet_prop_link:hover {
   text-decoration: underline;
 }
