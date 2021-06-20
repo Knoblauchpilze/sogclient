@@ -890,7 +890,7 @@ class Fleets extends React.Component {
 
     const game = this;
 
-    planets.fetchPlanetsForSystem(iGalaxy, iSystem)
+    planets.fetchPlanetsForSystem(iGalaxy, iSystem, this.props.universe.id)
       .then(function (res) {
         if (res.status !== PLANETS_FETCH_SUCCEEDED) {
           game.fetchDataFailed(res.status);
@@ -1450,7 +1450,7 @@ class Fleets extends React.Component {
           <span className="fleet_objective_mission_entry">{this.state.mission.text}</span>
           <span className="fleet_objective_mission_text">Target:</span>
           <span className="fleet_objective_mission_entry fleet_flight_galaxy_link"
-                onClick={() => this.props.viewSystem(this.props.planet.coordinate.galaxy, this.props.planet.coordinate.system)}
+                onClick={() => this.props.viewSystem(this.state.destination.coordinate.galaxy + 1, this.state.destination.coordinate.system + 1)}
                 >
             {this.state.destination.name + " " + (this.state.destination.coordinate.galaxy + 1) + ":" + (this.state.destination.coordinate.system + 1) + ":" + (this.state.destination.coordinate.position + 1)}
           </span>
