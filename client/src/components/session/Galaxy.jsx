@@ -89,7 +89,6 @@ class Galaxy extends React.Component {
       planets.push(p);
     }
 
-    // TODO: Handle the handling of the system data.
     return (
       <div className="galaxy_layout">
         <GalaxyNavigator coordinates={this.props.system.coordinates} updateSystem={this.props.updateSystem} />
@@ -117,7 +116,7 @@ class Galaxy extends React.Component {
           <span className="galaxy_default_label">No messages at the moment</span>
         </div>
 
-        <div className="galaxy_system_info">6 planet(s) colonized</div>
+        <div className="galaxy_system_info">{this.props.system.planets.length + " planet(s) colonized"}</div>
       </div>
     );
   }
