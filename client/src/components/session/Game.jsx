@@ -623,6 +623,7 @@ class Game extends React.Component {
           break;
       case TAB_GALAXY:
           tab = <Galaxy planet={this.state.planets[this.state.selectedPlanet]}
+                        player={this.props.session}
                         ships={this.state.ships}
                         defenses={this.state.defenses}
                         system={this.state.system_data}

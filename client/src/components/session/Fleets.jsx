@@ -26,6 +26,7 @@ import {fleet_objectives_list} from '../../datas/fleet_objectives.js';
 
 import { toFixedDigits, formatDuration, formatAmount } from '../game/amounts.js';
 import { computeDistance, computeDuration, computeConsumption, computeMaxSpeed } from '../game/fleet.js';
+import { computeFleetSlots } from '../game/rules.js';
 
 // Defines the initial step of the fleets view where the
 // player can select ships to include in the fleet.
@@ -1598,13 +1599,15 @@ class Fleets extends React.Component {
       classes += " fleets_next_step_disabled";
     }
 
+    const slots = computeFleetSlots(this.props.player.technologies);
+
     // TODO: Handle fleets count and expeditions count.
     return (
       <div className="fleets_layout fleets_creation_container">
         <div className="fleets_slots_layout">
           <div>
-            <span className="fleet_slot">Fleets: 0/15</span>
-            <span className="fleet_slot">Expeditions: 0/4</span>
+            <span className="fleet_slot">{"Fleets: 0/" + slots.fleets}</span>
+            <span className="fleet_slot">{"Expeditions: 0/" + slots.expeditions}</span>
           </div>
           <div className="fleet_display_link">Fleet movements</div>
         </div>
