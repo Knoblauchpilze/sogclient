@@ -3,9 +3,11 @@ import '../../styles/session/PlanetsList.css';
 import React from 'react';
 import PlanetContainer from './PlanetContainer.jsx';
 
+import { computePlanetsSlots } from '../game/rules.js';
+
 function PlanetsList (props) {
   // Generate title.
-  let count = props.planets.length + "/?? planet(s)";
+  let count = props.planets.length + "/" + computePlanetsSlots(props.player.technologies) +  " planet(s)";
 
   return (
     <div className="planets_list_layout">
