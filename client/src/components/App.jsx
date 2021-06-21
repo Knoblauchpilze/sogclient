@@ -12,6 +12,8 @@ import Server from './game/server.js';
 
 import UniversesModule from './game/universes.js';
 import { UNIVERSES_FETCH_SUCCEEDED } from './game/universes.js';
+import SessionsModule from './game/sessions.js';
+import { SESSION_FETCH_SUCCEEDED } from './game/sessions.js';
 
 import { NullAccount } from './game/server.js';
 import { NullSession } from './game/session.js';
@@ -155,6 +157,41 @@ class App extends React.Component {
     console.info("Fetched data for universe \"" + u.name + "\"");
   }
 
+  fetchSessionSuceeded(session) {
+    // Update internal state.
+    this.setState({
+      session: session,
+    });
+  }
+
+  updatePlayerData() {
+    // Re-fetch the session's data.
+    const server = new Server();
+    const sess = new SessionsModule(server);
+
+    const app = this;
+
+    // Flatten the session to a format expected by the
+    // sessions module.
+    const inSess = {
+      id: "",
+      name: this.state.session.name,
+      account: this.state.session.account,
+      universe: this.state.session.universe,
+    };
+
+    sess.fetch(inSess)
+      .then(function (res) {
+        if (res.status !== SESSION_FETCH_SUCCEEDED) {
+          app.fetchDataFailed(res.status);
+        }
+        else {
+          app.fetchSessionSuceeded(res.session);
+        }
+      })
+      .catch(err => app.fetchDataFailed(err));
+  }
+
   logout() {
     this.setState({
       gameState: LOGIN,
@@ -176,6 +213,7 @@ class App extends React.Component {
                 session={this.state.session}
                 universe={this.state.universe}
                 rankings={this.state.rankings}
+                updatePlayerData={() => this.updatePlayerData()}
                 />
           :
           <Lobby loginStep={this.state.loginStep}

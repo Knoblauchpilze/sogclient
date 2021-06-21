@@ -501,6 +501,9 @@ class Game extends React.Component {
         }
       })
       .catch(err => game.fetchDataFailed(err));
+
+    // Request parent component to update technologies.
+    this.props.updatePlayerData();
   }
 
   updateGameTab(tab, updateSystem) {
