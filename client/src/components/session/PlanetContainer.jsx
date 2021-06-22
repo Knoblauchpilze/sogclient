@@ -21,26 +21,29 @@ function PlanetContainer (props) {
   // See here for how to attach the on click to elements
   // defined for the planet container.
   // https://stackoverflow.com/questions/28268835/react-onclick-event-on-component
-  // TODO: Should change the <a> semantic.
   return (
     <div className={classes}>
       <div className="planet_container_icons">
-        <a href="../overview/overview.html">
+        <div onClick={() => props.updateSelectedPlanet()}>
           <img className="planet_container_planet_icon"
                src={planet}
                alt="Planet visual"
                />
-        </a>
-        <a href="../overview/overview.html">
+        </div>
+        <div onClick={() => props.updateSelectedMoon()}>
           <img className="planet_container_moon_icon"
                src={moon}
                alt="Moon visual"
                />
-        </a>
+        </div>
       </div>
-      <div className="planet_container_active_area" onClick={props.onClick}>
-        {props.planet.name}
-        <p className="planet_container_coordinates">{coords}</p>
+      <div className="planet_container_active_area">
+        <div onClick={() => props.updateSelectedPlanet()}>
+          {props.planet.name}
+        </div>
+        <p className="planet_container_coordinates" onClick={() => props.viewSystem(props.planet.coordinate.galaxy, props.planet.coordinate.system)}>
+          {coords}
+        </p>
       </div>
     </div>
   );

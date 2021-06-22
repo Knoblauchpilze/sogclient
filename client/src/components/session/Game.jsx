@@ -51,6 +51,16 @@ import { TAB_DEFENSES } from './NavigationMenu.jsx';
 import { TAB_FLEETS } from './NavigationMenu.jsx';
 import { TAB_GALAXY } from './NavigationMenu.jsx';
 
+// A string literal defining a planet body, which
+// indicates that the selected body is to be found
+// in the planets list.
+const SELECTED_PLANET = "selected_planet";
+
+// A string literal defining a moon, which indicates
+// that the selected body is to be found in the moons
+// list.
+const SELECTED_MOON = "selected_moon";
+
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -109,9 +119,12 @@ class Game extends React.Component {
       // is currently associated to.
       rankings: [],
 
-      // Defines the index of the selected planet among
+      // Defines the index of the selected planet/moon among
       // the available list.
-      selectedPlanet: -1,
+      selected: {
+        body: SELECTED_PLANET,
+        index: -1,
+      },
 
       // Current tab displayed in the central view. This
       // allows to select various facets of the planet
@@ -141,6 +154,8 @@ class Game extends React.Component {
 
     this.timer = 0;
     this.countDown = this.countDown.bind(this);
+    this.updateSelectedPlanet = this.updateSelectedPlanet.bind(this);
+    this.updateSelectedMoon = this.updateSelectedMoon.bind(this);
   }
 
   componentDidMount() {
@@ -335,7 +350,10 @@ class Game extends React.Component {
     // selected to be the first one.
     this.setState({
       planets: planets,
-      selectedPlanet: 0,
+      selected: {
+        body: SELECTED_PLANET,
+        index: 0,
+      },
     });
 
     console.info("Fetched " + planets.length + " planet(s) for " + this.props.session.id);
@@ -442,7 +460,29 @@ class Game extends React.Component {
     console.info("Selected planet " + this.state.planets[id].id);
 
     this.setState({
-      selectedPlanet: id,
+      selected: {
+        body: SELECTED_PLANET,
+        index: id,
+      },
+    });
+  }
+
+  updateSelectedMoon(id) {
+    // Update the selected moon index if it is
+    // valid compared to the list of available
+    // moons.
+    if (id < 0 || id >= this.state.moons.length) {
+      console.error("Can't select moon " + id + " among [0 - " + this.state.moons.length + "]");
+      return;
+    }
+
+    console.info("Selected moon " + this.state.moons[id].id);
+
+    this.setState({
+      selected: {
+        body: SELECTED_MOON,
+        index: id,
+      },
     });
   }
 
@@ -520,9 +560,18 @@ class Game extends React.Component {
   generateCurrentTab() {
     let tab;
 
+    // Fetch the selected planet or moon.
+    let body = {};
+    if (this.state.selected.body === SELECTED_PLANET) {
+      body = this.state.planets[this.state.selected.index];
+    }
+    else {
+      body = this.state.moons[this.state.selected.index];
+    }
+
     switch (this.state.selectedTab) {
       case TAB_RESOURCES:
-        tab = <Resources planet={this.state.planets[this.state.selectedPlanet]}
+        tab = <Resources planet={body}
                          player={this.props.session}
                          resources={this.state.resources}
                          buildings={this.state.buildings}
@@ -535,7 +584,7 @@ class Game extends React.Component {
                          />;
           break;
       case TAB_PRODUCTION_SETTINGS:
-        tab = <ProductionSettings planet={this.state.planets[this.state.selectedPlanet]}
+        tab = <ProductionSettings planet={body}
                                   player={this.props.session}
                                   resources={this.state.resources}
                                   buildings={this.state.buildings}
@@ -548,7 +597,7 @@ class Game extends React.Component {
                                   />;
         break;
       case TAB_FACILITIES:
-        tab = <Facilities planet={this.state.planets[this.state.selectedPlanet]}
+        tab = <Facilities planet={body}
                           player={this.props.session}
                           resources={this.state.resources}
                           buildings={this.state.buildings}
@@ -561,7 +610,7 @@ class Game extends React.Component {
                           />;
           break;
       case TAB_RESEARCH_LAB:
-        tab = <ResearchLab planet={this.state.planets[this.state.selectedPlanet]}
+        tab = <ResearchLab planet={body}
                            player={this.props.session}
                            resources={this.state.resources}
                            buildings={this.state.buildings}
@@ -574,7 +623,7 @@ class Game extends React.Component {
                            />;
           break;
       case TAB_TECH_TREE:
-        tab = <TechnologyTree planet={this.state.planets[this.state.selectedPlanet]}
+        tab = <TechnologyTree planet={body}
                               player={this.props.session}
                               resources={this.state.resources}
                               buildings={this.state.buildings}
@@ -586,7 +635,7 @@ class Game extends React.Component {
                               />;
         break;
       case TAB_SHIPYARD:
-        tab = <Shipyard planet={this.state.planets[this.state.selectedPlanet]}
+        tab = <Shipyard planet={body}
                         player={this.props.session}
                         resources={this.state.resources}
                         buildings={this.state.buildings}
@@ -599,7 +648,7 @@ class Game extends React.Component {
                         />;
           break;
       case TAB_DEFENSES:
-        tab = <Defenses planet={this.state.planets[this.state.selectedPlanet]}
+        tab = <Defenses planet={body}
                         player={this.props.session}
                         resources={this.state.resources}
                         buildings={this.state.buildings}
@@ -612,7 +661,7 @@ class Game extends React.Component {
                         />;
           break;
       case TAB_FLEETS:
-          tab = <Fleets planet={this.state.planets[this.state.selectedPlanet]}
+          tab = <Fleets planet={body}
                         player={this.props.session}
                         resources={this.state.resources}
                         buildings={this.state.buildings}
@@ -627,7 +676,7 @@ class Game extends React.Component {
                         />;
           break;
       case TAB_GALAXY:
-          tab = <Galaxy planet={this.state.planets[this.state.selectedPlanet]}
+          tab = <Galaxy planet={body}
                         player={this.props.session}
                         ships={this.state.ships}
                         defenses={this.state.defenses}
@@ -639,7 +688,7 @@ class Game extends React.Component {
           break;
       case TAB_OVERVIEW:
       default:
-        tab = <Overview planet={this.state.planets[this.state.selectedPlanet]}
+        tab = <Overview planet={body}
                         player={this.props.session}
                         rankings={this.state.rankings}
                         viewSystem={(galaxy, system) => this.moveToGalaxyView(galaxy, system)}
@@ -659,8 +708,11 @@ class Game extends React.Component {
       ships_construction: [],
       defenses_construction: [],
     };
-    if (this.state.selectedPlanet >= 0) {
-      p = this.state.planets[this.state.selectedPlanet];
+    if (this.state.selected.body === SELECTED_PLANET) {
+      p = this.state.planets[this.state.selected.index];
+    }
+    else {
+      p = this.state.moons[this.state.selected.index];
     }
 
     return (
@@ -684,9 +736,13 @@ class Game extends React.Component {
                                 />
             </div>
             <PlanetsList planets={this.state.planets}
+                         moons={this.state.moons}
                          player={this.props.session}
-                         selected={this.state.selectedPlanet}
-                         updateSelectedPlanet={(id) => this.updateSelectedPlanet(id)}
+                         selected={this.state.selected.index}
+                         isPlanet={(this.state.selected.body === SELECTED_PLANET)}
+                         updateSelectedPlanet={id => this.updateSelectedPlanet(id)}
+                         updateSelectedMoon={id => this.updateSelectedMoon(id)}
+                         viewSystem={(galaxy, system) => this.moveToGalaxyView(galaxy, system)}
                          />
           </div>
         </div>

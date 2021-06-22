@@ -33,6 +33,8 @@
   position: relative;
   top: -8px;
   left: 11px;
+
+  cursor: pointer;
 }
 
 .planet_container_moon_icon {
@@ -42,6 +44,8 @@
   position: relative;
   top: -18px;
   left: -4px;
+
+  cursor: pointer;
 }
 
 .planet_container_active_area {
