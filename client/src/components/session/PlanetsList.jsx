@@ -17,7 +17,9 @@ function PlanetsList (props) {
           <PlanetContainer key={`${planet.id}`}
                            planet={planet}
                            active={id === props.selected}
-                           onClick={() => props.updateSelectedPlanet(id)}
+                           updateSelectedPlanet={() => props.updateSelectedPlanet(id)}
+                           updateSelectedMoon={() => props.updateSelectedMoon(id)}
+                           viewSystem={(galaxy, system) => props.viewSystem(galaxy, system)}
                            />
         ))
       }
