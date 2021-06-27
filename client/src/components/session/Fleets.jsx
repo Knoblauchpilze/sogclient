@@ -1230,7 +1230,7 @@ class Fleets extends React.Component {
 
     const tankUsage = Math.floor(100.0 * this.state.flight_consumption / this.state.cargo);
     let consoClasses = "fleet_flight_detail_value";
-    if (tankUsage < 100.0) {
+    if (tankUsage <= 100.0) {
       consoClasses += " fleet_flight_detail_valid_value";
     }
     else {
@@ -1608,13 +1608,12 @@ class Fleets extends React.Component {
 
     const slots = computeFleetSlots(this.props.player.technologies);
 
-    // TODO: Handle fleets count and expeditions count.
     return (
       <div className="fleets_layout fleets_creation_container">
         <div className="fleets_slots_layout">
           <div>
-            <span className="fleet_slot">{"Fleets: 0/" + slots.fleets}</span>
-            <span className="fleet_slot">{"Expeditions: 0/" + slots.expeditions}</span>
+            <span className="fleet_slot">{"Fleets: " + this.props.fleets.regular + "/" + slots.fleets}</span>
+            <span className="fleet_slot">{"Expeditions: " + this.props.fleets.expeditions + "/" + slots.expeditions}</span>
           </div>
           <div className="fleet_display_link">Fleet movements</div>
         </div>
