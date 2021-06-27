@@ -784,6 +784,7 @@ class Game extends React.Component {
       case TAB_GALAXY:
           tab = <Galaxy planet={body}
                         player={this.props.session}
+                        fleets={this.state.fleets}
                         ships={this.state.ships}
                         defenses={this.state.defenses}
                         system={this.state.system_data}
