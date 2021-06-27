@@ -75,6 +75,13 @@ class Server {
     return this.serverURL() + "/moons?player=" + player;
   }
 
+  planetsFleetsURL(universe, planet, source) {
+    return this.serverURL() + "/fleets?universe=" + universe + "&" +
+      (source ? "source=" : "target=") +
+      planet
+    ;
+  }
+
   resourcesURL() {
     return this.serverURL() + "/resources";
   }
