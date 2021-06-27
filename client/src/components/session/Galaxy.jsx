@@ -19,7 +19,6 @@ class Galaxy extends React.Component {
     let recyclers = 0;
     let missiles = 0;
 
-    // TODO: Handle slots.
     const slots = computeFleetSlots(this.props.player.technologies);
 
     if (this.props.planet) {
@@ -52,7 +51,7 @@ class Galaxy extends React.Component {
         <span className="galaxy_default_label">{probes + " espionage probe(s)"}</span>
         <span className="galaxy_default_label">{recyclers + " recycler(s)"}</span>
         <span className="galaxy_default_label">{missiles + " interplanetary missile(s)"}</span>
-        <span className="galaxy_default_label">{0 + "/" + slots.fleets + " slot(s)"}</span>
+        <span className="galaxy_default_label">{(this.props.fleets.regular + this.props.fleets.expeditions) + "/" + slots.fleets + " slot(s)"}</span>
       </div>
     );
   }
