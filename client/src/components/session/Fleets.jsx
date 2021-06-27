@@ -367,6 +367,13 @@ class Fleets extends React.Component {
 
     if (step === FLEET_INIT) {
       valid = selected.length > 0;
+
+      // Also, make sure that there are still some slots left
+      // to send a fleet.
+      if (valid) {
+        const slots = computeFleetSlots(this.props.player.technologies);
+        valid = (this.props.fleets.regular + this.props.fleets.expeditions + 1 <= slots.fleets);
+      }
     }
     else if (step === FLEET_FLIGHT) {
       // We have to make sure that:
@@ -688,7 +695,7 @@ class Fleets extends React.Component {
       flight_duration: fDetails.duration,
       flight_consumption: fDetails.consumption,
       speed: fDetails.maxSpeed,
-      validStep: (selected.length > 0),
+      validStep: this.validateStep(this.state.step, this.state.destination.coordinate, selected, fDetails.flight_consumption, cargo),
       cargo_desc: updated,
       // Reset the mission objective.
       mission: {
@@ -758,7 +765,7 @@ class Fleets extends React.Component {
       flight_duration: fDetails.duration,
       flight_consumption: fDetails.consumption,
       speed: fDetails.maxSpeed,
-      validStep: (selected.length > 0),
+      validStep: this.validateStep(this.state.step, this.state.destination.coordinate, selected, fDetails.flight_consumption, cargo),
       cargo_desc: updated,
       // Reset the mission objective
       mission: {

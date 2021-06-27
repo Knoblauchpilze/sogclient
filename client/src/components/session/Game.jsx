@@ -34,7 +34,7 @@ import { DEFENSES_FETCH_SUCCEEDED } from '../game/defenses.js';
 import FleetObjectivesModule from '../game/fleet_objectives.js';
 import { FLEET_OBJECTIVES_FETCH_SUCCEEDED } from '../game/fleet_objectives.js';
 import PlayersModule from '../game/players.js';
-import { PLAYERS_FETCH_SUCCEEDED } from '../game/players.js';
+import { PLAYERS_FETCH_SUCCEEDED, FLEETS_FETCH_SUCCEEDED } from '../game/players.js';
 import UniversesModule from '../game/universes.js';
 import { RANKINGS_FETCH_SUCCEEDED } from '../game/universes.js';
 
@@ -70,6 +70,14 @@ class Game extends React.Component {
       // game: it corresponds to the planets owned by
       // the player currently logged in.
       planets: [],
+
+      // Defines the list of fleets that originates or
+      // target any of the player's planets.
+      fleets: {
+        regular: 0,
+        expeditions: 0,
+        data: [],
+      },
 
       // Defines the list of moons available for this
       // game: it corresponds to all the moons owned by
@@ -367,6 +375,72 @@ class Game extends React.Component {
         planets[0].coordinate.system + 1,
       );
     }
+
+    // Fetch the fleets attached to each planets associated to
+    // the player.
+    const server = new Server();
+    const players = new PlayersModule(server);
+
+    const game = this;
+
+    const pIDs = planets.map(p => p.id);
+
+    players.fetchFleetsForPlayer(this.props.session.universe, pIDs)
+      .then(function (res) {
+        if (res.status !== FLEETS_FETCH_SUCCEEDED) {
+          game.fetchDataFailed(res.status);
+        }
+        else {
+          game.fetchFleetsSucceeded(res.fleets);
+        }
+      })
+      .catch(err => game.fetchDataFailed(err));
+  }
+
+  fetchFleetsSucceeded(fleets) {
+    // Interpret how many fleets there are for each time in
+    // case we have the fleets objectives available. We can
+    // still do that later if needed.
+    let reg = 0;
+    let exp = 0;
+
+    if (this.state.fleetObjectives.length > 0) {
+      // Fetch the identifier of the expeditions objective.
+      let expID = "";
+      const expObj = this.state.fleetObjectives.find(o => o.name === "expedition");
+      if (expObj) {
+        expID = expObj.id;
+      }
+      else {
+        console.error("Failed to find expedition objective from server's data");
+      }
+
+      for (let id = 0 ; id < fleets.length ; ++id) {
+        const p = fleets[id];
+
+        for (let fID = 0 ; fID < p.outgoing.length ; ++fID) {
+          const f = p.outgoing[fID];
+
+          if (f.objective === expID) {
+            exp++;
+          }
+          else {
+            reg++;
+          }
+        }
+      }
+
+      console.info("Fetched " + reg + " and " + exp + " expedition(s) for player");
+    }
+
+    // Update internal state.
+    this.setState({
+      fleets: {
+        regular: reg,
+        expeditions: exp,
+        data: fleets,
+      }
+    });
   }
 
   fetchMoonsSucceeded(moons) {
@@ -412,8 +486,39 @@ class Game extends React.Component {
   }
 
   fetchFleetObjectivesSucceeded(objectives) {
+    // Update the fleets to account for the expeditions and
+    // the regular fleets. We do it only in case the total
+    // amount of fleets does not match the count which is
+    // needed from the data.
+    let expID = "";
+    const expObj = objectives.find(o => o.name === "expedition");
+    if (expObj) {
+      expID = expObj.id;
+    }
+    else {
+      console.error("Failed to find expedition objective from server's data");
+    }
+
+    let fleets = this.state.fleets;
+
+    for (let id = 0 ; id < fleets.data ; ++id) {
+      const p = fleets.data[id];
+
+      for (let fID = 0 ; fID < p.outgoing.length ; ++fID) {
+        const f = p.outgoing[fID];
+
+        if (f.objective === expID) {
+          fleets.expeditions++;
+        }
+        else {
+          fleets.regular++;
+        }
+      }
+    }
+
     // Update internal state.
     this.setState({
+      fleets: fleets,
       fleetObjectives: objectives,
     });
   }
@@ -663,6 +768,7 @@ class Game extends React.Component {
       case TAB_FLEETS:
           tab = <Fleets planet={body}
                         player={this.props.session}
+                        fleets={this.state.fleets}
                         resources={this.state.resources}
                         buildings={this.state.buildings}
                         technologies={this.state.technologies}
