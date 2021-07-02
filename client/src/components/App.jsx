@@ -205,7 +205,11 @@ class App extends React.Component {
   render() {
     return (
       <div className="app_layout">
-        <StatusBar account={this.state.account} session={this.state.session} requestLogout={() => this.logout()}/>
+        <StatusBar account={this.state.account}
+                   session={this.state.session}
+                   universe={this.state.universe}
+                   requestLogout={() => this.logout()}
+                   />
         {this.state.gameState !== GAME && <Banner />}
         {
           this.state.gameState === GAME ?

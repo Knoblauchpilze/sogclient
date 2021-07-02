@@ -22,6 +22,10 @@ function StatusBar(props) {
             <div className="status_bar_value">{props.account.name}</div>
           </div>
           <div className="status_bar_info_group">
+            {props.universe.id !== "" && <div className="status_bar_key">Universe:</div>}
+            <div className="status_bar_value">{props.universe.name}</div>
+          </div>
+          <div className="status_bar_info_group">
             {props.session.id !== "" && <div className="status_bar_key">Player:</div>}
             <div className="status_bar_value">{props.session.name}</div>
           </div>
