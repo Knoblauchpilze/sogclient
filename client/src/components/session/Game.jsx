@@ -16,6 +16,7 @@ import Shipyard from './Shipyard.jsx';
 import Defenses from './Defenses.jsx';
 import Fleets from './Fleets.jsx';
 import Galaxy from './Galaxy.jsx';
+import Rankings from './Rankings.jsx';
 
 import Server from '../game/server.js';
 
@@ -50,6 +51,7 @@ import { TAB_SHIPYARD } from './NavigationMenu.jsx';
 import { TAB_DEFENSES } from './NavigationMenu.jsx';
 import { TAB_FLEETS } from './NavigationMenu.jsx';
 import { TAB_GALAXY } from './NavigationMenu.jsx';
+import { TAB_RANKINGS } from './NavigationMenu.jsx';
 
 // A string literal defining a planet body, which
 // indicates that the selected body is to be found
@@ -629,6 +631,11 @@ class Game extends React.Component {
     this.updateSelectedSystem(galaxy, system);
   }
 
+  moveToRankingsView(player) {
+    this.updateGameTab(TAB_RANKINGS, false);
+    // TODO: Handle the update of the selected page.
+  }
+
   actionPerformed(updateSystem) {
     // We should reload the planets available for this player.
     const server = new Server();
@@ -793,12 +800,20 @@ class Game extends React.Component {
                         updateSystem={(galaxy, system) => this.updateSelectedSystem(galaxy, system)}
                         />;
           break;
+      case TAB_RANKINGS:
+        tab = <Rankings planet={body}
+                        player={this.props.session}
+                        universe={this.props.universe}
+                        players={this.state.players}
+                        />;
+          break;
       case TAB_OVERVIEW:
       default:
         tab = <Overview planet={body}
                         player={this.props.session}
                         rankings={this.state.rankings}
                         viewSystem={(galaxy, system) => this.moveToGalaxyView(galaxy, system)}
+                        viewRankings={(player) => this.moveToRankingsView(player)}
                         />;
         break;
     }

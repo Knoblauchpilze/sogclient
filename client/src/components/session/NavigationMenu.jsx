@@ -48,6 +48,10 @@ const TAB_FLEETS = "fleets";
 // other worlds and empires in the universe.
 const TAB_GALAXY = "galaxy";
 
+// Defines the ranking menu, displaying the players of the
+// universe and their score.
+const TAB_RANKINGS = "rankings";
+
 function NavigationMenu (props) {
   return (
     <div className="navigation_menu_layout">
@@ -99,6 +103,7 @@ export {
   TAB_DEFENSES,
   TAB_FLEETS,
   TAB_GALAXY,
+  TAB_RANKINGS,
 };
 
 export default NavigationMenu;
