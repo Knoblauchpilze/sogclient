@@ -5,7 +5,7 @@ import React from 'react';
 import planet from '../../assets/planet1.png';
 import moon from '../../assets/moon1.png';
 
-function PlanetContainer (props) {
+function PlanetContainer(props) {
   let classes = "planet_container_layout";
   if (props.active) {
     classes += " planet_container_layout_selected";
@@ -30,12 +30,15 @@ function PlanetContainer (props) {
                alt="Planet visual"
                />
         </div>
-        <div onClick={() => props.updateSelectedMoon()}>
-          <img className="planet_container_moon_icon"
-               src={moon}
-               alt="Moon visual"
-               />
-        </div>
+        {
+          props.hasMoon &&
+          <div onClick={() => props.updateSelectedMoon()}>
+            <img className="planet_container_moon_icon"
+                 src={moon}
+                 alt="Moon visual"
+                 />
+          </div>
+        }
       </div>
       <div className="planet_container_active_area">
         <div onClick={() => props.updateSelectedPlanet()}>
