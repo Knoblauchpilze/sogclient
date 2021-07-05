@@ -4,7 +4,7 @@ import '../../styles/session/Game.css';
 import React from 'react';
 import OverviewPlanetProp from './OverviewPlanetProp.jsx';
 
-function Overview (props) {
+function Overview(props) {
   // Generate default value in case no planet is defined:
   // this will be the case before we fetch the planets
   // from the server.
@@ -68,7 +68,7 @@ function Overview (props) {
                             />
         <OverviewPlanetProp title={"Points"}
                             value={points + " (Rank " + rank + " out of " + props.rankings.length + ")"}
-                            link={"../rankings/rankings.html"}
+                            link={() => props.viewRankings(props.player.id)}
                             />
         <OverviewPlanetProp title={"Honorific points"}
                             value={"TODO"}

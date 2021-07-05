@@ -1,0 +1,10 @@
+
+.rankings_layout {
+  display: flex;
+  flex-direction: column;
+
+  margin-left: 5px;
+  margin-right: 5px;
+
+  flex-grow: 1;
+}
